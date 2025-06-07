@@ -37,12 +37,30 @@ const Index = () => {
     setCurrentScreen('quiz-play');
   };
 
+  const handlePresetSelect = (subjects: string[], systems: string[]) => {
+    setSelectedSubjects(subjects);
+    setSelectedSystems(systems);
+    setCurrentScreen('quiz-play');
+  };
+
+  const handleQuizRestart = (subjects: string[], systems: string[]) => {
+    setSelectedSubjects(subjects);
+    setSelectedSystems(systems);
+    setCurrentScreen('quiz-play');
+  };
+
   const renderScreen = () => {
     switch (currentScreen) {
       case 'home':
-        return <HomeScreen onNavigate={handleNavigation} />;
+        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
       case 'quiz':
-        return <QuizScreen onNavigate={handleNavigation} onCategorySelect={handleCategorySelect} />;
+        return (
+          <QuizScreen 
+            onNavigate={handleNavigation} 
+            onCategorySelect={handleCategorySelect}
+            onPresetSelect={handlePresetSelect}
+          />
+        );
       case 'leaderboard':
         return <LeaderboardScreen />;
       case 'analytics':
@@ -71,7 +89,7 @@ const Index = () => {
       case 'review':
         return <ReviewScreen onNavigate={handleNavigation} />;
       default:
-        return <HomeScreen onNavigate={handleNavigation} />;
+        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
     }
   };
 

@@ -3,12 +3,26 @@ import { Bell, Settings } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
 import NotificationBadge from "./NotificationBadge";
+import RecentQuizzes from "./RecentQuizzes";
 
 interface HomeScreenProps {
   onNavigate: (screen: string) => void;
+  onQuizRestart?: (subjects: string[], systems: string[]) => void;
 }
 
-const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
+const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
+  const handleQuizRestart = (subjects: string[], systems: string[]) => {
+    if (onQuizRestart) {
+      onQuizRestart(subjects, systems);
+    }
+  };
+
+  const handleQuizContinue = (quizId: string) => {
+    // Navigate to quiz results/review screen
+    console.log('Continue quiz:', quizId);
+    onNavigate('review');
+  };
+
   return (
     <div className="p-4 pb-20 space-y-6">
       {/* Header */}
@@ -54,11 +68,17 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
         <span className="text-xl">🚀</span>
       </button>
 
+      {/* Recent Quizzes */}
+      <RecentQuizzes 
+        onQuizRestart={handleQuizRestart}
+        onQuizContinue={handleQuizContinue}
+      />
+
       {/* Weakest Subjects */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold">Weakest Subjects</h3>
         <div className="space-y-2">
-          <div className="bg-slate-800 rounded-xl p-4">
+          <div className="bg-slate-800/50 rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
@@ -77,7 +97,7 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
               </button>
             </div>
           </div>
-          <div className="bg-slate-800 rounded-xl p-4">
+          <div className="bg-slate-800/50 rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
@@ -102,7 +122,7 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
       {/* Review Mistakes */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold">Review Mistakes</h3>
-        <div className="bg-slate-800 rounded-xl p-4 space-y-3">
+        <div className="bg-slate-800/50 rounded-xl p-4 space-y-3">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
               <span className="text-xl">🔄</span>

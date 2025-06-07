@@ -1,12 +1,15 @@
 
 import { ChevronRight, Target, BookOpen, Users, Zap } from "lucide-react";
+import PresetCombinations from "./PresetCombinations";
+import SmartRecommendations from "./SmartRecommendations";
 
 interface QuizScreenProps {
   onNavigate: (screen: string) => void;
   onCategorySelect: (category: string) => void;
+  onPresetSelect?: (subjects: string[], systems: string[]) => void;
 }
 
-const QuizScreen = ({ onNavigate, onCategorySelect }: QuizScreenProps) => {
+const QuizScreen = ({ onNavigate, onCategorySelect, onPresetSelect }: QuizScreenProps) => {
   const categories = [
     { 
       name: "Anatomy", 
@@ -62,6 +65,12 @@ const QuizScreen = ({ onNavigate, onCategorySelect }: QuizScreenProps) => {
     onNavigate('subject-system-selection');
   };
 
+  const handlePresetSelect = (subjects: string[], systems: string[]) => {
+    if (onPresetSelect) {
+      onPresetSelect(subjects, systems);
+    }
+  };
+
   return (
     <div className="p-4 pb-20 space-y-6">
       {/* Header */}
@@ -70,8 +79,14 @@ const QuizScreen = ({ onNavigate, onCategorySelect }: QuizScreenProps) => {
         <p className="text-slate-400">Choose your practice area</p>
       </div>
 
+      {/* Quick Presets */}
+      <PresetCombinations onPresetSelect={handlePresetSelect} />
+
+      {/* Smart Recommendations */}
+      <SmartRecommendations onRecommendationSelect={handlePresetSelect} />
+
       {/* Create Custom Quiz */}
-      <div className="bg-slate-800 rounded-xl p-4">
+      <div className="bg-slate-800/50 rounded-xl p-4">
         <div className="text-center space-y-3">
           <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto">
             <Target className="w-6 h-6 text-white" />
@@ -89,25 +104,25 @@ const QuizScreen = ({ onNavigate, onCategorySelect }: QuizScreenProps) => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-slate-800 rounded-xl p-4 text-center">
+        <div className="bg-slate-800/50 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-blue-400">73%</div>
           <div className="text-sm text-slate-400">Overall Progress</div>
         </div>
-        <div className="bg-slate-800 rounded-xl p-4 text-center">
+        <div className="bg-slate-800/50 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-green-400">12</div>
           <div className="text-sm text-slate-400">Day Streak</div>
         </div>
       </div>
 
-      {/* Categories */}
+      {/* Legacy Categories */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">Quick Start</h3>
+        <h3 className="text-lg font-semibold text-white">Browse by Subject</h3>
         
         {categories.map((category, index) => (
           <button
             key={index}
             onClick={() => onCategorySelect(category.name)}
-            className="w-full bg-slate-800 hover:bg-slate-700 rounded-xl p-4 transition-colors"
+            className="w-full bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 transition-colors"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
