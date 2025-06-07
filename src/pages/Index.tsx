@@ -8,22 +8,32 @@ import LeaderboardScreen from "@/components/LeaderboardScreen";
 import AnalyticsScreen from "@/components/AnalyticsScreen";
 import CategoryScreen from "@/components/CategoryScreen";
 import QuizPlayScreen from "@/components/QuizPlayScreen";
+import SubjectSystemSelectionScreen from "@/components/SubjectSystemSelectionScreen";
 import SettingsScreen from "@/components/SettingsScreen";
 import ProfileScreen from "@/components/ProfileScreen";
 import ReviewScreen from "@/components/ReviewScreen";
 
-type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'settings' | 'profile' | 'review';
+type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'settings' | 'profile' | 'review';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
 
   const handleNavigation = (screen: string) => {
     setCurrentScreen(screen as Screen);
   };
 
   const handleCategorySelect = (category: string) => {
+    // For backward compatibility with old category system
     setSelectedCategory(category);
+    setCurrentScreen('subject-system-selection');
+  };
+
+  const handleSubjectSystemSelection = (subjects: string[], systems: string[]) => {
+    setSelectedSubjects(subjects);
+    setSelectedSystems(systems);
     setCurrentScreen('quiz-play');
   };
 
@@ -39,8 +49,21 @@ const Index = () => {
         return <AnalyticsScreen />;
       case 'category':
         return <CategoryScreen onCategorySelect={handleCategorySelect} />;
+      case 'subject-system-selection':
+        return (
+          <SubjectSystemSelectionScreen 
+            onNavigate={handleNavigation} 
+            onSelectionComplete={handleSubjectSystemSelection}
+          />
+        );
       case 'quiz-play':
-        return <QuizPlayScreen category={selectedCategory} onNavigate={handleNavigation} />;
+        return (
+          <QuizPlayScreen 
+            selectedSubjects={selectedSubjects}
+            selectedSystems={selectedSystems}
+            onNavigate={handleNavigation} 
+          />
+        );
       case 'settings':
         return <SettingsScreen onNavigate={handleNavigation} />;
       case 'profile':

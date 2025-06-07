@@ -1,21 +1,15 @@
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, Clock } from "lucide-react";
-
-interface Question {
-  id: number;
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  explanation?: string;
-}
+import { getFilteredQuestions, Question } from "@/data/questionBank";
 
 interface QuizPlayScreenProps {
-  category: string;
+  selectedSubjects: string[];
+  selectedSystems: string[];
   onNavigate: (screen: string) => void;
 }
 
-const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
+const QuizPlayScreen = ({ selectedSubjects, selectedSystems, onNavigate }: QuizPlayScreenProps) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -23,83 +17,23 @@ const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
   const [answers, setAnswers] = useState<(number | null)[]>([]);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [quizCompleted, setQuizCompleted] = useState(false);
-
-  // Dummy questions for the quiz
-  const questions: Question[] = [
-    {
-      id: 1,
-      question: "Which of the following is the most common cause of community-acquired pneumonia?",
-      options: [
-        "Streptococcus pneumoniae",
-        "Haemophilus influenzae",
-        "Mycoplasma pneumoniae",
-        "Staphylococcus aureus"
-      ],
-      correctAnswer: 0,
-      explanation: "Streptococcus pneumoniae is the most common bacterial cause of community-acquired pneumonia in adults."
-    },
-    {
-      id: 2,
-      question: "What is the normal range for serum sodium levels?",
-      options: [
-        "130-140 mEq/L",
-        "135-145 mEq/L",
-        "140-150 mEq/L",
-        "125-135 mEq/L"
-      ],
-      correctAnswer: 1,
-      explanation: "Normal serum sodium levels range from 135-145 mEq/L (135-145 mmol/L)."
-    },
-    {
-      id: 3,
-      question: "Which heart chamber has the thickest muscular wall?",
-      options: [
-        "Right atrium",
-        "Left atrium",
-        "Right ventricle",
-        "Left ventricle"
-      ],
-      correctAnswer: 3,
-      explanation: "The left ventricle has the thickest muscular wall as it needs to pump blood to the entire systemic circulation."
-    },
-    {
-      id: 4,
-      question: "What is the mechanism of action of aspirin?",
-      options: [
-        "COX-1 and COX-2 inhibition",
-        "Selective COX-2 inhibition",
-        "Lipoxygenase inhibition",
-        "Phospholipase A2 inhibition"
-      ],
-      correctAnswer: 0,
-      explanation: "Aspirin irreversibly inhibits both COX-1 and COX-2 enzymes, preventing prostaglandin synthesis."
-    },
-    {
-      id: 5,
-      question: "Which vitamin deficiency causes scurvy?",
-      options: [
-        "Vitamin B12",
-        "Vitamin C",
-        "Vitamin D",
-        "Vitamin K"
-      ],
-      correctAnswer: 1,
-      explanation: "Scurvy is caused by vitamin C (ascorbic acid) deficiency, leading to collagen synthesis problems."
-    }
-  ];
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   useEffect(() => {
-    if (!quizCompleted && timeLeft > 0) {
+    const filteredQuestions = getFilteredQuestions(selectedSubjects, selectedSystems);
+    const shuffledQuestions = filteredQuestions.sort(() => Math.random() - 0.5).slice(0, 10); // Take random 10 questions
+    setQuestions(shuffledQuestions);
+    setAnswers(new Array(shuffledQuestions.length).fill(null));
+  }, [selectedSubjects, selectedSystems]);
+
+  useEffect(() => {
+    if (!quizCompleted && timeLeft > 0 && questions.length > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     } else if (timeLeft === 0) {
       handleQuizCompletion();
     }
-  }, [timeLeft, quizCompleted]);
-
-  useEffect(() => {
-    setAnswers(new Array(questions.length).fill(null));
-  }, []);
+  }, [timeLeft, quizCompleted, questions.length]);
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
@@ -126,7 +60,7 @@ const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
   const handleQuizCompletion = () => {
     let finalScore = 0;
     answers.forEach((answer, index) => {
-      if (answer === questions[index].correctAnswer) {
+      if (answer === questions[index]?.correctAnswer) {
         finalScore++;
       }
     });
@@ -140,22 +74,34 @@ const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
+  // Show loading if questions haven't loaded yet
+  if (questions.length === 0) {
+    return (
+      <div className="p-4 pb-20 space-y-6 min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-slate-300">Loading questions...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (quizCompleted) {
     return (
-      <div className="p-4 pb-20 space-y-6">
+      <div className="p-4 pb-20 space-y-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
         <div className="text-center space-y-4">
           <div className="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto">
             <span className="text-3xl">🎉</span>
           </div>
-          <h1 className="text-2xl font-bold">Quiz Completed!</h1>
-          <p className="text-slate-300">Great job on completing the {category} quiz!</p>
+          <h1 className="text-2xl font-bold text-white">Quiz Completed!</h1>
+          <p className="text-slate-300">Great job on completing your custom quiz!</p>
         </div>
 
         <div className="bg-slate-800 rounded-xl p-6 space-y-4">
           <div className="text-center">
             <div className="text-4xl font-bold text-green-400">{score}/{questions.length}</div>
             <p className="text-slate-300">Final Score</p>
-            <p className="text-lg font-semibold">{Math.round((score / questions.length) * 100)}%</p>
+            <p className="text-lg font-semibold text-white">{Math.round((score / questions.length) * 100)}%</p>
           </div>
           
           <div className="grid grid-cols-2 gap-4 mt-6">
@@ -166,6 +112,21 @@ const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
             <div className="text-center">
               <div className="text-2xl font-bold text-red-400">{questions.length - score}</div>
               <p className="text-sm text-slate-400">Incorrect</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Quiz Details */}
+        <div className="bg-slate-800/50 rounded-xl p-4 space-y-3">
+          <h3 className="font-semibold text-white">Quiz Details</h3>
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-slate-400">Subjects:</span>
+              <span className="text-blue-400">{selectedSubjects.join(', ')}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-400">Systems:</span>
+              <span className="text-green-400">{selectedSystems.join(', ')}</span>
             </div>
           </div>
         </div>
@@ -199,11 +160,11 @@ const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
   const currentQ = questions[currentQuestion];
 
   return (
-    <div className="p-4 pb-20 space-y-6">
+    <div className="p-4 pb-20 space-y-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
         <button onClick={() => onNavigate('quiz')} className="p-2">
-          <ChevronLeft className="w-6 h-6" />
+          <ChevronLeft className="w-6 h-6 text-slate-300" />
         </button>
         <div className="flex items-center space-x-2">
           <Clock className="w-4 h-4 text-slate-400" />
@@ -225,9 +186,23 @@ const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
         </div>
       </div>
 
+      {/* Question Tags */}
+      <div className="flex flex-wrap gap-2">
+        {currentQ.subjects.map(subject => (
+          <span key={subject} className="bg-blue-600/20 text-blue-300 px-2 py-1 rounded-full text-xs">
+            {subject}
+          </span>
+        ))}
+        {currentQ.systems.map(system => (
+          <span key={system} className="bg-green-600/20 text-green-300 px-2 py-1 rounded-full text-xs">
+            {system}
+          </span>
+        ))}
+      </div>
+
       {/* Question */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold leading-relaxed">{currentQ.question}</h2>
+        <h2 className="text-lg font-semibold leading-relaxed text-white">{currentQ.question}</h2>
         
         <div className="space-y-3">
           {currentQ.options.map((option, index) => (
@@ -239,12 +214,12 @@ const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
                 selectedAnswer === index
                   ? showResult
                     ? index === currentQ.correctAnswer
-                      ? 'bg-green-600 border-green-500'
-                      : 'bg-red-600 border-red-500'
-                    : 'bg-blue-600 border-blue-500'
+                      ? 'bg-green-600 border-green-500 text-white'
+                      : 'bg-red-600 border-red-500 text-white'
+                    : 'bg-blue-600 border-blue-500 text-white'
                   : showResult && index === currentQ.correctAnswer
-                    ? 'bg-green-600 border-green-500'
-                    : 'bg-slate-800 hover:bg-slate-700 border-slate-700'
+                    ? 'bg-green-600 border-green-500 text-white'
+                    : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-white'
               } border`}
             >
               <div className="flex items-center space-x-3">
@@ -263,7 +238,7 @@ const QuizPlayScreen = ({ category, onNavigate }: QuizPlayScreenProps) => {
 
         {showResult && currentQ.explanation && (
           <div className="bg-slate-800 rounded-xl p-4 border-l-4 border-blue-500">
-            <h4 className="font-semibold mb-2">Explanation:</h4>
+            <h4 className="font-semibold mb-2 text-white">Explanation:</h4>
             <p className="text-slate-300 text-sm">{currentQ.explanation}</p>
           </div>
         )}

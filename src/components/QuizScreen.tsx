@@ -1,4 +1,3 @@
-
 import { ChevronRight, Target, BookOpen, Activity, Users, Zap } from "lucide-react";
 
 interface QuizScreenProps {
@@ -79,6 +78,10 @@ const QuizScreen = ({ onNavigate, onCategorySelect }: QuizScreenProps) => {
     return 'text-red-400';
   };
 
+  const handleCreateCustomQuiz = () => {
+    onNavigate('subject-system-selection');
+  };
+
   return (
     <div className="p-4 pb-20 space-y-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
       {/* Header */}
@@ -108,6 +111,21 @@ const QuizScreen = ({ onNavigate, onCategorySelect }: QuizScreenProps) => {
         </div>
       </div>
 
+      {/* Create Custom Quiz Button */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6">
+        <div className="text-center space-y-3">
+          <h3 className="text-xl font-semibold text-white">Create Custom Quiz</h3>
+          <p className="text-sm text-blue-100">Select specific subjects and body systems for targeted practice</p>
+          <button 
+            onClick={handleCreateCustomQuiz}
+            className="bg-white/20 hover:bg-white/30 text-white font-semibold px-6 py-3 rounded-lg transition-colors flex items-center space-x-2 mx-auto"
+          >
+            <Target className="w-4 h-4" />
+            <span>Create Custom Quiz</span>
+          </button>
+        </div>
+      </div>
+
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-4 text-center">
@@ -123,10 +141,10 @@ const QuizScreen = ({ onNavigate, onCategorySelect }: QuizScreenProps) => {
       {/* Categories */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-slate-200">Medical Subjects</h3>
+          <h3 className="text-xl font-semibold text-slate-200">Quick Start Templates</h3>
           <div className="flex items-center space-x-1 text-sm text-slate-400">
             <Activity className="w-4 h-4" />
-            <span>Recent activity</span>
+            <span>Popular</span>
           </div>
         </div>
         
