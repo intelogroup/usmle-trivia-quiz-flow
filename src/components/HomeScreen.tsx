@@ -24,11 +24,11 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
   };
 
   return (
-    <div className="p-4 pb-20 space-y-6">
+    <div className="p-4 pb-20 space-y-6 bg-background min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold">
+          <h1 className="text-xl font-bold text-foreground">
             USMLE <span className="text-blue-400">T</span>
             <span className="text-green-400">R</span>
             <span className="text-yellow-400">I</span>
@@ -39,7 +39,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
         </div>
         <div className="flex items-center space-x-3">
           <div className="relative">
-            <Bell size={20} className="text-slate-300" />
+            <Bell size={20} className="text-muted-foreground" />
             <NotificationBadge />
           </div>
           <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
@@ -50,9 +50,9 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
 
       {/* Welcome Message */}
       <div className="space-y-2">
-        <p className="text-slate-300">Welcome back,</p>
-        <h2 className="text-2xl font-bold">jim kali 👋</h2>
-        <p className="text-slate-300">Ready to challenge yourself today? 🎯</p>
+        <p className="text-muted-foreground">Welcome back,</p>
+        <h2 className="text-2xl font-bold text-foreground">jim kali 👋</h2>
+        <p className="text-muted-foreground">Ready to challenge yourself today? 🎯</p>
       </div>
 
       {/* Progress Card */}
@@ -61,7 +61,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Start Quiz Button */}
       <button
         onClick={() => onNavigate('quiz')}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-colors"
+        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-colors"
       >
         <span className="text-xl">⚡</span>
         <span>Start New Quiz</span>
@@ -76,17 +76,17 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
 
       {/* Weakest Subjects */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold">Weakest Subjects</h3>
+        <h3 className="text-lg font-semibold text-foreground">Weakest Subjects</h3>
         <div className="space-y-2">
-          <div className="bg-slate-800/50 rounded-xl p-4">
+          <div className="bg-card rounded-xl border border-border p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
                   <span className="text-white text-sm">🧬</span>
                 </div>
                 <div>
-                  <h4 className="font-medium">Pathology</h4>
-                  <p className="text-sm text-slate-400">68% average • Needs focus</p>
+                  <h4 className="font-medium text-foreground">Pathology</h4>
+                  <p className="text-sm text-muted-foreground">68% average • Needs focus</p>
                 </div>
               </div>
               <button
@@ -97,15 +97,15 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
               </button>
             </div>
           </div>
-          <div className="bg-slate-800/50 rounded-xl p-4">
+          <div className="bg-card rounded-xl border border-border p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
                   <span className="text-white text-sm">🫀</span>
                 </div>
                 <div>
-                  <h4 className="font-medium">Physiology</h4>
-                  <p className="text-sm text-slate-400">72% average • Room for improvement</p>
+                  <h4 className="font-medium text-foreground">Physiology</h4>
+                  <p className="text-sm text-muted-foreground">72% average • Room for improvement</p>
                 </div>
               </div>
               <button
@@ -121,20 +121,20 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
 
       {/* Review Mistakes */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold">Review Mistakes</h3>
-        <div className="bg-slate-800/50 rounded-xl p-4 space-y-3">
+        <h3 className="text-lg font-semibold text-foreground">Review Mistakes</h3>
+        <div className="bg-card rounded-xl border border-border p-4 space-y-3">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
               <span className="text-xl">🔄</span>
             </div>
             <div className="flex-1">
-              <p className="font-medium">3 questions need review</p>
-              <p className="text-sm text-slate-400">Focus on your recent mistakes</p>
+              <p className="font-medium text-foreground">3 questions need review</p>
+              <p className="text-sm text-muted-foreground">Focus on your recent mistakes</p>
             </div>
           </div>
           <button 
             onClick={() => onNavigate('review')}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors"
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 rounded-lg transition-colors"
           >
             Start Review
           </button>
