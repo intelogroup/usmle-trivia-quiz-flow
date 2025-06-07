@@ -1,5 +1,5 @@
 
-import { Crown, Medal, Award, Trophy, TrendingUp, Star } from "lucide-react";
+import { Crown, Medal, Award, Trophy, Star } from "lucide-react";
 
 const LeaderboardScreen = () => {
   const leaderboardData = [
@@ -14,78 +14,71 @@ const LeaderboardScreen = () => {
 
   const getRankColor = (rank: number) => {
     switch (rank) {
-      case 1: return "from-yellow-400 to-yellow-600";
-      case 2: return "from-gray-300 to-gray-500";
-      case 3: return "from-orange-400 to-orange-600";
-      default: return "from-slate-600 to-slate-700";
+      case 1: return "text-yellow-400";
+      case 2: return "text-gray-300";
+      case 3: return "text-orange-400";
+      default: return "text-slate-400";
     }
   };
 
   const getRankIcon = (rank: number, badge: any) => {
     if (badge) {
       const BadgeIcon = badge;
-      return <BadgeIcon className={`w-5 h-5 ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-gray-300' : 'text-orange-400'}`} />;
+      return <BadgeIcon className={`w-5 h-5 ${getRankColor(rank)}`} />;
     }
-    return <span className={`text-sm font-bold ${rank <= 3 ? 'text-white' : 'text-slate-400'}`}>{rank}</span>;
+    return <span className={`text-sm font-bold ${getRankColor(rank)}`}>{rank}</span>;
   };
 
   return (
-    <div className="p-4 pb-20 space-y-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
+    <div className="p-4 pb-20 space-y-6">
       {/* Header */}
-      <div className="text-center space-y-4">
-        <div className="flex items-center justify-center space-x-3">
-          <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-            <Trophy className="w-6 h-6 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-            Leaderboard
-          </h1>
-        </div>
-        <p className="text-slate-400 text-sm">Compete with medical students worldwide</p>
+      <div className="text-center space-y-2">
+        <h1 className="text-2xl font-bold text-white">Leaderboard</h1>
+        <p className="text-slate-400">Compete with medical students worldwide</p>
       </div>
 
-      {/* Top 3 Podium */}
-      <div className="bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm">
-        <div className="flex justify-center items-end space-x-4">
+      {/* Top 3 */}
+      <div className="bg-slate-800 rounded-xl p-6">
+        <div className="flex justify-center items-end space-x-6">
           {/* 2nd Place */}
           <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center mb-2 shadow-lg">
+            <div className="w-16 h-16 bg-slate-600 rounded-full flex items-center justify-center mb-2">
               <span className="text-2xl">👩‍⚕️</span>
             </div>
-            <div className="bg-slate-700 text-white px-3 py-2 rounded-lg text-center">
+            <div className="bg-slate-700 text-white px-3 py-2 rounded-lg">
               <div className="font-semibold text-sm">MedStudent2023</div>
               <div className="text-xs text-slate-300">9,720 pts</div>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-t from-gray-600 to-gray-400 mt-2 rounded-t-lg flex items-center justify-center">
-              <Medal className="w-4 h-4 text-white" />
+            <div className="w-12 h-8 bg-slate-600 mt-2 rounded-t-lg flex items-center justify-center">
+              <Medal className="w-4 h-4 text-gray-300" />
             </div>
           </div>
 
           {/* 1st Place */}
           <div className="text-center">
-            <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mb-2 shadow-xl ring-2 ring-yellow-300/50">
+            <div className="w-20 h-20 bg-yellow-600 rounded-full flex items-center justify-center mb-2">
               <span className="text-3xl">🧠</span>
             </div>
-            <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 text-white px-4 py-3 rounded-lg text-center">
+            <div className="bg-yellow-600 text-white px-4 py-3 rounded-lg">
               <div className="font-bold">DrBrainiac</div>
               <div className="text-sm">9,850 pts</div>
             </div>
-            <div className="w-16 h-16 bg-gradient-to-t from-yellow-600 to-yellow-400 mt-2 rounded-t-lg flex items-center justify-center">
+            <div className="w-16 h-12 bg-yellow-600 mt-2 rounded-t-lg flex items-center justify-center">
               <Crown className="w-5 h-5 text-white" />
             </div>
           </div>
 
           {/* 3rd Place */}
           <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mb-2 shadow-lg">
+            <div className="w-16 h-16 bg-slate-600 rounded-full flex items-center justify-center mb-2">
               <span className="text-2xl">👨‍⚕️</span>
             </div>
-            <div className="bg-slate-700 text-white px-3 py-2 rounded-lg text-center">
+            <div className="bg-slate-700 text-white px-3 py-2 rounded-lg">
               <div className="font-semibold text-sm">USMLEMaster</div>
               <div className="text-xs text-slate-300">9,580 pts</div>
             </div>
-            <div className="w-12 h-10 bg-gradient-to-t from-orange-600 to-orange-400 mt-2 rounded-t-lg flex items-center justify-center">
-              <Award className="w-4 h-4 text-white" />
+            <div className="w-12 h-6 bg-slate-600 mt-2 rounded-t-lg flex items-center justify-center">
+              <Award className="w-4 h-4 text-orange-400" />
             </div>
           </div>
         </div>
@@ -93,19 +86,19 @@ const LeaderboardScreen = () => {
 
       {/* Full Rankings */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-slate-200">Rankings</h3>
+        <h3 className="text-lg font-semibold text-white">All Rankings</h3>
         {leaderboardData.map((player) => (
-          <div key={player.rank} className={`rounded-xl p-4 transition-all duration-200 ${
+          <div key={player.rank} className={`rounded-xl p-4 ${
             player.isCurrentUser 
-              ? 'bg-blue-900/30 ring-1 ring-blue-500/50' 
-              : 'bg-slate-800/50 hover:bg-slate-700/50'
+              ? 'bg-blue-900/30 border border-blue-500/30' 
+              : 'bg-slate-800'
           }`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-r ${getRankColor(player.rank)}`}>
+                <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center">
                   {getRankIcon(player.rank, player.badge)}
                 </div>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg ${
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
                   player.isCurrentUser ? 'bg-blue-600 text-white font-bold' : 'bg-slate-600'
                 }`}>
                   {player.isCurrentUser ? player.avatar : <span>{player.avatar}</span>}
@@ -137,7 +130,7 @@ const LeaderboardScreen = () => {
         ))}
       </div>
 
-      {/* Your Position Summary */}
+      {/* Your Position */}
       <div className="bg-blue-900/20 rounded-xl p-4 border border-blue-500/30">
         <div className="text-center space-y-2">
           <h3 className="text-lg font-semibold text-blue-300">Your Position</h3>
