@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Navigation from "@/components/Navigation";
@@ -12,14 +11,17 @@ import SubjectSystemSelectionScreen from "@/components/SubjectSystemSelectionScr
 import SettingsScreen from "@/components/SettingsScreen";
 import ProfileScreen from "@/components/ProfileScreen";
 import ReviewScreen from "@/components/ReviewScreen";
+import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
+import { getQuestionCount } from "@/data/questionBank";
 
-type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'settings' | 'profile' | 'review';
+type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
+  const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
 
   const handleNavigation = (screen: string) => {
     setCurrentScreen(screen as Screen);
@@ -43,10 +45,23 @@ const Index = () => {
     setCurrentScreen('quiz-play');
   };
 
+  const handleQuizConfiguration = (subjects: string[], systems: string[]) => {
+    setSelectedSubjects(subjects);
+    setSelectedSystems(systems);
+    setCurrentScreen('quiz-configuration');
+  };
+
+  const handleStartQuizWithConfig = (config: QuizConfig) => {
+    setQuizConfig(config);
+    setSelectedSubjects(config.subjects);
+    setSelectedSystems(config.systems);
+    setCurrentScreen('quiz-play');
+  };
+
   const handleQuizRestart = (subjects: string[], systems: string[]) => {
     setSelectedSubjects(subjects);
     setSelectedSystems(systems);
-    setCurrentScreen('quiz-play');
+    setCurrentScreen('quiz-configuration');
   };
 
   const renderScreen = () => {
@@ -71,7 +86,17 @@ const Index = () => {
         return (
           <SubjectSystemSelectionScreen 
             onNavigate={handleNavigation} 
-            onSelectionComplete={handleSubjectSystemSelection}
+            onSelectionComplete={handleQuizConfiguration}
+          />
+        );
+      case 'quiz-configuration':
+        return (
+          <QuizConfigurationScreen
+            selectedSubjects={selectedSubjects}
+            selectedSystems={selectedSystems}
+            availableQuestions={getQuestionCount(selectedSubjects, selectedSystems)}
+            onNavigate={handleNavigation}
+            onStartQuiz={handleStartQuizWithConfig}
           />
         );
       case 'quiz-play':
@@ -79,6 +104,7 @@ const Index = () => {
           <QuizPlayScreen 
             selectedSubjects={selectedSubjects}
             selectedSystems={selectedSystems}
+            quizConfig={quizConfig}
             onNavigate={handleNavigation} 
           />
         );

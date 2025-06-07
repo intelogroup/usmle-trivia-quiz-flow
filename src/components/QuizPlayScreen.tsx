@@ -1,15 +1,17 @@
-
 import { useState, useEffect } from "react";
 import { ChevronLeft, Clock } from "lucide-react";
 import { getFilteredQuestions, Question } from "@/data/questionBank";
+import { QuizConfig } from "./QuizConfigurationScreen";
+import { saveQuizResult, generateQuizName } from "@/utils/storageUtils";
 
 interface QuizPlayScreenProps {
   selectedSubjects: string[];
   selectedSystems: string[];
+  quizConfig?: QuizConfig | null;
   onNavigate: (screen: string) => void;
 }
 
-const QuizPlayScreen = ({ selectedSubjects, selectedSystems, onNavigate }: QuizPlayScreenProps) => {
+const QuizPlayScreen = ({ selectedSubjects, selectedSystems, quizConfig, onNavigate }: QuizPlayScreenProps) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -18,13 +20,22 @@ const QuizPlayScreen = ({ selectedSubjects, selectedSystems, onNavigate }: QuizP
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [startTime] = useState(new Date());
 
   useEffect(() => {
     const filteredQuestions = getFilteredQuestions(selectedSubjects, selectedSystems);
-    const shuffledQuestions = filteredQuestions.sort(() => Math.random() - 0.5).slice(0, 10); // Take random 10 questions
+    const questionLimit = quizConfig?.questionCount || 10;
+    const shuffledQuestions = filteredQuestions.sort(() => Math.random() - 0.5).slice(0, questionLimit);
     setQuestions(shuffledQuestions);
     setAnswers(new Array(shuffledQuestions.length).fill(null));
-  }, [selectedSubjects, selectedSystems]);
+    
+    // Set time limit if specified
+    if (quizConfig?.timeLimit && quizConfig.timeLimit > 0) {
+      setTimeLeft(quizConfig.timeLimit * 60); // Convert minutes to seconds
+    } else {
+      setTimeLeft(300); // Default 5 minutes
+    }
+  }, [selectedSubjects, selectedSystems, quizConfig]);
 
   useEffect(() => {
     if (!quizCompleted && timeLeft > 0 && questions.length > 0) {
@@ -59,13 +70,41 @@ const QuizPlayScreen = ({ selectedSubjects, selectedSystems, onNavigate }: QuizP
 
   const handleQuizCompletion = () => {
     let finalScore = 0;
+    const correctAnswerIndices: number[] = [];
+    
     answers.forEach((answer, index) => {
       if (answer === questions[index]?.correctAnswer) {
         finalScore++;
       }
+      correctAnswerIndices.push(questions[index]?.correctAnswer || 0);
     });
+    
     setScore(finalScore);
     setQuizCompleted(true);
+
+    // Save quiz result to storage
+    if (quizConfig) {
+      const endTime = new Date();
+      const duration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
+      const durationString = `${Math.floor(duration / 60)}:${(duration % 60).toString().padStart(2, '0')}`;
+      
+      const quizResult = {
+        id: Date.now().toString(),
+        name: generateQuizName(quizConfig),
+        config: quizConfig,
+        score: finalScore,
+        totalQuestions: questions.length,
+        answers,
+        correctAnswers: correctAnswerIndices,
+        questions,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        duration: durationString,
+        date: new Date().toISOString()
+      };
+      
+      saveQuizResult(quizResult);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -139,18 +178,10 @@ const QuizPlayScreen = ({ selectedSubjects, selectedSystems, onNavigate }: QuizP
             Back to Home
           </button>
           <button
-            onClick={() => {
-              setCurrentQuestion(0);
-              setSelectedAnswer(null);
-              setShowResult(false);
-              setScore(0);
-              setAnswers(new Array(questions.length).fill(null));
-              setTimeLeft(300);
-              setQuizCompleted(false);
-            }}
+            onClick={() => onNavigate('quiz-configuration')}
             className="w-full bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-xl font-semibold transition-colors"
           >
-            Retake Quiz
+            Take Another Quiz
           </button>
         </div>
       </div>

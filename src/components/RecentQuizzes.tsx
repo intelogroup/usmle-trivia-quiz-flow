@@ -1,16 +1,6 @@
 
 import { Clock, RotateCcw, Play } from "lucide-react";
-
-interface RecentQuiz {
-  id: string;
-  name: string;
-  subjects: string[];
-  systems: string[];
-  score: number;
-  totalQuestions: number;
-  date: string;
-  duration: string;
-}
+import { getRecentQuizzes, QuizResult } from "@/utils/storageUtils";
 
 interface RecentQuizzesProps {
   onQuizRestart: (subjects: string[], systems: string[]) => void;
@@ -18,45 +8,24 @@ interface RecentQuizzesProps {
 }
 
 const RecentQuizzes = ({ onQuizRestart, onQuizContinue }: RecentQuizzesProps) => {
-  // Mock data - in real app this would come from localStorage or API
-  const recentQuizzes: RecentQuiz[] = [
-    {
-      id: "1",
-      name: "Cardio Focus",
-      subjects: ["Anatomy", "Physiology"],
-      systems: ["Cardiovascular System"],
-      score: 7,
-      totalQuestions: 10,
-      date: "2 hours ago",
-      duration: "8:32"
-    },
-    {
-      id: "2", 
-      name: "Neuro Essentials",
-      subjects: ["Anatomy", "Physiology"],
-      systems: ["Nervous System"],
-      score: 12,
-      totalQuestions: 15,
-      date: "Yesterday",
-      duration: "12:15"
-    },
-    {
-      id: "3",
-      name: "Custom Quiz",
-      subjects: ["Pathology"],
-      systems: ["Respiratory System"],
-      score: 5,
-      totalQuestions: 8,
-      date: "2 days ago", 
-      duration: "6:45"
-    }
-  ];
+  const recentQuizzes: QuizResult[] = getRecentQuizzes();
 
   const getScoreColor = (score: number, total: number) => {
     const percentage = (score / total) * 100;
     if (percentage >= 80) return "text-green-400";
     if (percentage >= 60) return "text-yellow-400";
     return "text-red-400";
+  };
+
+  const getRelativeTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return "Just now";
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    if (diffInHours < 48) return "Yesterday";
+    return `${Math.floor(diffInHours / 24)} days ago`;
   };
 
   if (recentQuizzes.length === 0) {
@@ -86,15 +55,15 @@ const RecentQuizzes = ({ onQuizRestart, onQuizContinue }: RecentQuizzesProps) =>
                     {quiz.score}/{quiz.totalQuestions} ({Math.round((quiz.score / quiz.totalQuestions) * 100)}%)
                   </span>
                   <span>{quiz.duration}</span>
-                  <span>{quiz.date}</span>
+                  <span>{getRelativeTime(quiz.date)}</span>
                 </div>
                 <div className="flex flex-wrap gap-1 mt-2">
-                  {quiz.subjects.map(subject => (
+                  {quiz.config.subjects.map(subject => (
                     <span key={subject} className="text-xs bg-blue-600/20 text-blue-300 px-2 py-1 rounded-full">
                       {subject}
                     </span>
                   ))}
-                  {quiz.systems.map(system => (
+                  {quiz.config.systems.map(system => (
                     <span key={system} className="text-xs bg-green-600/20 text-green-300 px-2 py-1 rounded-full">
                       {system.split(' ')[0]}
                     </span>
@@ -104,7 +73,7 @@ const RecentQuizzes = ({ onQuizRestart, onQuizContinue }: RecentQuizzesProps) =>
               
               <div className="flex items-center space-x-2 ml-3">
                 <button
-                  onClick={() => onQuizRestart(quiz.subjects, quiz.systems)}
+                  onClick={() => onQuizRestart(quiz.config.subjects, quiz.config.systems)}
                   className="bg-slate-700 hover:bg-slate-600 text-white p-2 rounded-lg transition-colors"
                   title="Restart quiz"
                 >
