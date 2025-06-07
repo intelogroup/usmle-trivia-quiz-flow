@@ -1,5 +1,5 @@
 
-import { Zap, BookOpen, Trophy, BarChart3 } from "lucide-react";
+import { Brain, BookOpen, Trophy, BarChart3, RotateCcw, Settings } from "lucide-react";
 
 interface QuickActionsProps {
   onNavigate: (screen: string) => void;
@@ -7,10 +7,38 @@ interface QuickActionsProps {
 
 const QuickActions = ({ onNavigate }: QuickActionsProps) => {
   const actions = [
-    { id: 'quiz', icon: Zap, label: 'Timed Challenge', color: 'bg-blue-600' },
-    { id: 'category', icon: BookOpen, label: 'Browse Categories', color: 'bg-green-600' },
-    { id: 'leaderboard', icon: Trophy, label: 'Leaderboard', color: 'bg-yellow-600' },
-    { id: 'analytics', icon: BarChart3, label: 'Analytics', color: 'bg-purple-600' },
+    {
+      id: 'category',
+      icon: Brain,
+      label: 'Browse Topics',
+      description: 'Explore by subject',
+      color: 'bg-purple-600',
+      action: () => onNavigate('category')
+    },
+    {
+      id: 'review',
+      icon: RotateCcw,
+      label: 'Review Mistakes',
+      description: 'Learn from errors',
+      color: 'bg-red-600',
+      action: () => onNavigate('review')
+    },
+    {
+      id: 'leaderboard',
+      icon: Trophy,
+      label: 'Rankings',
+      description: 'See your rank',
+      color: 'bg-yellow-600',
+      action: () => onNavigate('leaderboard')
+    },
+    {
+      id: 'analytics',
+      icon: BarChart3,
+      label: 'Analytics',
+      description: 'Track progress',
+      color: 'bg-green-600',
+      action: () => onNavigate('analytics')
+    }
   ];
 
   return (
@@ -22,11 +50,18 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
           return (
             <button
               key={action.id}
-              onClick={() => onNavigate(action.id)}
-              className={`${action.color} hover:opacity-90 text-white p-4 rounded-xl flex flex-col items-center space-y-2 transition-opacity`}
+              onClick={action.action}
+              className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors"
             >
-              <Icon size={24} />
-              <span className="text-sm font-medium text-center">{action.label}</span>
+              <div className="flex items-center space-x-3">
+                <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center`}>
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-sm">{action.label}</div>
+                  <div className="text-xs text-slate-400">{action.description}</div>
+                </div>
+              </div>
             </button>
           );
         })}

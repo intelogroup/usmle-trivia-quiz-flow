@@ -2,6 +2,7 @@
 import { Bell, Settings } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
+import NotificationBadge from "./NotificationBadge";
 
 interface HomeScreenProps {
   onNavigate: (screen: string) => void;
@@ -25,7 +26,7 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
         <div className="flex items-center space-x-3">
           <div className="relative">
             <Bell size={20} className="text-slate-300" />
-            <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+            <NotificationBadge />
           </div>
           <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
             <span className="text-sm font-semibold">JK</span>
@@ -56,8 +57,45 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
       {/* Weakest Subjects */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold">Weakest Subjects</h3>
-        <div className="bg-slate-800 rounded-xl p-4 text-center">
-          <p className="text-slate-400">Not enough data yet. Take more quizzes to identify weak areas.</p>
+        <div className="space-y-2">
+          <div className="bg-slate-800 rounded-xl p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white text-sm">🧬</span>
+                </div>
+                <div>
+                  <h4 className="font-medium">Pathology</h4>
+                  <p className="text-sm text-slate-400">68% average • Needs focus</p>
+                </div>
+              </div>
+              <button
+                onClick={() => onNavigate('category')}
+                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+              >
+                Practice
+              </button>
+            </div>
+          </div>
+          <div className="bg-slate-800 rounded-xl p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white text-sm">🫀</span>
+                </div>
+                <div>
+                  <h4 className="font-medium">Physiology</h4>
+                  <p className="text-sm text-slate-400">72% average • Room for improvement</p>
+                </div>
+              </div>
+              <button
+                onClick={() => onNavigate('category')}
+                className="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+              >
+                Practice
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -70,11 +108,14 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
               <span className="text-xl">🔄</span>
             </div>
             <div className="flex-1">
-              <p className="font-medium">Revisit questions you got wrong</p>
-              <p className="text-sm text-slate-400">No questions available for review yet</p>
+              <p className="font-medium">3 questions need review</p>
+              <p className="text-sm text-slate-400">Focus on your recent mistakes</p>
             </div>
           </div>
-          <button className="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 py-3 rounded-lg transition-colors">
+          <button 
+            onClick={() => onNavigate('review')}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors"
+          >
             Start Review
           </button>
         </div>

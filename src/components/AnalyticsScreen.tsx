@@ -1,151 +1,138 @@
 
-import { useState } from "react";
-import { TrendingUp, Target, Clock, BookOpen } from "lucide-react";
+import { TrendingUp, Target, Clock, Trophy, Calendar, BookOpen } from "lucide-react";
 
 const AnalyticsScreen = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('Month');
-  const periods = ['Week', 'Month', 'Quarter'];
+  const analyticsData = {
+    totalQuizzes: 12,
+    averageScore: 78,
+    totalTime: 145, // minutes
+    bestStreak: 7,
+    weeklyData: [
+      { day: 'Mon', quizzes: 2, score: 85 },
+      { day: 'Tue', quizzes: 1, score: 72 },
+      { day: 'Wed', quizzes: 3, score: 91 },
+      { day: 'Thu', quizzes: 0, score: 0 },
+      { day: 'Fri', quizzes: 2, score: 68 },
+      { day: 'Sat', quizzes: 1, score: 95 },
+      { day: 'Sun', quizzes: 2, score: 82 }
+    ],
+    subjectPerformance: [
+      { subject: 'Anatomy', score: 85, quizzes: 3 },
+      { subject: 'Physiology', score: 72, quizzes: 2 },
+      { subject: 'Pharmacology', score: 91, quizzes: 4 },
+      { subject: 'Pathology', score: 68, quizzes: 2 },
+      { subject: 'Microbiology', score: 79, quizzes: 1 }
+    ]
+  };
 
-  const stats = {
-    averageScore: 0,
-    studyTime: '0h',
-    sessions: 0,
-    currentStreak: 0,
-    bestStreak: 0,
-    thisWeek: 0,
-    thisMonth: 0,
+  const formatTime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
   };
 
   return (
     <div className="p-4 pb-20 space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold">Learning Analytics</h1>
-        <p className="text-slate-300">Track your progress and insights</p>
+        <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto">
+          <TrendingUp className="w-8 h-8 text-green-400" />
+        </div>
+        <h1 className="text-2xl font-bold">Analytics</h1>
+        <p className="text-slate-300">Track your learning progress</p>
       </div>
 
-      {/* Period Selector */}
-      <div className="flex bg-slate-800 rounded-xl p-1">
-        {periods.map((period) => (
-          <button
-            key={period}
-            onClick={() => setSelectedPeriod(period)}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
-              selectedPeriod === period
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            {period}
-          </button>
-        ))}
-      </div>
-
-      {/* Main Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      {/* Key Stats */}
+      <div className="grid grid-cols-2 gap-3">
         <div className="bg-slate-800 rounded-xl p-4 text-center">
-          <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
-            <Target className="w-4 h-4 text-white" />
-          </div>
-          <div className="text-2xl font-bold">{stats.averageScore}%</div>
+          <BookOpen className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+          <div className="text-2xl font-bold">{analyticsData.totalQuizzes}</div>
+          <div className="text-sm text-slate-400">Total Quizzes</div>
+        </div>
+        <div className="bg-slate-800 rounded-xl p-4 text-center">
+          <Target className="w-6 h-6 text-green-400 mx-auto mb-2" />
+          <div className="text-2xl font-bold">{analyticsData.averageScore}%</div>
           <div className="text-sm text-slate-400">Average Score</div>
         </div>
-        
         <div className="bg-slate-800 rounded-xl p-4 text-center">
-          <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
-            <Clock className="w-4 h-4 text-white" />
-          </div>
-          <div className="text-2xl font-bold">{stats.studyTime}</div>
+          <Clock className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
+          <div className="text-2xl font-bold">{formatTime(analyticsData.totalTime)}</div>
           <div className="text-sm text-slate-400">Study Time</div>
         </div>
-        
         <div className="bg-slate-800 rounded-xl p-4 text-center">
-          <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-2">
-            <BookOpen className="w-4 h-4 text-white" />
-          </div>
-          <div className="text-2xl font-bold">{stats.sessions}</div>
-          <div className="text-sm text-slate-400">Sessions</div>
+          <Trophy className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+          <div className="text-2xl font-bold">{analyticsData.bestStreak}</div>
+          <div className="text-sm text-slate-400">Best Streak</div>
         </div>
       </div>
 
-      {/* Performance Overview */}
-      <div className="bg-slate-800 rounded-xl p-4 space-y-4">
-        <div className="flex items-center space-x-2">
-          <TrendingUp className="w-5 h-5 text-green-400" />
-          <h3 className="text-lg font-semibold">Performance Overview</h3>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-slate-700 rounded-lg p-3 text-center">
-            <div className="text-xl font-bold">{stats.currentStreak}</div>
-            <div className="text-sm text-slate-400">Current Streak</div>
+      {/* Weekly Activity */}
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold">Weekly Activity</h3>
+        <div className="bg-slate-800 rounded-xl p-4">
+          <div className="flex justify-between items-end space-x-2 h-32">
+            {analyticsData.weeklyData.map((day, index) => (
+              <div key={index} className="flex-1 flex flex-col items-center">
+                <div 
+                  className="bg-blue-600 rounded-t-sm w-full mb-2 transition-all duration-300"
+                  style={{ 
+                    height: `${Math.max(day.quizzes * 20, 8)}px`,
+                    minHeight: '8px'
+                  }}
+                ></div>
+                <div className="text-xs text-slate-400">{day.day}</div>
+              </div>
+            ))}
           </div>
-          
-          <div className="bg-slate-700 rounded-lg p-3 text-center">
-            <div className="text-xl font-bold">{stats.bestStreak}</div>
-            <div className="text-sm text-slate-400">Best Streak</div>
-          </div>
-          
-          <div className="bg-slate-700 rounded-lg p-3 text-center">
-            <div className="text-xl font-bold">{stats.thisWeek}</div>
-            <div className="text-sm text-slate-400">This Week</div>
-          </div>
-          
-          <div className="bg-slate-700 rounded-lg p-3 text-center">
-            <div className="text-xl font-bold">{stats.thisMonth}</div>
-            <div className="text-sm text-slate-400">This Month</div>
+          <div className="text-center mt-4">
+            <p className="text-sm text-slate-400">Quizzes completed this week</p>
           </div>
         </div>
       </div>
 
-      {/* Category Performance */}
-      <div className="bg-slate-800 rounded-xl p-4 space-y-4">
-        <h3 className="text-lg font-semibold flex items-center space-x-2">
-          <Target className="w-5 h-5" />
-          <span>Category Performance</span>
-        </h3>
-        
-        <div className="bg-slate-700 rounded-lg p-4 text-center">
-          <p className="text-slate-400 mb-2">No category data available for this period</p>
-          <p className="text-sm text-slate-500">Complete some quizzes to see your category breakdown</p>
+      {/* Subject Performance */}
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold">Subject Performance</h3>
+        <div className="space-y-3">
+          {analyticsData.subjectPerformance.map((subject, index) => (
+            <div key={index} className="bg-slate-800 rounded-xl p-4">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-medium">{subject.subject}</span>
+                <span className="text-sm text-slate-400">{subject.quizzes} quizzes</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="flex-1 bg-slate-700 rounded-full h-2">
+                  <div 
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      subject.score >= 80 ? 'bg-green-500' : 
+                      subject.score >= 70 ? 'bg-yellow-500' : 'bg-red-500'
+                    }`}
+                    style={{ width: `${subject.score}%` }}
+                  ></div>
+                </div>
+                <span className="text-sm font-semibold">{subject.score}%</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Study Time Analysis */}
-      <div className="bg-slate-800 rounded-xl p-4 space-y-4">
-        <h3 className="text-lg font-semibold flex items-center space-x-2">
-          <Clock className="w-5 h-5" />
-          <span>Study Time Analysis</span>
-        </h3>
-        
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-center">
-            <div className="text-3xl font-bold">30s</div>
-            <div className="text-sm text-slate-400">Avg. Time per Question</div>
+      {/* Study Insights */}
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold">Study Insights</h3>
+        <div className="bg-slate-800 rounded-xl p-4 space-y-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span className="text-sm">Your performance is improving by 5% weekly</span>
           </div>
-          
-          <div className="text-center">
-            <div className="text-3xl font-bold">0m</div>
-            <div className="text-sm text-slate-400">Avg. Session Length</div>
+          <div className="flex items-center space-x-3">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <span className="text-sm">Strongest subject: Pharmacology (91% avg)</span>
           </div>
-        </div>
-      </div>
-
-      {/* Weekly Progress */}
-      <div className="bg-slate-800 rounded-xl p-4 space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Weekly Progress</h3>
-          <TrendingUp className="w-5 h-5 text-blue-400" />
-        </div>
-        
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="text-slate-400">0% of weekly goal</span>
+          <div className="flex items-center space-x-3">
+            <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+            <span className="text-sm">Focus area: Pathology needs improvement</span>
           </div>
-          <div className="w-full bg-slate-700 rounded-full h-2">
-            <div className="bg-blue-600 h-2 rounded-full" style={{ width: '0%' }}></div>
-          </div>
-          <p className="text-sm text-slate-400">Complete 7 quizzes this week to reach your goal!</p>
         </div>
       </div>
     </div>
