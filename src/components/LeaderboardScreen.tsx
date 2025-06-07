@@ -37,51 +37,87 @@ const LeaderboardScreen = () => {
         <p className="text-slate-400">Compete with medical students worldwide</p>
       </div>
 
-      {/* Top 3 */}
-      <div className="bg-slate-800 rounded-xl p-6">
-        <div className="flex justify-center items-end space-x-6">
+      {/* Enhanced Podium */}
+      <div className="bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl p-6 overflow-hidden relative">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/5 via-transparent to-yellow-500/5"></div>
+        
+        <div className="relative flex justify-center items-end space-x-4 mb-4">
           {/* 2nd Place */}
-          <div className="text-center">
-            <div className="w-16 h-16 bg-slate-600 rounded-full flex items-center justify-center mb-2">
-              <span className="text-2xl">👩‍⚕️</span>
+          <div className="text-center transform transition-transform hover:scale-105">
+            {/* Avatar */}
+            <div className="relative mb-3">
+              <div className="w-16 h-16 bg-gradient-to-b from-gray-400 to-gray-500 rounded-full flex items-center justify-center shadow-lg border-2 border-gray-300">
+                <span className="text-2xl">👩‍⚕️</span>
+              </div>
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                <Medal className="w-4 h-4 text-gray-700" />
+              </div>
             </div>
-            <div className="bg-slate-700 text-white px-3 py-2 rounded-lg">
-              <div className="font-semibold text-sm">MedStudent2023</div>
-              <div className="text-xs text-slate-300">9,720 pts</div>
+            
+            {/* Info Card */}
+            <div className="bg-gradient-to-b from-gray-100 to-gray-200 text-gray-800 px-3 py-2 rounded-lg shadow-md mb-2 min-w-[100px]">
+              <div className="font-bold text-sm">MedStudent2023</div>
+              <div className="text-xs text-gray-600">9,720 pts</div>
             </div>
-            <div className="w-12 h-8 bg-slate-600 mt-2 rounded-t-lg flex items-center justify-center">
-              <Medal className="w-4 h-4 text-gray-300" />
+            
+            {/* Podium Base */}
+            <div className="w-20 h-16 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-xl shadow-lg flex items-center justify-center border-t-2 border-gray-200">
+              <span className="text-2xl font-bold text-white">2</span>
             </div>
           </div>
 
-          {/* 1st Place */}
-          <div className="text-center">
-            <div className="w-20 h-20 bg-yellow-600 rounded-full flex items-center justify-center mb-2">
-              <span className="text-3xl">🧠</span>
+          {/* 1st Place - Taller */}
+          <div className="text-center transform transition-transform hover:scale-105">
+            {/* Avatar */}
+            <div className="relative mb-3">
+              <div className="w-20 h-20 bg-gradient-to-b from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center shadow-xl border-3 border-yellow-300 ring-2 ring-yellow-200">
+                <span className="text-3xl">🧠</span>
+              </div>
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                <Crown className="w-5 h-5 text-yellow-800" />
+              </div>
             </div>
-            <div className="bg-yellow-600 text-white px-4 py-3 rounded-lg">
-              <div className="font-bold">DrBrainiac</div>
-              <div className="text-sm">9,850 pts</div>
+            
+            {/* Info Card */}
+            <div className="bg-gradient-to-b from-yellow-400 to-yellow-500 text-yellow-900 px-4 py-3 rounded-lg shadow-lg mb-2 min-w-[120px]">
+              <div className="font-black text-base">DrBrainiac</div>
+              <div className="text-sm font-semibold">9,850 pts</div>
             </div>
-            <div className="w-16 h-12 bg-yellow-600 mt-2 rounded-t-lg flex items-center justify-center">
-              <Crown className="w-5 h-5 text-white" />
+            
+            {/* Podium Base - Tallest */}
+            <div className="w-24 h-20 bg-gradient-to-t from-yellow-500 to-yellow-400 rounded-t-xl shadow-xl flex items-center justify-center border-t-3 border-yellow-300">
+              <span className="text-3xl font-bold text-white">1</span>
             </div>
           </div>
 
           {/* 3rd Place */}
-          <div className="text-center">
-            <div className="w-16 h-16 bg-slate-600 rounded-full flex items-center justify-center mb-2">
-              <span className="text-2xl">👨‍⚕️</span>
+          <div className="text-center transform transition-transform hover:scale-105">
+            {/* Avatar */}
+            <div className="relative mb-3">
+              <div className="w-16 h-16 bg-gradient-to-b from-orange-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg border-2 border-orange-300">
+                <span className="text-2xl">👨‍⚕️</span>
+              </div>
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-orange-400 rounded-full flex items-center justify-center">
+                <Award className="w-4 h-4 text-orange-800" />
+              </div>
             </div>
-            <div className="bg-slate-700 text-white px-3 py-2 rounded-lg">
-              <div className="font-semibold text-sm">USMLEMaster</div>
-              <div className="text-xs text-slate-300">9,580 pts</div>
+            
+            {/* Info Card */}
+            <div className="bg-gradient-to-b from-orange-100 to-orange-200 text-orange-800 px-3 py-2 rounded-lg shadow-md mb-2 min-w-[100px]">
+              <div className="font-bold text-sm">USMLEMaster</div>
+              <div className="text-xs text-orange-600">9,580 pts</div>
             </div>
-            <div className="w-12 h-6 bg-slate-600 mt-2 rounded-t-lg flex items-center justify-center">
-              <Award className="w-4 h-4 text-orange-400" />
+            
+            {/* Podium Base - Shortest */}
+            <div className="w-20 h-12 bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-xl shadow-lg flex items-center justify-center border-t-2 border-orange-300">
+              <span className="text-xl font-bold text-white">3</span>
             </div>
           </div>
         </div>
+
+        {/* Podium Floor */}
+        <div className="h-3 bg-gradient-to-r from-slate-600 via-slate-500 to-slate-600 rounded-b-lg shadow-inner"></div>
       </div>
 
       {/* Full Rankings */}
