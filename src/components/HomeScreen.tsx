@@ -24,7 +24,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
   };
 
   return (
-    <div className="p-4 pb-20 space-y-6 bg-background min-h-screen">
+    <div className="p-4 pb-20 space-y-6 min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
@@ -42,8 +42,8 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
             <Bell size={20} className="text-muted-foreground" />
             <NotificationBadge />
           </div>
-          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-            <span className="text-sm font-semibold">JK</span>
+          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center shadow-lg">
+            <span className="text-sm font-semibold text-white">JK</span>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Start Quiz Button */}
       <button
         onClick={() => onNavigate('quiz')}
-        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-colors"
+        className="w-full gradient-primary text-primary-foreground font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 hover:scale-105 shadow-lg"
       >
         <span className="text-xl">⚡</span>
         <span>Start New Quiz</span>
@@ -77,40 +77,40 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Weakest Subjects */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-foreground">Weakest Subjects</h3>
-        <div className="space-y-2">
-          <div className="bg-card rounded-xl border border-border p-4">
+        <div className="space-y-3">
+          <div className="glass-card rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white text-sm">🧬</span>
+                <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-white text-lg">🧬</span>
                 </div>
                 <div>
-                  <h4 className="font-medium text-foreground">Pathology</h4>
+                  <h4 className="font-semibold text-foreground">Pathology</h4>
                   <p className="text-sm text-muted-foreground">68% average • Needs focus</p>
                 </div>
               </div>
               <button
                 onClick={() => onNavigate('category')}
-                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-all duration-300 hover:scale-105 shadow-lg"
               >
                 Practice
               </button>
             </div>
           </div>
-          <div className="bg-card rounded-xl border border-border p-4">
+          <div className="glass-card rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white text-sm">🫀</span>
+                <div className="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-white text-lg">🫀</span>
                 </div>
                 <div>
-                  <h4 className="font-medium text-foreground">Physiology</h4>
+                  <h4 className="font-semibold text-foreground">Physiology</h4>
                   <p className="text-sm text-muted-foreground">72% average • Room for improvement</p>
                 </div>
               </div>
               <button
                 onClick={() => onNavigate('category')}
-                className="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm transition-all duration-300 hover:scale-105 shadow-lg"
               >
                 Practice
               </button>
@@ -122,19 +122,19 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Review Mistakes */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-foreground">Review Mistakes</h3>
-        <div className="bg-card rounded-xl border border-border p-4 space-y-3">
+        <div className="glass-card rounded-xl p-4 space-y-3">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-lg">
               <span className="text-xl">🔄</span>
             </div>
             <div className="flex-1">
-              <p className="font-medium text-foreground">3 questions need review</p>
+              <p className="font-semibold text-foreground">3 questions need review</p>
               <p className="text-sm text-muted-foreground">Focus on your recent mistakes</p>
             </div>
           </div>
           <button 
             onClick={() => onNavigate('review')}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 rounded-lg transition-colors"
+            className="w-full gradient-primary text-primary-foreground py-3 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
           >
             Start Review
           </button>

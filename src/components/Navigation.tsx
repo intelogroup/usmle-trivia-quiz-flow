@@ -16,8 +16,8 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-card border-t border-border">
-      <div className="flex justify-around items-center py-2">
+    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md glass-nav">
+      <div className="flex justify-around items-center py-3 px-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentScreen === item.id;
@@ -26,14 +26,14 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+              className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-300 ${
                 isActive 
-                  ? 'text-primary' 
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'text-primary glass-button' 
+                  : 'text-muted-foreground hover:text-foreground hover:glass-button'
               }`}
             >
               <Icon size={20} />
-              <span className="text-xs mt-1">{item.label}</span>
+              <span className="text-xs mt-1 font-medium">{item.label}</span>
             </button>
           );
         })}

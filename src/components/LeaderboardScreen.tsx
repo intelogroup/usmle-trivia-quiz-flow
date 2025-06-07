@@ -26,7 +26,7 @@ const LeaderboardScreen = () => {
   const podiumOrder = [leaderboardData[1], leaderboardData[0], leaderboardData[2]];
 
   return (
-    <div className="min-h-screen bg-background p-4 pb-20">
+    <div className="min-h-screen p-4 pb-20">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold text-foreground mb-2">Leaderboard</h1>
@@ -45,7 +45,7 @@ const LeaderboardScreen = () => {
               <div key={player.rank} className="flex flex-col items-center">
                 {/* Avatar */}
                 <div className="mb-3">
-                  <Avatar className={`${avatarSize} ring-2 ${isFirst ? 'ring-yellow-400' : player.rank === 2 ? 'ring-gray-300' : 'ring-orange-300'}`}>
+                  <Avatar className={`${avatarSize} ring-2 ${isFirst ? 'ring-yellow-400' : player.rank === 2 ? 'ring-gray-300' : 'ring-orange-300'} shadow-lg`}>
                     <AvatarImage src="" />
                     <AvatarFallback className={`text-white font-bold ${isFirst ? 'bg-yellow-500 text-lg' : player.rank === 2 ? 'bg-gray-400' : 'bg-orange-400'}`}>
                       {player.avatar}
@@ -54,7 +54,7 @@ const LeaderboardScreen = () => {
                 </div>
 
                 {/* Card */}
-                <div className={`bg-card rounded-lg shadow-sm border border-border p-4 ${cardHeight} ${isFirst ? 'w-24' : 'w-20'} flex flex-col justify-between items-center`}>
+                <div className={`glass-card ${cardHeight} ${isFirst ? 'w-24' : 'w-20'} flex flex-col justify-between items-center p-4`}>
                   <div className="text-center">
                     {getRankIcon(player.rank)}
                   </div>
@@ -74,8 +74,8 @@ const LeaderboardScreen = () => {
       </div>
 
       {/* Full Rankings */}
-      <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-muted border-b border-border">
+      <div className="glass-card rounded-xl overflow-hidden">
+        <div className="px-4 py-3 bg-muted/50 border-b border-border">
           <h3 className="text-lg font-semibold text-foreground">Rankings</h3>
         </div>
         
@@ -83,8 +83,8 @@ const LeaderboardScreen = () => {
           {leaderboardData.map((player) => (
             <div 
               key={player.rank} 
-              className={`flex items-center justify-between px-4 py-4 ${
-                player.isCurrentUser ? 'bg-accent' : 'hover:bg-muted/50'
+              className={`flex items-center justify-between px-4 py-4 transition-colors ${
+                player.isCurrentUser ? 'bg-accent/50' : 'hover:bg-muted/30'
               }`}
             >
               <div className="flex items-center gap-4">
@@ -96,7 +96,7 @@ const LeaderboardScreen = () => {
                 </div>
 
                 {/* Avatar */}
-                <Avatar className="w-10 h-10">
+                <Avatar className="w-10 h-10 shadow-md">
                   <AvatarImage src="" />
                   <AvatarFallback className={`text-white font-medium ${
                     player.isCurrentUser ? 'bg-primary' : 'bg-muted-foreground'
@@ -129,7 +129,7 @@ const LeaderboardScreen = () => {
 
       {/* Your Position Summary */}
       {leaderboardData.find(p => p.isCurrentUser) && (
-        <div className="mt-6 bg-accent rounded-lg border border-border p-4">
+        <div className="mt-6 glass-card rounded-xl p-4">
           <div className="text-center">
             <h3 className="text-lg font-semibold text-foreground mb-2">Your Position</h3>
             <div className="flex items-center justify-center gap-4">
