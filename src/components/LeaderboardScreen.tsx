@@ -18,7 +18,7 @@ const LeaderboardScreen = () => {
       case 1: return <Crown className="w-4 h-4 text-yellow-500" />;
       case 2: return <Medal className="w-4 h-4 text-gray-400" />;
       case 3: return <Award className="w-4 h-4 text-orange-400" />;
-      default: return <span className="text-sm font-semibold text-muted-foreground">{rank}</span>;
+      default: return <span className="text-sm font-semibold text-gray-600">{rank}</span>;
     }
   };
 
@@ -26,11 +26,11 @@ const LeaderboardScreen = () => {
   const podiumOrder = [leaderboardData[1], leaderboardData[0], leaderboardData[2]];
 
   return (
-    <div className="min-h-screen p-4 pb-20">
+    <div className="min-h-screen bg-gray-50 p-4 pb-20">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-foreground mb-2">Leaderboard</h1>
-        <p className="text-muted-foreground">Compete with medical students worldwide</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Leaderboard</h1>
+        <p className="text-gray-600">Compete with medical students worldwide</p>
       </div>
 
       {/* Top 3 Podium */}
@@ -45,7 +45,7 @@ const LeaderboardScreen = () => {
               <div key={player.rank} className="flex flex-col items-center">
                 {/* Avatar */}
                 <div className="mb-3">
-                  <Avatar className={`${avatarSize} ring-2 ${isFirst ? 'ring-yellow-400' : player.rank === 2 ? 'ring-gray-300' : 'ring-orange-300'} shadow-lg`}>
+                  <Avatar className={`${avatarSize} ring-2 ${isFirst ? 'ring-yellow-400' : player.rank === 2 ? 'ring-gray-300' : 'ring-orange-300'}`}>
                     <AvatarImage src="" />
                     <AvatarFallback className={`text-white font-bold ${isFirst ? 'bg-yellow-500 text-lg' : player.rank === 2 ? 'bg-gray-400' : 'bg-orange-400'}`}>
                       {player.avatar}
@@ -54,15 +54,15 @@ const LeaderboardScreen = () => {
                 </div>
 
                 {/* Card */}
-                <div className={`glass-card ${cardHeight} ${isFirst ? 'w-24' : 'w-20'} flex flex-col justify-between items-center p-4`}>
+                <div className={`bg-white rounded-lg shadow-sm border p-4 ${cardHeight} ${isFirst ? 'w-24' : 'w-20'} flex flex-col justify-between items-center`}>
                   <div className="text-center">
                     {getRankIcon(player.rank)}
                   </div>
                   <div className="text-center">
-                    <div className={`font-bold text-foreground ${isFirst ? 'text-sm' : 'text-xs'} truncate`}>
+                    <div className={`font-bold text-gray-900 ${isFirst ? 'text-sm' : 'text-xs'} truncate`}>
                       {player.name.length > 8 ? player.name.substring(0, 8) + '...' : player.name}
                     </div>
-                    <div className={`text-muted-foreground ${isFirst ? 'text-xs' : 'text-xs'} font-medium`}>
+                    <div className={`text-gray-600 ${isFirst ? 'text-xs' : 'text-xs'} font-medium`}>
                       {player.points.toLocaleString()}
                     </div>
                   </div>
@@ -74,32 +74,32 @@ const LeaderboardScreen = () => {
       </div>
 
       {/* Full Rankings */}
-      <div className="glass-card rounded-xl overflow-hidden">
-        <div className="px-4 py-3 bg-muted/50 border-b border-border">
-          <h3 className="text-lg font-semibold text-foreground">Rankings</h3>
+      <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+        <div className="px-4 py-3 bg-gray-50 border-b">
+          <h3 className="text-lg font-semibold text-gray-900">Rankings</h3>
         </div>
         
-        <div className="divide-y divide-border">
+        <div className="divide-y divide-gray-100">
           {leaderboardData.map((player) => (
             <div 
               key={player.rank} 
-              className={`flex items-center justify-between px-4 py-4 transition-colors ${
-                player.isCurrentUser ? 'bg-accent/50' : 'hover:bg-muted/30'
+              className={`flex items-center justify-between px-4 py-4 ${
+                player.isCurrentUser ? 'bg-blue-50' : 'hover:bg-gray-50'
               }`}
             >
               <div className="flex items-center gap-4">
                 {/* Rank */}
                 <div className="w-8 flex justify-center">
                   {player.rank <= 3 ? getRankIcon(player.rank) : (
-                    <span className="text-sm font-semibold text-muted-foreground">{player.rank}</span>
+                    <span className="text-sm font-semibold text-gray-600">{player.rank}</span>
                   )}
                 </div>
 
                 {/* Avatar */}
-                <Avatar className="w-10 h-10 shadow-md">
+                <Avatar className="w-10 h-10">
                   <AvatarImage src="" />
                   <AvatarFallback className={`text-white font-medium ${
-                    player.isCurrentUser ? 'bg-primary' : 'bg-muted-foreground'
+                    player.isCurrentUser ? 'bg-blue-500' : 'bg-gray-500'
                   }`}>
                     {player.avatar}
                   </AvatarFallback>
@@ -108,7 +108,7 @@ const LeaderboardScreen = () => {
                 {/* Name */}
                 <div>
                   <div className={`font-semibold ${
-                    player.isCurrentUser ? 'text-primary' : 'text-foreground'
+                    player.isCurrentUser ? 'text-blue-900' : 'text-gray-900'
                   }`}>
                     {player.name} {player.isCurrentUser && '(You)'}
                   </div>
@@ -117,10 +117,10 @@ const LeaderboardScreen = () => {
 
               {/* Points */}
               <div className="text-right">
-                <div className="font-semibold text-foreground">
+                <div className="font-semibold text-gray-900">
                   {player.points.toLocaleString()}
                 </div>
-                <div className="text-xs text-muted-foreground">points</div>
+                <div className="text-xs text-gray-500">points</div>
               </div>
             </div>
           ))}
@@ -129,14 +129,14 @@ const LeaderboardScreen = () => {
 
       {/* Your Position Summary */}
       {leaderboardData.find(p => p.isCurrentUser) && (
-        <div className="mt-6 glass-card rounded-xl p-4">
+        <div className="mt-6 bg-blue-50 rounded-lg border border-blue-200 p-4">
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-foreground mb-2">Your Position</h3>
+            <h3 className="text-lg font-semibold text-blue-900 mb-2">Your Position</h3>
             <div className="flex items-center justify-center gap-4">
-              <div className="text-2xl font-bold text-primary">#7</div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-2xl font-bold text-blue-600">#7</div>
+              <div className="text-sm text-blue-700">
                 <div className="font-medium">8,750 points</div>
-                <div className="text-primary">300 points to rank up</div>
+                <div className="text-blue-600">300 points to rank up</div>
               </div>
             </div>
           </div>

@@ -12,7 +12,7 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
       icon: Brain,
       label: 'Browse Topics',
       description: 'Explore by subject',
-      color: 'bg-purple-500',
+      color: 'bg-purple-600',
       action: () => onNavigate('category')
     },
     {
@@ -20,7 +20,7 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
       icon: RotateCcw,
       label: 'Review Mistakes',
       description: 'Learn from errors',
-      color: 'bg-red-500',
+      color: 'bg-red-600',
       action: () => onNavigate('review')
     },
     {
@@ -28,7 +28,7 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
       icon: Trophy,
       label: 'Rankings',
       description: 'See your rank',
-      color: 'bg-yellow-500',
+      color: 'bg-yellow-600',
       action: () => onNavigate('leaderboard')
     },
     {
@@ -36,14 +36,14 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
       icon: BarChart3,
       label: 'Analytics',
       description: 'Track progress',
-      color: 'bg-green-500',
+      color: 'bg-green-600',
       action: () => onNavigate('analytics')
     }
   ];
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-foreground">Quick Actions</h3>
+    <div className="space-y-3">
+      <h3 className="text-lg font-semibold">Quick Actions</h3>
       <div className="grid grid-cols-2 gap-3">
         {actions.map((action) => {
           const Icon = action.icon;
@@ -51,15 +51,15 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
             <button
               key={action.id}
               onClick={action.action}
-              className="glass-card hover:glass-button rounded-xl p-4 text-left transition-all duration-300 hover:scale-105"
+              className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors"
             >
               <div className="flex items-center space-x-3">
-                <div className={`w-12 h-12 ${action.color} rounded-xl flex items-center justify-center shadow-lg`}>
-                  <Icon className="w-6 h-6 text-white" />
+                <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center`}>
+                  <Icon className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="font-semibold text-sm text-foreground">{action.label}</div>
-                  <div className="text-xs text-muted-foreground">{action.description}</div>
+                  <div className="font-medium text-sm">{action.label}</div>
+                  <div className="text-xs text-slate-400">{action.description}</div>
                 </div>
               </div>
             </button>
