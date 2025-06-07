@@ -1,5 +1,5 @@
 
-import { Home, Zap, Trophy, BarChart3 } from "lucide-react";
+import { Home, Zap, Trophy, BarChart3, User } from "lucide-react";
 
 interface NavigationProps {
   currentScreen: string;
@@ -10,8 +10,9 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
   const navItems = [
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'quiz', icon: Zap, label: 'Quiz' },
-    { id: 'leaderboard', icon: Trophy, label: 'Leaderboard' },
-    { id: 'analytics', icon: BarChart3, label: 'Analytics' },
+    { id: 'leaderboard', icon: Trophy, label: 'Rankings' },
+    { id: 'analytics', icon: BarChart3, label: 'Stats' },
+    { id: 'profile', icon: User, label: 'Profile' },
   ];
 
   return (
@@ -25,7 +26,7 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex flex-col items-center py-2 px-4 rounded-lg transition-colors ${
+              className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
                 isActive 
                   ? 'text-blue-400' 
                   : 'text-slate-400 hover:text-slate-300'
