@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,20 +38,38 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Custom app colors for light mode */
+    --app-background: 248 250 252; /* slate-50 */
+    --app-surface: 255 255 255; /* white */
+    --app-surface-secondary: 248 250 252; /* slate-50 */
+    --app-surface-tertiary: 241 245 249; /* slate-100 */
+    --app-text-primary: 15 23 42; /* slate-800 */
+    --app-text-secondary: 71 85 105; /* slate-600 */
+    --app-text-muted: 100 116 139; /* slate-500 */
+    --app-border: 226 232 240; /* slate-200 */
+    --app-border-secondary: 203 213 225; /* slate-300 */
+
+    /* Phone frame colors for light mode */
+    --phone-frame-bg: 203 213 225; /* slate-300 */
+    --phone-frame-body: 148 163 184; /* slate-400 */
+    --phone-frame-bezel: 30 41 59; /* slate-800 */
+    --phone-frame-screen: 255 255 255; /* white */
+    --phone-frame-buttons: 100 116 139; /* slate-500 */
+    --phone-frame-indicator: 148 163 184; /* slate-400 */
+
+    /* Gradients for light mode */
+    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --gradient-secondary: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    --gradient-surface: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    --gradient-phone-bg: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%);
   }
 
   .dark {
@@ -89,6 +108,31 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Custom app colors for dark mode */
+    --app-background: 15 23 42; /* slate-800 */
+    --app-surface: 30 41 59; /* slate-800 */
+    --app-surface-secondary: 51 65 85; /* slate-700 */
+    --app-surface-tertiary: 71 85 105; /* slate-600 */
+    --app-text-primary: 248 250 252; /* slate-50 */
+    --app-text-secondary: 203 213 225; /* slate-300 */
+    --app-text-muted: 148 163 184; /* slate-400 */
+    --app-border: 71 85 105; /* slate-600 */
+    --app-border-secondary: 51 65 85; /* slate-700 */
+
+    /* Phone frame colors for dark mode */
+    --phone-frame-bg: 15 23 42; /* slate-800 */
+    --phone-frame-body: 30 41 59; /* slate-800 */
+    --phone-frame-bezel: 0 0 0; /* black */
+    --phone-frame-screen: 30 41 59; /* slate-800 */
+    --phone-frame-buttons: 71 85 105; /* slate-600 */
+    --phone-frame-indicator: 71 85 105; /* slate-600 */
+
+    /* Gradients for dark mode */
+    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    --gradient-secondary: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+    --gradient-surface: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    --gradient-phone-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #000000 100%);
   }
 }
 
@@ -99,5 +143,84 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utility classes for the design system */
+@layer utilities {
+  .bg-app-background {
+    background-color: hsl(var(--app-background));
+  }
+  
+  .bg-app-surface {
+    background-color: hsl(var(--app-surface));
+  }
+  
+  .bg-app-surface-secondary {
+    background-color: hsl(var(--app-surface-secondary));
+  }
+  
+  .bg-app-surface-tertiary {
+    background-color: hsl(var(--app-surface-tertiary));
+  }
+  
+  .text-app-primary {
+    color: hsl(var(--app-text-primary));
+  }
+  
+  .text-app-secondary {
+    color: hsl(var(--app-text-secondary));
+  }
+  
+  .text-app-muted {
+    color: hsl(var(--app-text-muted));
+  }
+  
+  .border-app {
+    border-color: hsl(var(--app-border));
+  }
+  
+  .border-app-secondary {
+    border-color: hsl(var(--app-border-secondary));
+  }
+  
+  .bg-gradient-primary {
+    background-image: var(--gradient-primary);
+  }
+  
+  .bg-gradient-secondary {
+    background-image: var(--gradient-secondary);
+  }
+  
+  .bg-gradient-surface {
+    background-image: var(--gradient-surface);
+  }
+  
+  .bg-gradient-phone {
+    background-image: var(--gradient-phone-bg);
+  }
+
+  .bg-phone-frame {
+    background-color: hsl(var(--phone-frame-bg));
+  }
+  
+  .bg-phone-body {
+    background-color: hsl(var(--phone-frame-body));
+  }
+  
+  .bg-phone-bezel {
+    background-color: hsl(var(--phone-frame-bezel));
+  }
+  
+  .bg-phone-screen {
+    background-color: hsl(var(--phone-frame-screen));
+  }
+  
+  .bg-phone-buttons {
+    background-color: hsl(var(--phone-frame-buttons));
+  }
+  
+  .bg-phone-indicator {
+    background-color: hsl(var(--phone-frame-indicator));
   }
 }
