@@ -1,23 +1,23 @@
 
 import { Trophy, Calendar, Target, BookOpen, Star, Settings } from "lucide-react";
+import { getUserProfile, getAchievements, calculateWeeklyProgress } from "@/utils/dataStore";
+import { getUserProgress } from "@/utils/storageUtils";
 
 interface ProfileScreenProps {
   onNavigate: (screen: string) => void;
 }
 
 const ProfileScreen = ({ onNavigate }: ProfileScreenProps) => {
-  const achievements = [
-    { icon: "🏆", title: "First Quiz", description: "Completed your first quiz", unlocked: true },
-    { icon: "🔥", title: "Study Streak", description: "7 days in a row", unlocked: false },
-    { icon: "🎯", title: "Perfect Score", description: "100% on a quiz", unlocked: false },
-    { icon: "📚", title: "Knowledge Seeker", description: "Completed 10 quizzes", unlocked: false },
-  ];
+  const userProfile = getUserProfile();
+  const userProgress = getUserProgress();
+  const achievements = getAchievements();
+  const weeklyProgress = calculateWeeklyProgress();
 
   const stats = [
-    { label: "Quizzes Taken", value: "1", icon: BookOpen },
-    { label: "Average Score", value: "85%", icon: Target },
-    { label: "Study Streak", value: "1 day", icon: Calendar },
-    { label: "Total XP", value: "0", icon: Star },
+    { label: "Quizzes Taken", value: userProgress.totalQuizzes.toString(), icon: BookOpen },
+    { label: "Average Score", value: `${userProgress.averageScore}%`, icon: Target },
+    { label: "Study Streak", value: `${userProfile.studyStreak} day${userProfile.studyStreak !== 1 ? 's' : ''}`, icon: Calendar },
+    { label: "Total XP", value: userProfile.totalXP.toString(), icon: Star },
   ];
 
   return (
@@ -36,15 +36,15 @@ const ProfileScreen = ({ onNavigate }: ProfileScreenProps) => {
       {/* User Profile */}
       <div className="bg-slate-800 rounded-xl p-6 text-center space-y-4">
         <div className="w-24 h-24 bg-orange-500 rounded-full flex items-center justify-center mx-auto">
-          <span className="text-3xl font-bold text-white">JK</span>
+          <span className="text-3xl font-bold text-white">{userProfile.avatar}</span>
         </div>
         <div>
-          <h2 className="text-xl font-bold">jim kali</h2>
+          <h2 className="text-xl font-bold">{userProfile.name}</h2>
           <p className="text-slate-400">Medical Student</p>
         </div>
         <div className="flex items-center justify-center space-x-2">
           <Trophy className="w-5 h-5 text-yellow-400" />
-          <span className="font-semibold">Level 1</span>
+          <span className="font-semibold">Level {userProfile.level}</span>
         </div>
       </div>
 
@@ -74,6 +74,11 @@ const ProfileScreen = ({ onNavigate }: ProfileScreenProps) => {
               <div className="flex-1">
                 <h4 className="font-semibold">{achievement.title}</h4>
                 <p className="text-sm text-slate-400">{achievement.description}</p>
+                {!achievement.unlocked && achievement.maxProgress > 1 && (
+                  <div className="text-xs text-slate-500 mt-1">
+                    Progress: {achievement.progress}/{achievement.maxProgress}
+                  </div>
+                )}
               </div>
               {achievement.unlocked && (
                 <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
@@ -91,12 +96,17 @@ const ProfileScreen = ({ onNavigate }: ProfileScreenProps) => {
         <div className="bg-slate-800 rounded-xl p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-slate-400">This Week</span>
-            <span className="text-blue-400">1/7 days</span>
+            <span className="text-blue-400">{weeklyProgress.completed}/{weeklyProgress.goal} days</span>
           </div>
           <div className="w-full bg-slate-700 rounded-full h-2">
-            <div className="bg-blue-600 h-2 rounded-full" style={{ width: '14%' }}></div>
+            <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${weeklyProgress.percentage}%` }}></div>
           </div>
-          <p className="text-sm text-slate-400 text-center mt-2">Keep studying to maintain your streak! 🔥</p>
+          <p className="text-sm text-slate-400 text-center mt-2">
+            {weeklyProgress.completed >= weeklyProgress.goal ? 
+              'Great job! You\'ve reached your weekly goal! 🎉' : 
+              'Keep studying to reach your weekly goal! 🔥'
+            }
+          </p>
         </div>
       </div>
     </div>
