@@ -12,11 +12,12 @@ import SubjectSystemSelectionScreen from "@/components/SubjectSystemSelectionScr
 import SettingsScreen from "@/components/SettingsScreen";
 import ProfileScreen from "@/components/ProfileScreen";
 import ReviewScreen from "@/components/ReviewScreen";
+import LearnScreen from "@/components/LearnScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
 import PhoneFrame from "@/components/PhoneFrame";
 import { getQuestionCount } from "@/data/questionBank";
 
-type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review';
+type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review' | 'learn';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -116,6 +117,8 @@ const Index = () => {
         return <ProfileScreen onNavigate={handleNavigation} />;
       case 'review':
         return <ReviewScreen onNavigate={handleNavigation} />;
+      case 'learn':
+        return <LearnScreen onNavigate={handleNavigation} />;
       default:
         return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
     }

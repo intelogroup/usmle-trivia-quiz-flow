@@ -1,5 +1,5 @@
 
-import { Home, Zap, Trophy, BarChart3, User } from "lucide-react";
+import { Home, Zap, Trophy, BarChart3, BookOpen } from "lucide-react";
 
 interface NavigationProps {
   currentScreen: string;
@@ -12,7 +12,7 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
     { id: 'quiz', icon: Zap, label: 'Quiz' },
     { id: 'leaderboard', icon: Trophy, label: 'Rankings' },
     { id: 'analytics', icon: BarChart3, label: 'Stats' },
-    { id: 'profile', icon: User, label: 'Profile' },
+    { id: 'learn', icon: BookOpen, label: 'Learn' },
   ];
 
   return (
