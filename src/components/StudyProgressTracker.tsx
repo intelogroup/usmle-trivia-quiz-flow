@@ -41,20 +41,20 @@ const StudyProgressTracker = () => {
       case 1: return 'bg-green-200';
       case 2: return 'bg-green-400';
       case 3: return 'bg-green-600';
-      default: return 'bg-app-border';
+      default: return 'bg-slate-700';
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Weekly Overview */}
-      <div className="bg-app-surface border border-app-border rounded-xl p-4">
+      <div className="bg-slate-800 rounded-xl p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-app-primary flex items-center">
+          <h3 className="font-semibold text-white flex items-center">
             <Calendar className="w-5 h-5 mr-2 text-blue-400" />
             This Week
           </h3>
-          <div className="text-sm text-app-muted">
+          <div className="text-sm text-slate-400">
             {weeklyProgress.completed}/{weeklyProgress.goal} goals
           </div>
         </div>
@@ -63,13 +63,11 @@ const StudyProgressTracker = () => {
         <div className="grid grid-cols-7 gap-2 mb-4">
           {studyDays.map((day, index) => (
             <div key={index} className="text-center">
-              <div className="text-xs text-app-muted mb-1">{day.dayName}</div>
+              <div className="text-xs text-slate-400 mb-1">{day.dayName}</div>
               <div
                 className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-medium transition-all ${
                   getIntensityColor(day.intensity)
-                } ${day.isToday ? 'ring-2 ring-blue-400' : ''} ${
-                  day.intensity > 0 ? 'text-white' : 'text-app-muted'
-                }`}
+                } ${day.isToday ? 'ring-2 ring-blue-400' : ''}`}
               >
                 {day.date}
               </div>
@@ -80,10 +78,10 @@ const StudyProgressTracker = () => {
         {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-app-muted">Weekly Goal Progress</span>
+            <span className="text-slate-400">Weekly Goal Progress</span>
             <span className="text-blue-400">{Math.round(weeklyProgress.percentage)}%</span>
           </div>
-          <div className="w-full bg-app-border rounded-full h-2">
+          <div className="w-full bg-slate-700 rounded-full h-2">
             <div 
               className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-500" 
               style={{ width: `${weeklyProgress.percentage}%` }}
@@ -94,38 +92,38 @@ const StudyProgressTracker = () => {
 
       {/* Study Stats */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-app-surface border border-app-border rounded-xl p-4 text-center">
+        <div className="bg-slate-800 rounded-xl p-4 text-center">
           <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
             <Target className="w-5 h-5 text-white" />
           </div>
-          <div className="text-lg font-bold text-app-primary">{userProfile.studyStreak}</div>
-          <div className="text-sm text-app-muted">Day Streak</div>
+          <div className="text-lg font-bold text-white">{userProfile.studyStreak}</div>
+          <div className="text-sm text-slate-400">Day Streak</div>
         </div>
 
-        <div className="bg-app-surface border border-app-border rounded-xl p-4 text-center">
+        <div className="bg-slate-800 rounded-xl p-4 text-center">
           <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
             <TrendingUp className="w-5 h-5 text-white" />
           </div>
-          <div className="text-lg font-bold text-app-primary">{userProgress.averageScore}%</div>
-          <div className="text-sm text-app-muted">Avg Score</div>
+          <div className="text-lg font-bold text-white">{userProgress.averageScore}%</div>
+          <div className="text-sm text-slate-400">Avg Score</div>
         </div>
       </div>
 
       {/* Study Time Today */}
-      <div className="bg-app-surface border border-app-border rounded-xl p-4">
+      <div className="bg-slate-800 rounded-xl p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Clock className="w-5 h-5 text-orange-400 mr-2" />
-            <span className="font-medium text-app-primary">Study Time Today</span>
+            <span className="font-medium text-white">Study Time Today</span>
           </div>
           <div className="text-orange-400 font-bold">
             {Math.floor(Math.random() * 45) + 15}m
           </div>
         </div>
-        <div className="mt-3 bg-app-border rounded-full h-2">
+        <div className="mt-3 bg-slate-700 rounded-full h-2">
           <div className="bg-orange-400 h-2 rounded-full w-3/4"></div>
         </div>
-        <div className="text-sm text-app-muted mt-2">
+        <div className="text-sm text-slate-400 mt-2">
           Goal: 60 minutes
         </div>
       </div>

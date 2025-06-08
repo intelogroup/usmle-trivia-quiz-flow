@@ -14,7 +14,6 @@ import ProfileScreen from "@/components/ProfileScreen";
 import ReviewScreen from "@/components/ReviewScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
 import PhoneFrame from "@/components/PhoneFrame";
-import LoadingScreen from "@/components/LoadingScreen";
 import { getQuestionCount } from "@/data/questionBank";
 
 type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review';
@@ -25,15 +24,9 @@ const Index = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
   const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleNavigation = (screen: string) => {
-    setIsLoading(true);
-    // Simulate loading transition
-    setTimeout(() => {
-      setCurrentScreen(screen as Screen);
-      setIsLoading(false);
-    }, 300);
+    setCurrentScreen(screen as Screen);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -74,10 +67,6 @@ const Index = () => {
   };
 
   const renderScreen = () => {
-    if (isLoading) {
-      return <LoadingScreen message="Loading..." />;
-    }
-
     switch (currentScreen) {
       case 'home':
         return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ChevronLeft, BookOpen, Activity, CheckCircle } from "lucide-react";
 import { subjects, systems, getQuestionCount } from "@/data/questionBank";
@@ -75,20 +74,20 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
   };
 
   return (
-    <div className="p-3 pb-20 space-y-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen max-w-sm mx-auto">
+    <div className="p-3 pb-20 space-y-4 bg-app-background min-h-screen max-w-sm mx-auto text-app-primary">
       {/* Header */}
       <div className="flex items-center justify-between">
         <button onClick={() => onNavigate('quiz')} className="p-2">
-          <ChevronLeft className="w-5 h-5 text-slate-300" />
+          <ChevronLeft className="w-5 h-5 text-app-secondary" />
         </button>
-        <h1 className="text-lg font-bold text-white">Create Quiz</h1>
+        <h1 className="text-lg font-bold">Create Quiz</h1>
         <div className="w-9"></div>
       </div>
 
       {/* Selection Summary */}
-      <div className="bg-slate-800/50 rounded-xl p-3 space-y-2">
+      <div className="bg-app-surface rounded-xl p-3 space-y-2 border border-app-border">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-white">Your Selection</h2>
+          <h2 className="text-base font-semibold">Your Selection</h2>
           {availableQuestions > 0 && (
             <div className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs">
               {availableQuestions} questions
@@ -97,29 +96,29 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
         </div>
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div>
-            <span className="text-slate-400">Subjects: </span>
+            <span className="text-app-muted">Subjects: </span>
             <span className="text-blue-400">{selectedSubjects.length} selected</span>
           </div>
           <div>
-            <span className="text-slate-400">Systems: </span>
+            <span className="text-app-muted">Systems: </span>
             <span className="text-green-400">{selectedSystems.length} selected</span>
           </div>
         </div>
       </div>
 
-      {/* Tabs - Optimized for mobile */}
-      <div className="flex bg-slate-800 rounded-lg p-0.5 w-full">
+      {/* Tabs */}
+      <div className="flex bg-app-surface rounded-lg p-0.5 w-full border border-app-border">
         <button
           onClick={() => setActiveTab('subjects')}
           className={`flex-1 py-2 px-2 rounded-md transition-colors ${
             activeTab === 'subjects'
               ? 'bg-blue-600 text-white'
-              : 'text-slate-400 hover:text-white'
+              : 'text-app-muted hover:text-app-primary'
           }`}
         >
           <div className="flex items-center justify-center space-x-1.5">
             <BookOpen className="w-3.5 h-3.5 flex-shrink-0" />
-            <span className="text-sm font-medium">Subjects</span>
+            <span className="text-sm font-medium truncate">Subjects</span>
             {selectedSubjects.length > 0 && (
               <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
                 {selectedSubjects.length}
@@ -132,12 +131,12 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
           className={`flex-1 py-2 px-2 rounded-md transition-colors ${
             activeTab === 'systems'
               ? 'bg-green-600 text-white'
-              : 'text-slate-400 hover:text-white'
+              : 'text-app-muted hover:text-app-primary'
           }`}
         >
           <div className="flex items-center justify-center space-x-1.5">
             <Activity className="w-3.5 h-3.5 flex-shrink-0" />
-            <span className="text-sm font-medium">Systems</span>
+            <span className="text-sm font-medium truncate">Systems</span>
             {selectedSystems.length > 0 && (
               <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
                 {selectedSystems.length}
@@ -151,8 +150,8 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
       <div className="space-y-2">
         {activeTab === 'subjects' && (
           <>
-            <h3 className="text-base font-semibold text-slate-200">Select Subjects</h3>
-            <p className="text-xs text-slate-400 mb-3">Choose medical disciplines to focus on</p>
+            <h3 className="text-base font-semibold">Select Subjects</h3>
+            <p className="text-xs text-app-muted mb-3">Choose medical disciplines to focus on</p>
             {subjects.map((subject) => {
               const isSelected = selectedSubjects.includes(subject);
               const questionCount = getQuestionCount([subject], selectedSystems.length > 0 ? selectedSystems : systems);
@@ -161,10 +160,10 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
                 <button
                   key={subject}
                   onClick={() => handleSubjectToggle(subject)}
-                  className={`w-full p-3 rounded-lg transition-all duration-200 ${
+                  className={`w-full p-3 rounded-lg transition-all duration-200 border ${
                     isSelected
-                      ? 'bg-blue-600/20 border border-blue-500'
-                      : 'bg-slate-800/50 hover:bg-slate-700/50 border border-transparent'
+                      ? 'bg-blue-600/20 border-blue-500'
+                      : 'bg-app-surface hover:bg-app-surface-secondary border-app-border'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -178,7 +177,7 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
                       </div>
                       <div className="text-left min-w-0 flex-1">
                         <h4 className="font-semibold text-white text-sm truncate">{subject}</h4>
-                        <p className="text-xs text-slate-400">{questionCount} questions</p>
+                        <p className="text-xs text-app-muted">{questionCount} questions</p>
                       </div>
                     </div>
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
@@ -195,8 +194,8 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
 
         {activeTab === 'systems' && (
           <>
-            <h3 className="text-base font-semibold text-slate-200">Select Body Systems</h3>
-            <p className="text-xs text-slate-400 mb-3">Choose anatomical systems to study</p>
+            <h3 className="text-base font-semibold">Select Body Systems</h3>
+            <p className="text-xs text-app-muted mb-3">Choose anatomical systems to study</p>
             {systems.map((system) => {
               const isSelected = selectedSystems.includes(system);
               const questionCount = getQuestionCount(selectedSubjects.length > 0 ? selectedSubjects : subjects, [system]);
@@ -205,10 +204,10 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
                 <button
                   key={system}
                   onClick={() => handleSystemToggle(system)}
-                  className={`w-full p-3 rounded-lg transition-all duration-200 ${
+                  className={`w-full p-3 rounded-lg transition-all duration-200 border ${
                     isSelected
-                      ? 'bg-green-600/20 border border-green-500'
-                      : 'bg-slate-800/50 hover:bg-slate-700/50 border border-transparent'
+                      ? 'bg-green-600/20 border-green-500'
+                      : 'bg-app-surface hover:bg-app-surface-secondary border-app-border'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -222,7 +221,7 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
                       </div>
                       <div className="text-left min-w-0 flex-1">
                         <h4 className="font-semibold text-white text-sm truncate">{system}</h4>
-                        <p className="text-xs text-slate-400">{questionCount} questions</p>
+                        <p className="text-xs text-app-muted">{questionCount} questions</p>
                       </div>
                     </div>
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
@@ -243,7 +242,7 @@ const SubjectSystemSelectionScreen = ({ onNavigate, onSelectionComplete }: Subje
         <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-sm px-3">
           <button
             onClick={handleProceed}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold transition-all duration-200 shadow-lg text-sm"
+            className="w-full bg-gradient-primary hover:opacity-90 text-white py-3 rounded-lg font-semibold transition-all duration-200 shadow-lg text-sm"
           >
             Start Quiz ({availableQuestions} questions)
           </button>

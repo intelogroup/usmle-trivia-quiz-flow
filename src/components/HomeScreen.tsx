@@ -1,4 +1,3 @@
-
 import { Bell, Settings } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
@@ -83,11 +82,11 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
   };
 
   return (
-    <div className="p-4 pb-20 space-y-6 bg-app-background min-h-screen">
+    <div className="p-4 pb-20 space-y-6 bg-app-background text-app-primary">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold text-app-primary">
+          <h1 className="text-xl font-bold">
             USMLE <span className="text-blue-400">T</span>
             <span className="text-green-400">R</span>
             <span className="text-yellow-400">I</span>
@@ -103,7 +102,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
             onClearAll={handleClearAll}
           />
           <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-            <span className="text-sm font-semibold text-white">{userProfile.avatar}</span>
+            <span className="text-sm font-semibold">{userProfile.avatar}</span>
           </div>
         </div>
       </div>
@@ -111,7 +110,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Welcome Message */}
       <div className="space-y-2">
         <p className="text-app-secondary">Welcome back,</p>
-        <h2 className="text-2xl font-bold text-app-primary">{userProfile.name} 👋</h2>
+        <h2 className="text-2xl font-bold">{userProfile.name} 👋</h2>
         <p className="text-app-secondary">Ready to challenge yourself today? 🎯</p>
       </div>
 
@@ -121,7 +120,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Start Quiz Button */}
       <button
         onClick={() => onNavigate('quiz')}
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg"
+        className="w-full bg-gradient-primary hover:opacity-90 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg"
       >
         <span className="text-xl">⚡</span>
         <span>Start New Quiz</span>
@@ -137,17 +136,17 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Weakest Subjects */}
       {weakestSubjects.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-app-primary">Areas for Improvement</h3>
+          <h3 className="text-lg font-semibold">Areas for Improvement</h3>
           <div className="space-y-2">
             {weakestSubjects.map((subject, index) => (
-              <div key={index} className="bg-app-surface border border-app-border rounded-xl p-4">
+              <div key={index} className="bg-app-surface rounded-xl p-4 border border-app-border">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className={`w-10 h-10 ${getSubjectColor(subject.score)} rounded-lg flex items-center justify-center`}>
                       <span className="text-white text-sm">{getSubjectIcon(subject.subject)}</span>
                     </div>
                     <div>
-                      <h4 className="font-medium text-app-primary">{subject.subject}</h4>
+                      <h4 className="font-medium">{subject.subject}</h4>
                       <p className="text-sm text-app-muted">{subject.score}% average • {subject.description}</p>
                     </div>
                   </div>
@@ -167,14 +166,14 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Review Mistakes */}
       {userProgress.totalQuizzes > 0 && (
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-app-primary">Review Mistakes</h3>
-          <div className="bg-app-surface border border-app-border rounded-xl p-4 space-y-3">
+          <h3 className="text-lg font-semibold">Review Mistakes</h3>
+          <div className="bg-app-surface rounded-xl p-4 space-y-3 border border-app-border">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                 <span className="text-xl">🔄</span>
               </div>
               <div className="flex-1">
-                <p className="font-medium text-app-primary">{Math.max(userProgress.totalQuestions - userProgress.totalCorrect, 0)} questions need review</p>
+                <p className="font-medium">{Math.max(userProgress.totalQuestions - userProgress.totalCorrect, 0)} questions need review</p>
                 <p className="text-sm text-app-muted">Focus on your recent mistakes</p>
               </div>
             </div>

@@ -43,7 +43,7 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-lg font-semibold text-app-primary">Quick Actions</h3>
+      <h3 className="text-lg font-semibold">Quick Actions</h3>
       <div className="grid grid-cols-2 gap-3">
         {actions.map((action) => {
           const Icon = action.icon;
@@ -51,15 +51,15 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
             <button
               key={action.id}
               onClick={action.action}
-              className="bg-app-surface hover:bg-app-surface-hover border border-app-border rounded-xl p-4 text-left transition-colors"
+              className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors"
             >
               <div className="flex items-center space-x-3">
                 <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center`}>
                   <Icon className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-sm text-app-primary">{action.label}</div>
-                  <div className="text-xs text-app-muted">{action.description}</div>
+                  <div className="font-medium text-sm">{action.label}</div>
+                  <div className="text-xs text-slate-400">{action.description}</div>
                 </div>
               </div>
             </button>
