@@ -157,7 +157,7 @@ const CountryFlag: React.FC<CountryFlagProps> = ({ countryCode, size = 'sm', cla
       className={`inline-flex items-center justify-center rounded-full bg-white shadow-xl border-2 border-gray-300/80 overflow-hidden transition-all duration-200 hover:shadow-2xl hover:scale-105 hover:border-gray-400/90 ${sizeClasses[size]} ${className}`}
       title={countryNames[countryCode] || countryCode}
     >
-      <span className="leading-none select-none transition-transform duration-200">{flagEmoji}</span>
+      <span className="leading-none select-none transition-transform duration-200 hover:scale-110">{flagEmoji}</span>
     </div>
   );
 };
