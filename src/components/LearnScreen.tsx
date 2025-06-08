@@ -114,13 +114,18 @@ const LearnScreen = ({ onNavigate }: LearnScreenProps) => {
       title: 'Practice Tests',
       description: 'Take comprehensive practice exams',
       color: 'bg-purple-600',
-      action: () => onNavigate('quiz')
+      action: () => console.log('Navigate to practice tests')
     }
   ];
 
   const handleSubcategoryClick = (category: string, subcategory: string) => {
     console.log(`Selected: ${category} - ${subcategory}`);
     // Here you would navigate to the specific lesson content
+  };
+
+  const handleContinueStudying = () => {
+    console.log('Continue studying clicked - navigating to continue-studying');
+    onNavigate('continue-studying');
   };
 
   if (showCategories) {
@@ -221,7 +226,7 @@ const LearnScreen = ({ onNavigate }: LearnScreenProps) => {
             </div>
           </div>
           <button 
-            onClick={() => onNavigate('quiz')}
+            onClick={handleContinueStudying}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors"
           >
             Continue Studying
