@@ -59,7 +59,21 @@ const CountryFlag: React.FC<CountryFlagProps> = ({ countryCode, size = 'sm', cla
     'UY': '🇺🇾',
     'EC': '🇪🇨',
     'BO': '🇧🇴',
-    'PY': '🇵🇾'
+    'PY': '🇵🇾',
+    'PL': '🇵🇱',
+    'CZ': '🇨🇿',
+    'HU': '🇭🇺',
+    'RO': '🇷🇴',
+    'HR': '🇭🇷',
+    'BG': '🇧🇬',
+    'LT': '🇱🇹',
+    'LV': '🇱🇻',
+    'EE': '🇪🇪',
+    'SK': '🇸🇰',
+    'SI': '🇸🇮',
+    'LU': '🇱🇺',
+    'MT': '🇲🇹',
+    'CY': '🇨🇾'
   };
 
   const countryNames: { [key: string]: string } = {
@@ -113,13 +127,27 @@ const CountryFlag: React.FC<CountryFlagProps> = ({ countryCode, size = 'sm', cla
     'UY': 'Uruguay',
     'EC': 'Ecuador',
     'BO': 'Bolivia',
-    'PY': 'Paraguay'
+    'PY': 'Paraguay',
+    'PL': 'Poland',
+    'CZ': 'Czech Republic',
+    'HU': 'Hungary',
+    'RO': 'Romania',
+    'HR': 'Croatia',
+    'BG': 'Bulgaria',
+    'LT': 'Lithuania',
+    'LV': 'Latvia',
+    'EE': 'Estonia',
+    'SK': 'Slovakia',
+    'SI': 'Slovenia',
+    'LU': 'Luxembourg',
+    'MT': 'Malta',
+    'CY': 'Cyprus'
   };
 
   const sizeClasses = {
-    sm: 'text-xs w-4 h-4',
-    md: 'text-sm w-6 h-6',
-    lg: 'text-base w-8 h-8'
+    sm: 'w-5 h-5 text-xs',
+    md: 'w-7 h-7 text-sm',
+    lg: 'w-10 h-10 text-lg'
   };
 
   // Get flag emoji, fallback to a default flag if country not found
@@ -127,10 +155,10 @@ const CountryFlag: React.FC<CountryFlagProps> = ({ countryCode, size = 'sm', cla
 
   return (
     <div 
-      className={`inline-flex items-center justify-center rounded-full bg-slate-600/50 backdrop-blur-sm border border-slate-500/20 ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center rounded-full bg-white shadow-lg border-2 border-gray-200 overflow-hidden ${sizeClasses[size]} ${className}`}
       title={countryNames[countryCode] || countryCode}
     >
-      <span className="leading-none">{flagEmoji}</span>
+      <span className="leading-none select-none">{flagEmoji}</span>
     </div>
   );
 };
