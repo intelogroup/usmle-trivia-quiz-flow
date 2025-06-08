@@ -1,3 +1,4 @@
+
 import { Bell, Settings } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
@@ -86,7 +87,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold">
+          <h1 className="text-xl font-bold text-white">
             USMLE <span className="text-blue-400">T</span>
             <span className="text-green-400">R</span>
             <span className="text-yellow-400">I</span>
@@ -110,7 +111,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Welcome Message */}
       <div className="space-y-2">
         <p className="text-slate-300">Welcome back,</p>
-        <h2 className="text-2xl font-bold">{userProfile.name} 👋</h2>
+        <h2 className="text-2xl font-bold text-white">{userProfile.name} 👋</h2>
         <p className="text-slate-300">Ready to challenge yourself today? 🎯</p>
       </div>
 
@@ -188,7 +189,10 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       )}
 
       {/* Quick Actions */}
-      <QuickActions onNavigate={onNavigate} />
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-white">Quick Actions</h3>
+        <QuickActions onNavigate={onNavigate} />
+      </div>
     </div>
   );
 };
