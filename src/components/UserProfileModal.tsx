@@ -31,6 +31,10 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, isOpen, onClo
     return `${hours}h ${mins}m`;
   };
 
+  // Safety checks for undefined arrays
+  const strongestSubjects = user.strongestSubjects || [];
+  const weakestSubjects = user.weakestSubjects || [];
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-800 border-slate-700">
@@ -127,42 +131,46 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, isOpen, onClo
           </div>
 
           {/* Subject Strengths */}
-          <div className="bg-slate-700 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <Trophy className="w-4 h-4 text-yellow-400" />
-              <span className="font-medium text-white">Strongest Subjects</span>
-            </div>
-            <div className="space-y-3">
-              {user.strongestSubjects.map((subject, index) => (
-                <div key={subject.subject} className="flex items-center justify-between">
-                  <span className="text-slate-300">{subject.subject}</span>
-                  <div className="flex items-center gap-2">
-                    <Progress value={subject.score} className="w-20 h-2" />
-                    <span className="text-sm text-white font-medium">{subject.score}%</span>
+          {strongestSubjects.length > 0 && (
+            <div className="bg-slate-700 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-4">
+                <Trophy className="w-4 h-4 text-yellow-400" />
+                <span className="font-medium text-white">Strongest Subjects</span>
+              </div>
+              <div className="space-y-3">
+                {strongestSubjects.map((subject, index) => (
+                  <div key={subject.subject} className="flex items-center justify-between">
+                    <span className="text-slate-300">{subject.subject}</span>
+                    <div className="flex items-center gap-2">
+                      <Progress value={subject.score} className="w-20 h-2" />
+                      <span className="text-sm text-white font-medium">{subject.score}%</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Areas for Improvement */}
-          <div className="bg-slate-700 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <Target className="w-4 h-4 text-blue-400" />
-              <span className="font-medium text-white">Areas for Improvement</span>
-            </div>
-            <div className="space-y-3">
-              {user.weakestSubjects.map((subject, index) => (
-                <div key={subject.subject} className="flex items-center justify-between">
-                  <span className="text-slate-300">{subject.subject}</span>
-                  <div className="flex items-center gap-2">
-                    <Progress value={subject.score} className="w-20 h-2" />
-                    <span className="text-sm text-white font-medium">{subject.score}%</span>
+          {weakestSubjects.length > 0 && (
+            <div className="bg-slate-700 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-4">
+                <Target className="w-4 h-4 text-blue-400" />
+                <span className="font-medium text-white">Areas for Improvement</span>
+              </div>
+              <div className="space-y-3">
+                {weakestSubjects.map((subject, index) => (
+                  <div key={subject.subject} className="flex items-center justify-between">
+                    <span className="text-slate-300">{subject.subject}</span>
+                    <div className="flex items-center gap-2">
+                      <Progress value={subject.score} className="w-20 h-2" />
+                      <span className="text-sm text-white font-medium">{subject.score}%</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Achievements */}
           <div className="bg-slate-700 rounded-lg p-4">
