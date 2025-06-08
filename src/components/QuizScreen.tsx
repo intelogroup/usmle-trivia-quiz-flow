@@ -75,8 +75,8 @@ const QuizScreen = ({ onNavigate, onCategorySelect, onPresetSelect }: QuizScreen
     <div className="p-4 pb-20 space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-white">Quiz Categories</h1>
-        <p className="text-slate-400">Choose your practice area</p>
+        <h1 className="text-2xl font-bold text-app-primary">Quiz Categories</h1>
+        <p className="text-app-muted">Choose your practice area</p>
       </div>
 
       {/* Quick Presets */}
@@ -86,16 +86,16 @@ const QuizScreen = ({ onNavigate, onCategorySelect, onPresetSelect }: QuizScreen
       <SmartRecommendations onRecommendationSelect={handlePresetSelect} />
 
       {/* Create Custom Quiz */}
-      <div className="bg-slate-800/50 rounded-xl p-4">
+      <div className="bg-card rounded-xl p-4 border border-border">
         <div className="text-center space-y-3">
           <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto">
-            <Target className="w-6 h-6 text-white" />
+            <Target className="w-6 h-6 text-app-primary" />
           </div>
-          <h3 className="text-lg font-semibold text-white">Custom Quiz</h3>
-          <p className="text-sm text-slate-400">Select specific subjects and systems</p>
+          <h3 className="text-lg font-semibold text-app-primary">Custom Quiz</h3>
+          <p className="text-sm text-app-muted">Select specific subjects and systems</p>
           <button 
             onClick={handleCreateCustomQuiz}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-app-primary py-3 rounded-lg font-medium transition-colors"
           >
             Create Custom Quiz
           </button>
@@ -104,43 +104,43 @@ const QuizScreen = ({ onNavigate, onCategorySelect, onPresetSelect }: QuizScreen
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+        <div className="bg-card rounded-xl p-4 text-center border border-border">
           <div className="text-2xl font-bold text-blue-400">73%</div>
-          <div className="text-sm text-slate-400">Overall Progress</div>
+          <div className="text-sm text-app-muted">Overall Progress</div>
         </div>
-        <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+        <div className="bg-card rounded-xl p-4 text-center border border-border">
           <div className="text-2xl font-bold text-green-400">12</div>
-          <div className="text-sm text-slate-400">Day Streak</div>
+          <div className="text-sm text-app-muted">Day Streak</div>
         </div>
       </div>
 
       {/* Legacy Categories */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">Browse by Subject</h3>
+        <h3 className="text-lg font-semibold text-app-primary">Browse by Subject</h3>
         
         {categories.map((category, index) => (
           <button
             key={index}
             onClick={() => onCategorySelect(category.name)}
-            className="w-full bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 transition-colors"
+            className="w-full bg-card hover:bg-accent rounded-xl p-4 transition-colors border border-border"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-xl flex items-center justify-center`}>
-                  <BookOpen className="w-6 h-6 text-white" />
+                  <BookOpen className="w-6 h-6 text-app-primary" />
                 </div>
                 
                 <div className="text-left">
-                  <h4 className="font-semibold text-white">{category.name}</h4>
-                  <p className="text-sm text-slate-400">{category.description}</p>
-                  <div className="flex items-center space-x-4 text-xs text-slate-500 mt-1">
+                  <h4 className="font-semibold text-app-primary">{category.name}</h4>
+                  <p className="text-sm text-app-muted">{category.description}</p>
+                  <div className="flex items-center space-x-4 text-xs text-app-muted mt-1">
                     <span>{category.questions} Questions</span>
                     <span>{category.completion}% Complete</span>
                   </div>
                 </div>
               </div>
               
-              <ChevronRight className="w-5 h-5 text-slate-400" />
+              <ChevronRight className="w-5 h-5 text-app-muted" />
             </div>
           </button>
         ))}

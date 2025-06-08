@@ -16,7 +16,7 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-slate-800 border-t border-slate-700">
+    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-card border-t border-border">
       <div className="flex justify-around items-center py-2">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -28,8 +28,8 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
               onClick={() => onNavigate(item.id)}
               className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
                 isActive 
-                  ? 'text-blue-400' 
-                  : 'text-slate-400 hover:text-slate-300'
+                  ? 'text-app-accent' 
+                  : 'text-app-muted hover:text-app-secondary'
               }`}
             >
               <Icon size={20} />

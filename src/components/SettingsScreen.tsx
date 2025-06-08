@@ -34,35 +34,35 @@ const SettingsScreen = ({ onNavigate }: SettingsScreenProps) => {
     <div className="p-4 pb-20 space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-slate-300">Customize your learning experience</p>
+        <h1 className="text-2xl font-bold text-app-primary">Settings</h1>
+        <p className="text-app-secondary">Customize your learning experience</p>
       </div>
 
       {/* Settings Groups */}
       <div className="space-y-6">
         {settingsGroups.map((group, groupIndex) => (
           <div key={groupIndex} className="space-y-3">
-            <h3 className="text-lg font-semibold text-slate-300">{group.title}</h3>
-            <div className="bg-slate-800 rounded-xl overflow-hidden">
+            <h3 className="text-lg font-semibold text-app-secondary">{group.title}</h3>
+            <div className="bg-card rounded-xl overflow-hidden border border-border">
               {group.items.map((item, itemIndex) => {
                 const Icon = item.icon;
                 return (
                   <button
                     key={itemIndex}
                     onClick={item.action}
-                    className="w-full p-4 flex items-center justify-between hover:bg-slate-700 transition-colors border-b border-slate-700 last:border-b-0"
+                    className="w-full p-4 flex items-center justify-between hover:bg-accent transition-colors border-b border-border last:border-b-0"
                   >
                     <div className="flex items-center space-x-3">
-                      <Icon className="w-5 h-5 text-slate-400" />
-                      <span className="font-medium">{item.label}</span>
+                      <Icon className="w-5 h-5 text-app-muted" />
+                      <span className="font-medium text-app-primary">{item.label}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       {item.hasToggle ? (
-                        <div className={`w-12 h-6 rounded-full ${item.enabled ? 'bg-blue-600' : 'bg-slate-600'} relative transition-colors`}>
-                          <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${item.enabled ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
+                        <div className={`w-12 h-6 rounded-full ${item.enabled ? 'bg-blue-600' : 'bg-muted'} relative transition-colors`}>
+                          <div className={`w-5 h-5 rounded-full bg-background absolute top-0.5 transition-transform ${item.enabled ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
                         </div>
                       ) : (
-                        <ChevronRight className="w-5 h-5 text-slate-400" />
+                        <ChevronRight className="w-5 h-5 text-app-muted" />
                       )}
                     </div>
                   </button>
@@ -74,10 +74,10 @@ const SettingsScreen = ({ onNavigate }: SettingsScreenProps) => {
       </div>
 
       {/* App Info */}
-      <div className="bg-slate-800 rounded-xl p-4 text-center">
-        <h4 className="font-semibold mb-2">USMLE Trivia</h4>
-        <p className="text-sm text-slate-400">Version 1.0.0</p>
-        <p className="text-xs text-slate-500 mt-2">Made with ❤️ for medical students</p>
+      <div className="bg-card rounded-xl p-4 text-center border border-border">
+        <h4 className="font-semibold mb-2 text-app-primary">USMLE Trivia</h4>
+        <p className="text-sm text-app-muted">Version 1.0.0</p>
+        <p className="text-xs text-app-muted mt-2">Made with ❤️ for medical students</p>
       </div>
     </div>
   );

@@ -76,7 +76,7 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
       case "weakness": return "text-red-400";
       case "popular": return "text-orange-400";
       case "learning-path": return "text-blue-400";
-      default: return "text-slate-400";
+      default: return "text-app-muted";
     }
   };
 
@@ -89,8 +89,8 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
               {getTypeIcon(section.type)}
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white">{section.title}</h3>
-              <p className="text-sm text-slate-400">{section.description}</p>
+              <h3 className="text-lg font-semibold text-app-primary">{section.title}</h3>
+              <p className="text-sm text-app-muted">{section.description}</p>
             </div>
           </div>
 
@@ -99,7 +99,7 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
               <button
                 key={comboIndex}
                 onClick={() => onRecommendationSelect(combo.subjects, combo.systems)}
-                className="w-full bg-slate-800/30 hover:bg-slate-700/50 rounded-xl p-4 transition-all duration-200 border border-transparent hover:border-slate-600"
+                className="w-full bg-card hover:bg-accent rounded-xl p-4 transition-all duration-200 border border-border hover:border-accent"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -107,8 +107,8 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
                       <span className="text-lg">{combo.icon}</span>
                     </div>
                     <div className="text-left">
-                      <h4 className="font-semibold text-white">{combo.name}</h4>
-                      <p className="text-sm text-slate-400">{combo.reason}</p>
+                      <h4 className="font-semibold text-app-primary">{combo.name}</h4>
+                      <p className="text-sm text-app-muted">{combo.reason}</p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {combo.subjects.map(subject => (
                           <span key={subject} className="text-xs bg-blue-600/20 text-blue-300 px-2 py-1 rounded-full">
