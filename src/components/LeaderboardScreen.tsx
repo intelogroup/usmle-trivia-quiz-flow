@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Crown, Medal, Award, Star } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -10,22 +11,12 @@ import { LeaderboardEntry } from "@/utils/types";
 const LeaderboardScreen = () => {
   const [selectedUser, setSelectedUser] = useState<LeaderboardEntry | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [expandedUser, setExpandedUser] = useState<number | null>(null);
   
   const leaderboardData = getLeaderboard();
   const userProfile = getUserProfile();
   const currentUser = leaderboardData.find(player => player.isCurrentUser);
 
   const handleUserClick = (user: LeaderboardEntry) => {
-    if (expandedUser === user.rank) {
-      setExpandedUser(null);
-    } else {
-      setExpandedUser(user.rank);
-    }
-  };
-
-  const handleProfileClick = (user: LeaderboardEntry, e: React.MouseEvent) => {
-    e.stopPropagation();
     setSelectedUser(user);
     setIsModalOpen(true);
   };
@@ -69,7 +60,7 @@ const LeaderboardScreen = () => {
                 <div 
                   key={player.rank} 
                   className="flex flex-col items-center cursor-pointer hover:scale-105 transition-all duration-300 group"
-                  onClick={() => handleProfileClick(player, {} as React.MouseEvent)}
+                  onClick={() => handleUserClick(player)}
                 >
                   {/* Avatar */}
                   <div className="mb-3 relative">
@@ -113,82 +104,73 @@ const LeaderboardScreen = () => {
         
         <div className="divide-y divide-slate-600/30">
           {leaderboardData.map((player) => (
-            <div key={player.rank}>
-              <div 
-                className={`flex items-center justify-between px-4 py-4 cursor-pointer transition-all duration-200 hover:scale-[1.02] ${
-                  player.isCurrentUser ? 'bg-blue-900/50 hover:bg-blue-800/60 border-l-4 border-blue-400' : 'hover:bg-slate-700/50'
-                }`}
-                onClick={() => handleUserClick(player)}
-              >
-                <div className="flex items-center gap-4">
-                  {/* Rank */}
-                  <div className="w-8 flex justify-center">
-                    {player.rank <= 3 ? getRankIcon(player.rank) : (
-                      <span className="text-sm font-semibold text-slate-400">{player.rank}</span>
-                    )}
-                  </div>
+            <div 
+              key={player.rank} 
+              className={`flex items-center justify-between px-4 py-4 cursor-pointer transition-all duration-200 hover:scale-[1.02] ${
+                player.isCurrentUser ? 'bg-blue-900/50 hover:bg-blue-800/60 border-l-4 border-blue-400' : 'hover:bg-slate-700/50'
+              }`}
+              onClick={() => handleUserClick(player)}
+            >
+              <div className="flex items-center gap-4">
+                {/* Rank */}
+                <div className="w-8 flex justify-center">
+                  {player.rank <= 3 ? getRankIcon(player.rank) : (
+                    <span className="text-sm font-semibold text-slate-400">{player.rank}</span>
+                  )}
+                </div>
 
-                  {/* Avatar */}
-                  <div className="relative group">
-                    <Avatar 
-                      className="w-10 h-10 ring-2 ring-slate-600/50 transition-all duration-200 group-hover:ring-blue-400/50"
-                      onClick={(e) => handleProfileClick(player, e)}
-                    >
-                      <AvatarImage src="" />
-                      <AvatarFallback className={`text-white font-medium transition-all duration-200 ${
-                        player.isCurrentUser ? 'bg-gradient-to-br from-blue-500 to-blue-600' : 'bg-gradient-to-br from-slate-600 to-slate-700'
-                      }`}>
-                        {player.avatar}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="absolute -bottom-1 -right-1 transition-transform duration-200 group-hover:scale-110">
-                      <CountryFlag countryCode={player.country} size="sm" />
-                    </div>
-                  </div>
-
-                  {/* Name and Info */}
-                  <div className="flex-1">
-                    <div className={`font-semibold transition-colors duration-200 ${
-                      player.isCurrentUser ? 'text-blue-300' : 'text-white'
+                {/* Avatar */}
+                <div className="relative group">
+                  <Avatar className="w-10 h-10 ring-2 ring-slate-600/50 transition-all duration-200 group-hover:ring-blue-400/50">
+                    <AvatarImage src="" />
+                    <AvatarFallback className={`text-white font-medium transition-all duration-200 ${
+                      player.isCurrentUser ? 'bg-gradient-to-br from-blue-500 to-blue-600' : 'bg-gradient-to-br from-slate-600 to-slate-700'
                     }`}>
-                      {player.name} {player.isCurrentUser && '(You)'}
-                    </div>
-                    <div className="text-xs text-slate-400">
-                      {player.university} • {player.year} Year
-                    </div>
+                      {player.avatar}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute -bottom-1 -right-1 transition-transform duration-200 group-hover:scale-110">
+                    <CountryFlag countryCode={player.country} size="sm" />
                   </div>
                 </div>
 
-                {/* Points and Stats */}
-                <div className="text-right">
-                  <div className="font-semibold text-white">
-                    {player.points.toLocaleString()}
+                {/* Name and Info */}
+                <div className="flex-1">
+                  <div className={`font-semibold transition-colors duration-200 ${
+                    player.isCurrentUser ? 'text-blue-300' : 'text-white'
+                  }`}>
+                    {player.name} {player.isCurrentUser && '(You)'}
                   </div>
-                  <div className="text-xs text-slate-400 flex items-center gap-2">
-                    <span>{player.accuracy}% acc</span>
-                    <span>•</span>
-                    <span>{player.streak}d streak</span>
+                  <div className="text-xs text-slate-400 mb-2">
+                    {player.university} • {player.year} Year
                   </div>
-                </div>
-              </div>
-
-              {/* Expanded Strongest Subjects */}
-              {expandedUser === player.rank && (
-                <div className="px-4 py-3 bg-slate-700/30 border-t border-slate-600/20">
-                  <div className="text-sm font-medium text-slate-300 mb-2">Strongest Subjects:</div>
-                  <div className="flex flex-wrap gap-2">
-                    {player.strongestSubjects?.slice(0, 3).map((subject, index) => (
+                  
+                  {/* Strongest Subjects */}
+                  <div className="flex flex-wrap gap-1">
+                    {player.strongestSubjects?.slice(0, 2).map((subject, index) => (
                       <Badge 
                         key={subject.subject} 
                         variant="outline" 
-                        className="text-xs px-2 py-1 text-green-400 border-green-400/30 bg-green-400/10 hover:bg-green-400/20"
+                        className="text-xs px-2 py-0.5 text-green-400 border-green-400/30 bg-green-400/10 hover:bg-green-400/20"
                       >
                         {subject.subject} {subject.score}%
                       </Badge>
                     ))}
                   </div>
                 </div>
-              )}
+              </div>
+
+              {/* Points and Stats */}
+              <div className="text-right">
+                <div className="font-semibold text-white">
+                  {player.points.toLocaleString()}
+                </div>
+                <div className="text-xs text-slate-400 flex items-center gap-2">
+                  <span>{player.accuracy}% acc</span>
+                  <span>•</span>
+                  <span>{player.streak}d streak</span>
+                </div>
+              </div>
             </div>
           ))}
         </div>
