@@ -6,6 +6,9 @@ const ACHIEVEMENTS_KEY = 'medquiz_achievements';
 const WEEKLY_ACTIVITY_KEY = 'medquiz_weekly_activity';
 const SUBJECT_STATS_KEY = 'medquiz_subject_stats';
 
+// Forward declaration to avoid circular import
+let initializeLeaderboard: (() => void) | null = null;
+
 // Initialize default data
 export const initializeDefaultData = () => {
   if (!localStorage.getItem(USER_PROFILE_KEY)) {
@@ -55,8 +58,15 @@ export const initializeDefaultData = () => {
     localStorage.setItem(SUBJECT_STATS_KEY, JSON.stringify(defaultStats));
   }
 
-  const { initializeLeaderboard } = require('./leaderboardManager');
-  initializeLeaderboard();
+  // Initialize leaderboard if function is available
+  if (initializeLeaderboard) {
+    initializeLeaderboard();
+  }
+};
+
+// Function to set the leaderboard initializer (called from leaderboardManager)
+export const setLeaderboardInitializer = (fn: () => void) => {
+  initializeLeaderboard = fn;
 };
 
 // Getter functions

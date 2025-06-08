@@ -1,6 +1,6 @@
 
 import { LeaderboardEntry } from "./types";
-import { getUserProfile } from "./dataManager";
+import { getUserProfile, setLeaderboardInitializer } from "./dataManager";
 
 const LEADERBOARD_KEY = 'medquiz_leaderboard';
 
@@ -9,6 +9,9 @@ export const initializeLeaderboard = () => {
     generateMockLeaderboard();
   }
 };
+
+// Set the initializer function in dataManager
+setLeaderboardInitializer(initializeLeaderboard);
 
 // Generate mock leaderboard with current user
 export const generateMockLeaderboard = () => {
