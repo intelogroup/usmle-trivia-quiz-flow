@@ -1,6 +1,6 @@
 
 import { LeaderboardEntry } from "./types";
-import { getUserProfile, setLeaderboardInitializer } from "./dataManager";
+import { setLeaderboardInitializer } from "./dataManager";
 
 const LEADERBOARD_KEY = 'medquiz_leaderboard';
 
@@ -15,7 +15,12 @@ setLeaderboardInitializer(initializeLeaderboard);
 
 // Generate mock leaderboard with current user
 export const generateMockLeaderboard = () => {
-  const userProfile = getUserProfile();
+  // Get user profile directly from localStorage to avoid circular dependency
+  const profileData = localStorage.getItem('medquiz_user_profile');
+  const userProfile = profileData ? JSON.parse(profileData) : {
+    name: 'jim kali',
+    avatar: 'JK'
+  };
   
   // Get basic user progress from localStorage directly to avoid circular import
   const progressData = localStorage.getItem('medquiz_progress');
