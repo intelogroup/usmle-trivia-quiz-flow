@@ -1,12 +1,24 @@
 
+import React, { useState } from "react";
 import { Crown, Medal, Award, Star } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getLeaderboard, getUserProfile } from "@/utils/dataStore";
+import CountryFlag from "./CountryFlag";
+import UserProfileModal from "./UserProfileModal";
+import { LeaderboardEntry } from "@/utils/types";
 
 const LeaderboardScreen = () => {
+  const [selectedUser, setSelectedUser] = useState<LeaderboardEntry | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
   const leaderboardData = getLeaderboard();
   const userProfile = getUserProfile();
   const currentUser = leaderboardData.find(player => player.isCurrentUser);
+
+  const handleUserClick = (user: LeaderboardEntry) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
@@ -42,19 +54,26 @@ const LeaderboardScreen = () => {
               const avatarSize = isFirst ? "w-16 h-16" : "w-12 h-12";
               
               return (
-                <div key={player.rank} className="flex flex-col items-center">
+                <div 
+                  key={player.rank} 
+                  className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform"
+                  onClick={() => handleUserClick(player)}
+                >
                   {/* Avatar */}
-                  <div className="mb-3">
+                  <div className="mb-3 relative">
                     <Avatar className={`${avatarSize} ring-2 ${isFirst ? 'ring-yellow-400' : player.rank === 2 ? 'ring-gray-300' : 'ring-orange-300'}`}>
                       <AvatarImage src="" />
                       <AvatarFallback className={`text-white font-bold ${isFirst ? 'bg-yellow-500 text-lg' : player.rank === 2 ? 'bg-gray-400' : 'bg-orange-400'}`}>
                         {player.avatar}
                       </AvatarFallback>
                     </Avatar>
+                    <div className="absolute -bottom-1 -right-1">
+                      <CountryFlag countryCode={player.country} size="sm" />
+                    </div>
                   </div>
 
                   {/* Card */}
-                  <div className={`bg-slate-800 rounded-lg border border-slate-700 p-4 ${cardHeight} ${isFirst ? 'w-24' : 'w-20'} flex flex-col justify-between items-center`}>
+                  <div className={`bg-slate-800 rounded-lg border border-slate-700 p-4 ${cardHeight} ${isFirst ? 'w-24' : 'w-20'} flex flex-col justify-between items-center hover:bg-slate-700 transition-colors`}>
                     <div className="text-center">
                       {getRankIcon(player.rank)}
                     </div>
@@ -84,9 +103,10 @@ const LeaderboardScreen = () => {
           {leaderboardData.map((player) => (
             <div 
               key={player.rank} 
-              className={`flex items-center justify-between px-4 py-4 ${
-                player.isCurrentUser ? 'bg-blue-900/50' : 'hover:bg-slate-700'
+              className={`flex items-center justify-between px-4 py-4 cursor-pointer transition-colors ${
+                player.isCurrentUser ? 'bg-blue-900/50 hover:bg-blue-800/50' : 'hover:bg-slate-700'
               }`}
+              onClick={() => handleUserClick(player)}
             >
               <div className="flex items-center gap-4">
                 {/* Rank */}
@@ -97,31 +117,43 @@ const LeaderboardScreen = () => {
                 </div>
 
                 {/* Avatar */}
-                <Avatar className="w-10 h-10">
-                  <AvatarImage src="" />
-                  <AvatarFallback className={`text-white font-medium ${
-                    player.isCurrentUser ? 'bg-blue-500' : 'bg-slate-600'
-                  }`}>
-                    {player.avatar}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative">
+                  <Avatar className="w-10 h-10">
+                    <AvatarImage src="" />
+                    <AvatarFallback className={`text-white font-medium ${
+                      player.isCurrentUser ? 'bg-blue-500' : 'bg-slate-600'
+                    }`}>
+                      {player.avatar}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute -bottom-1 -right-1">
+                    <CountryFlag countryCode={player.country} size="sm" />
+                  </div>
+                </div>
 
-                {/* Name */}
+                {/* Name and Info */}
                 <div>
                   <div className={`font-semibold ${
                     player.isCurrentUser ? 'text-blue-300' : 'text-white'
                   }`}>
                     {player.name} {player.isCurrentUser && '(You)'}
                   </div>
+                  <div className="text-xs text-slate-400">
+                    {player.university} • {player.year} Year
+                  </div>
                 </div>
               </div>
 
-              {/* Points */}
+              {/* Points and Stats */}
               <div className="text-right">
                 <div className="font-semibold text-white">
                   {player.points.toLocaleString()}
                 </div>
-                <div className="text-xs text-slate-400">points</div>
+                <div className="text-xs text-slate-400 flex items-center gap-2">
+                  <span>{player.accuracy}% acc</span>
+                  <span>•</span>
+                  <span>{player.streak}d streak</span>
+                </div>
               </div>
             </div>
           ))}
@@ -145,6 +177,13 @@ const LeaderboardScreen = () => {
           </div>
         </div>
       )}
+
+      {/* User Profile Modal */}
+      <UserProfileModal 
+        user={selectedUser}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

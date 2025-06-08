@@ -72,11 +72,21 @@ export interface SubjectStats {
 export interface LeaderboardEntry {
   rank: number;
   name: string;
+  fullName: string;
   points: number;
   avatar: string;
+  country: string;
   streak: number;
   accuracy: number;
   isCurrentUser?: boolean;
+  dateJoined: string;
+  university: string;
+  year: string;
+  totalStudyTime: number;
+  strongestSubjects: { subject: string; score: number }[];
+  weakestSubjects: { subject: string; score: number }[];
+  achievements: number;
+  bio: string;
 }
 
 // Import QuizConfig type
