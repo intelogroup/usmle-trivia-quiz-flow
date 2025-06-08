@@ -14,6 +14,7 @@ import ProfileScreen from "@/components/ProfileScreen";
 import ReviewScreen from "@/components/ReviewScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
 import PhoneFrame from "@/components/PhoneFrame";
+import LoadingScreen from "@/components/LoadingScreen";
 import { getQuestionCount } from "@/data/questionBank";
 
 type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review';
@@ -24,9 +25,15 @@ const Index = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
   const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNavigation = (screen: string) => {
-    setCurrentScreen(screen as Screen);
+    setIsLoading(true);
+    // Simulate loading transition
+    setTimeout(() => {
+      setCurrentScreen(screen as Screen);
+      setIsLoading(false);
+    }, 300);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -67,6 +74,10 @@ const Index = () => {
   };
 
   const renderScreen = () => {
+    if (isLoading) {
+      return <LoadingScreen message="Loading..." />;
+    }
+
     switch (currentScreen) {
       case 'home':
         return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
@@ -123,7 +134,7 @@ const Index = () => {
 
   return (
     <PhoneFrame>
-      <div className="max-w-md mx-auto bg-slate-900 min-h-screen relative">
+      <div className="max-w-md mx-auto bg-app-background min-h-screen relative">
         {renderScreen()}
         <Navigation currentScreen={currentScreen} onNavigate={handleNavigation} />
       </div>

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,20 +38,31 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* App-specific colors for better contrast */
+    --app-background: 220 13% 91%;
+    --app-surface: 0 0% 100%;
+    --app-surface-hover: 210 40% 96.1%;
+    --app-text-primary: 222.2 84% 4.9%;
+    --app-text-secondary: 215.4 16.3% 46.9%;
+    --app-text-muted: 215.4 16.3% 65.1%;
+    --app-border: 214.3 31.8% 91.4%;
+    
+    /* Interactive elements */
+    --app-interactive: 217.2 91.2% 59.8%;
+    --app-interactive-hover: 217.2 91.2% 54.8%;
+    
+    /* Status colors */
+    --app-success: 142.1 76.2% 36.3%;
+    --app-warning: 47.9 95.8% 53.1%;
+    --app-error: 0 84.2% 60.2%;
   }
 
   .dark {
@@ -89,6 +101,24 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* App-specific dark mode colors */
+    --app-background: 222.2 84% 4.9%;
+    --app-surface: 217.2 32.6% 17.5%;
+    --app-surface-hover: 217.2 32.6% 22.5%;
+    --app-text-primary: 210 40% 98%;
+    --app-text-secondary: 215 20.2% 85.1%;
+    --app-text-muted: 215 20.2% 65.1%;
+    --app-border: 217.2 32.6% 17.5%;
+    
+    /* Interactive elements */
+    --app-interactive: 217.2 91.2% 59.8%;
+    --app-interactive-hover: 217.2 91.2% 64.8%;
+    
+    /* Status colors */
+    --app-success: 142.1 70.6% 45.3%;
+    --app-warning: 47.9 95.8% 53.1%;
+    --app-error: 0 84.2% 60.2%;
   }
 }
 
@@ -99,5 +129,44 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utility classes for app-specific design tokens */
+@layer utilities {
+  .bg-app-background {
+    background-color: hsl(var(--app-background));
+  }
+  
+  .bg-app-surface {
+    background-color: hsl(var(--app-surface));
+  }
+  
+  .bg-app-surface-hover {
+    background-color: hsl(var(--app-surface-hover));
+  }
+  
+  .text-app-primary {
+    color: hsl(var(--app-text-primary));
+  }
+  
+  .text-app-secondary {
+    color: hsl(var(--app-text-secondary));
+  }
+  
+  .text-app-muted {
+    color: hsl(var(--app-text-muted));
+  }
+  
+  .border-app-border {
+    border-color: hsl(var(--app-border));
+  }
+  
+  .bg-app-interactive {
+    background-color: hsl(var(--app-interactive));
+  }
+  
+  .hover\:bg-app-interactive-hover:hover {
+    background-color: hsl(var(--app-interactive-hover));
   }
 }
