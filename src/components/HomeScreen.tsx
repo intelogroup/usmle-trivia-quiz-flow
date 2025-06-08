@@ -1,4 +1,3 @@
-
 import { Bell, Settings } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
@@ -187,6 +186,28 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
           </div>
         </div>
       )}
+
+      {/* Continue Learning */}
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-white">Continue Learning</h3>
+        <div className="bg-slate-800/50 rounded-xl p-4 space-y-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+              <span className="text-xl">🧬</span>
+            </div>
+            <div className="flex-1">
+              <p className="font-medium text-white">Pathology</p>
+              <p className="text-sm text-slate-400">Last studied 2 days ago</p>
+            </div>
+          </div>
+          <button 
+            onClick={() => onNavigate('continue-studying')}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors"
+          >
+            Continue Studying
+          </button>
+        </div>
+      </div>
 
       {/* Quick Actions */}
       <div className="space-y-3">

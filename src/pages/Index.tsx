@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Navigation from "@/components/Navigation";
@@ -13,11 +12,12 @@ import SettingsScreen from "@/components/SettingsScreen";
 import ProfileScreen from "@/components/ProfileScreen";
 import ReviewScreen from "@/components/ReviewScreen";
 import LearnScreen from "@/components/LearnScreen";
+import ContinueStudyingScreen from "@/components/ContinueStudyingScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
 import PhoneFrame from "@/components/PhoneFrame";
 import { getQuestionCount } from "@/data/questionBank";
 
-type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review' | 'learn';
+type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review' | 'learn' | 'continue-studying';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -119,6 +119,8 @@ const Index = () => {
         return <ReviewScreen onNavigate={handleNavigation} />;
       case 'learn':
         return <LearnScreen onNavigate={handleNavigation} />;
+      case 'continue-studying':
+        return <ContinueStudyingScreen onNavigate={handleNavigation} />;
       default:
         return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
     }
