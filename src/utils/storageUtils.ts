@@ -1,6 +1,6 @@
 
 import { QuizConfig } from "@/components/QuizConfigurationScreen";
-import { getUserProfile, updateUserProfile, getAchievements, updateAchievements, getSubjectStats, updateSubjectStats, generateMockLeaderboard } from "./dataStore";
+import { getUserProfile, updateUserProfile, getAchievements, updateAchievements, getSubjectStats, updateSubjectStats } from "./dataStore";
 
 export interface QuizResult {
   id: string;
@@ -40,7 +40,10 @@ export const saveQuizResult = (result: QuizResult): void => {
     updateStreakAndProfile(result);
     checkAndUnlockAchievements(result);
     updateSubjectStatistics(result);
-    generateMockLeaderboard(); // Regenerate leaderboard with new data
+    
+    // Regenerate leaderboard by directly calling the function from dataStore
+    const { generateMockLeaderboard } = require('./dataStore');
+    generateMockLeaderboard();
   } catch (error) {
     console.error('Failed to save quiz result:', error);
   }

@@ -114,9 +114,16 @@ const initializeDefaultData = () => {
 };
 
 // Generate mock leaderboard with current user
-const generateMockLeaderboard = () => {
+export const generateMockLeaderboard = () => {
   const userProfile = getUserProfile();
-  const userProgress = getUserProgress();
+  
+  // Get basic user progress from localStorage directly to avoid circular import
+  const progressData = localStorage.getItem('medquiz_progress');
+  const userProgress = progressData ? JSON.parse(progressData) : {
+    totalCorrect: 0,
+    currentStreak: 0,
+    averageScore: 0
+  };
   
   const userPoints = Math.max(userProgress.totalCorrect * 100 + userProgress.currentStreak * 50, 500);
   
@@ -206,11 +213,15 @@ export const updateSubjectStats = (stats: SubjectStats[]): void => {
 // Calculate dynamic stats
 export const calculateWeeklyProgress = () => {
   const userProfile = getUserProfile();
-  const userProgress = getUserProgress();
+  
+  // Get quiz history from localStorage directly to avoid circular import
+  const historyData = localStorage.getItem('medquiz_history');
+  const quizHistory = historyData ? JSON.parse(historyData) : [];
+  
   const today = new Date();
   const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
   
-  const thisWeekQuizzes = getQuizHistory().filter(quiz => {
+  const thisWeekQuizzes = quizHistory.filter((quiz: any) => {
     const quizDate = new Date(quiz.date);
     return quizDate >= weekStart;
   });
