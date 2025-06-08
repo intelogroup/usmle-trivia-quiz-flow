@@ -28,6 +28,7 @@ export const initializeDefaultData = () => {
         studyStreak: 0,
         lastStudyDate: '',
         weeklyGoal: 5,
+        rank: 1,
         preferences: {
           notifications: true,
           darkMode: true,
