@@ -60,16 +60,21 @@ const Index = () => {
     setCurrentScreen('quiz-play');
   };
 
-  const handleQuizRestart = (subjects: string[], systems: string[]) => {
+  const handleQuizStart = (subjects: string[], systems: string[]) => {
     setSelectedSubjects(subjects);
     setSelectedSystems(systems);
     setCurrentScreen('quiz-configuration');
   };
 
+  const handleQuizContinue = (quizId: string) => {
+    // Handle quiz continuation logic here
+    console.log('Continuing quiz:', quizId);
+  };
+
   const renderScreen = () => {
     switch (currentScreen) {
       case 'home':
-        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
+        return <HomeScreen onNavigate={handleNavigation} onQuizStart={handleQuizStart} onQuizContinue={handleQuizContinue} />;
       case 'quiz':
         return (
           <QuizScreen 
@@ -117,7 +122,7 @@ const Index = () => {
       case 'review':
         return <ReviewScreen onNavigate={handleNavigation} />;
       default:
-        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
+        return <HomeScreen onNavigate={handleNavigation} onQuizStart={handleQuizStart} onQuizContinue={handleQuizContinue} />;
     }
   };
 
