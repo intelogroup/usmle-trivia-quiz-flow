@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Crown, Medal, Award, Star } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { getLeaderboard, getUserProfile } from "@/utils/dataStore";
 import CountryFlag from "./CountryFlag";
 import UserProfileModal from "./UserProfileModal";
@@ -134,14 +135,27 @@ const LeaderboardScreen = () => {
                 </div>
 
                 {/* Name and Info */}
-                <div>
+                <div className="flex-1">
                   <div className={`font-semibold transition-colors duration-200 ${
                     player.isCurrentUser ? 'text-blue-300' : 'text-white'
                   }`}>
                     {player.name} {player.isCurrentUser && '(You)'}
                   </div>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-xs text-slate-400 mb-2">
                     {player.university} • {player.year} Year
+                  </div>
+                  
+                  {/* Strongest Subjects */}
+                  <div className="flex flex-wrap gap-1">
+                    {player.strongestSubjects?.slice(0, 2).map((subject, index) => (
+                      <Badge 
+                        key={subject.subject} 
+                        variant="outline" 
+                        className="text-xs px-2 py-0.5 text-green-400 border-green-400/30 bg-green-400/10 hover:bg-green-400/20"
+                      >
+                        {subject.subject} {subject.score}%
+                      </Badge>
+                    ))}
                   </div>
                 </div>
               </div>
