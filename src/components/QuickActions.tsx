@@ -1,4 +1,5 @@
 
+
 import { Brain, BookOpen, Trophy, BarChart3, RotateCcw, Settings } from "lucide-react";
 
 interface QuickActionsProps {
@@ -58,7 +59,7 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
                   <Icon className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-sm">{action.label}</div>
+                  <div className="font-medium text-sm text-white">{action.label}</div>
                   <div className="text-xs text-slate-400">{action.description}</div>
                 </div>
               </div>
@@ -71,3 +72,4 @@ const QuickActions = ({ onNavigate }: QuickActionsProps) => {
 };
 
 export default QuickActions;
+
