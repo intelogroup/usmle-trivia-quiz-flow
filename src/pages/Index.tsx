@@ -27,7 +27,10 @@ const Index = () => {
   const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
 
   const handleNavigation = (screen: string) => {
+    console.log(`Navigation requested: ${screen}`);
+    console.log(`Current screen: ${currentScreen}`);
     setCurrentScreen(screen as Screen);
+    console.log(`Screen changed to: ${screen}`);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -68,6 +71,7 @@ const Index = () => {
   };
 
   const renderScreen = () => {
+    console.log(`Rendering screen: ${currentScreen}`);
     switch (currentScreen) {
       case 'home':
         return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
@@ -120,8 +124,10 @@ const Index = () => {
       case 'learn':
         return <LearnScreen onNavigate={handleNavigation} />;
       case 'continue-studying':
+        console.log('Rendering ContinueStudyingScreen');
         return <ContinueStudyingScreen onNavigate={handleNavigation} />;
       default:
+        console.log(`Unknown screen: ${currentScreen}, defaulting to home`);
         return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
     }
   };

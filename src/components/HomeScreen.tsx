@@ -63,6 +63,11 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
     onNavigate('review');
   };
 
+  const handleContinueStudying = () => {
+    console.log('Continue Studying button clicked - navigating to continue-studying');
+    onNavigate('continue-studying');
+  };
+
   const getSubjectIcon = (subject: string) => {
     const icons: { [key: string]: string } = {
       'Pathology': '🧬',
@@ -201,7 +206,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
             </div>
           </div>
           <button 
-            onClick={() => onNavigate('continue-studying')}
+            onClick={handleContinueStudying}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors"
           >
             Continue Studying

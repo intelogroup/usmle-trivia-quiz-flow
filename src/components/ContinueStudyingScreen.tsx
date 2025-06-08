@@ -1,4 +1,3 @@
-
 import { ArrowLeft, BookOpen, Clock, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
@@ -17,6 +16,8 @@ interface UnfinishedLesson {
 }
 
 const ContinueStudyingScreen = ({ onNavigate }: ContinueStudyingScreenProps) => {
+  console.log('ContinueStudyingScreen rendered');
+  
   // Mock data for unfinished lessons
   const [unfinishedLessons] = useState<UnfinishedLesson[]>([
     {
@@ -58,8 +59,20 @@ const ContinueStudyingScreen = ({ onNavigate }: ContinueStudyingScreenProps) => 
   ]);
 
   const handleLessonClick = (lesson: UnfinishedLesson) => {
-    console.log('Continue lesson:', lesson);
+    console.log('Continue lesson clicked:', lesson);
     // Here you would navigate to the specific lesson content
+    // For now, we'll navigate to the learn screen
+    onNavigate('learn');
+  };
+
+  const handleBackToHome = () => {
+    console.log('Back to home clicked from ContinueStudyingScreen');
+    onNavigate('home');
+  };
+
+  const handleStartNewLesson = () => {
+    console.log('Start new lesson clicked from ContinueStudyingScreen');
+    onNavigate('learn');
   };
 
   const getProgressColor = (progress: number) => {
@@ -79,7 +92,7 @@ const ContinueStudyingScreen = ({ onNavigate }: ContinueStudyingScreenProps) => 
       {/* Header */}
       <div className="flex items-center space-x-3">
         <button 
-          onClick={() => onNavigate('home')}
+          onClick={handleBackToHome}
           className="text-white hover:text-slate-300"
         >
           <ArrowLeft className="w-6 h-6" />
@@ -181,7 +194,7 @@ const ContinueStudyingScreen = ({ onNavigate }: ContinueStudyingScreenProps) => 
 
       {/* Start New Lesson */}
       <button
-        onClick={() => onNavigate('learn')}
+        onClick={handleStartNewLesson}
         className="w-full bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-xl transition-colors border border-slate-600"
       >
         <div className="flex items-center justify-center space-x-2">
