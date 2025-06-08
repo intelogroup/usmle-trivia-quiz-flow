@@ -123,7 +123,7 @@ const Index = () => {
 
   return (
     <PhoneFrame>
-      <div className="max-w-md mx-auto bg-app-background min-h-screen relative">
+      <div className="max-w-md mx-auto bg-slate-900 min-h-screen relative">
         {renderScreen()}
         <Navigation currentScreen={currentScreen} onNavigate={handleNavigation} />
       </div>
