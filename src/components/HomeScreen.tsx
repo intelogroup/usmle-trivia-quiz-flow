@@ -1,11 +1,12 @@
-
 import { Bell, Settings } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
-import NotificationBadge from "./NotificationBadge";
+import NotificationSystem from "./NotificationSystem";
+import StudyProgressTracker from "./StudyProgressTracker";
 import RecentQuizzes from "./RecentQuizzes";
 import { getUserProfile, getWeakestSubjects } from "@/utils/dataStore";
 import { getUserProgress } from "@/utils/storageUtils";
+import { useState } from "react";
 
 interface HomeScreenProps {
   onNavigate: (screen: string) => void;
@@ -16,6 +17,40 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
   const userProfile = getUserProfile();
   const userProgress = getUserProgress();
   const weakestSubjects = getWeakestSubjects();
+
+  // Mock notifications for demonstration
+  const [notifications, setNotifications] = useState([
+    {
+      id: '1',
+      type: 'achievement' as const,
+      title: 'First Quiz Completed!',
+      message: 'Congratulations on completing your first quiz. Keep up the great work!',
+      icon: '🏆',
+      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
+      read: false
+    },
+    {
+      id: '2',
+      type: 'streak' as const,
+      title: 'Study Streak',
+      message: `You're on a ${userProfile.studyStreak} day streak! Don't break it now.`,
+      icon: '🔥',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+      read: false
+    }
+  ]);
+
+  const handleMarkAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
+  };
+
+  const handleClearAll = () => {
+    setNotifications([]);
+  };
 
   const handleQuizRestart = (subjects: string[], systems: string[]) => {
     if (onQuizRestart) {
@@ -61,10 +96,11 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
           </h1>
         </div>
         <div className="flex items-center space-x-3">
-          <div className="relative">
-            <Bell size={20} className="text-slate-300" />
-            <NotificationBadge />
-          </div>
+          <NotificationSystem 
+            notifications={notifications}
+            onMarkAsRead={handleMarkAsRead}
+            onClearAll={handleClearAll}
+          />
           <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
             <span className="text-sm font-semibold">{userProfile.avatar}</span>
           </div>
@@ -78,13 +114,13 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
         <p className="text-slate-300">Ready to challenge yourself today? 🎯</p>
       </div>
 
-      {/* Progress Card */}
-      <ProgressCard />
+      {/* Study Progress Tracker */}
+      <StudyProgressTracker />
 
       {/* Start Quiz Button */}
       <button
         onClick={() => onNavigate('quiz')}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-colors"
+        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg"
       >
         <span className="text-xl">⚡</span>
         <span>Start New Quiz</span>

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Navigation from "@/components/Navigation";
@@ -12,6 +13,7 @@ import SettingsScreen from "@/components/SettingsScreen";
 import ProfileScreen from "@/components/ProfileScreen";
 import ReviewScreen from "@/components/ReviewScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
+import PhoneFrame from "@/components/PhoneFrame";
 import { getQuestionCount } from "@/data/questionBank";
 
 type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review';
@@ -120,12 +122,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <PhoneFrame>
       <div className="max-w-md mx-auto bg-slate-900 min-h-screen relative">
         {renderScreen()}
         <Navigation currentScreen={currentScreen} onNavigate={handleNavigation} />
       </div>
-    </div>
+    </PhoneFrame>
   );
 };
 
