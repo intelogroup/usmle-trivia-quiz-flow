@@ -35,7 +35,6 @@ export interface UserProfile {
   studyStreak: number;
   lastStudyDate: string;
   weeklyGoal: number;
-  rank: number; // Added missing rank property
   preferences: {
     notifications: boolean;
     darkMode: boolean;
