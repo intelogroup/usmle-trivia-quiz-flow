@@ -1,5 +1,5 @@
 
-import { BookOpen, Clock, Target } from "lucide-react";
+import { BookOpen, Clock, Target, Activity } from "lucide-react";
 import Section from "./ui/Section";
 
 interface QuickQuizSectionProps {
@@ -7,42 +7,49 @@ interface QuickQuizSectionProps {
 }
 
 const QuickQuizSection = ({ onQuickQuizStart }: QuickQuizSectionProps) => {
+  // Updated to represent system-based quick quizzes with mixed subjects
   const quickQuizCategories = [
     { 
-      name: "Anatomy", 
+      name: "Cardiovascular System", 
       color: "from-red-500 to-pink-600",
-      description: "Human body structure",
-      questions: 45
+      description: "Heart & circulation (all subjects)",
+      questions: 45,
+      icon: <Activity className="w-5 h-5 text-white" />
     },
     { 
-      name: "Physiology", 
+      name: "Respiratory System", 
       color: "from-blue-500 to-cyan-600",
-      description: "Body functions & processes",
-      questions: 52
+      description: "Breathing & lungs (all subjects)",
+      questions: 52,
+      icon: <Activity className="w-5 h-5 text-white" />
     },
     { 
-      name: "Pathology", 
+      name: "Nervous System", 
       color: "from-purple-500 to-indigo-600",
-      description: "Disease mechanisms",
-      questions: 38
+      description: "Brain & nerves (all subjects)",
+      questions: 38,
+      icon: <Activity className="w-5 h-5 text-white" />
     },
     { 
-      name: "Pharmacology", 
+      name: "Gastrointestinal System", 
       color: "from-green-500 to-emerald-600",
-      description: "Drug actions & effects",
-      questions: 41
+      description: "Digestive system (all subjects)",
+      questions: 41,
+      icon: <Activity className="w-5 h-5 text-white" />
     },
     { 
-      name: "Microbiology", 
+      name: "Musculoskeletal System", 
       color: "from-yellow-500 to-orange-600",
-      description: "Microorganisms & infections",
-      questions: 29
+      description: "Bones & muscles (all subjects)",
+      questions: 29,
+      icon: <Activity className="w-5 h-5 text-white" />
     },
     { 
-      name: "Immunology", 
+      name: "Endocrine System", 
       color: "from-teal-500 to-blue-600",
-      description: "Immune system responses",
-      questions: 33
+      description: "Hormones & glands (all subjects)",
+      questions: 33,
+      icon: <Activity className="w-5 h-5 text-white" />
     },
   ];
 
@@ -53,7 +60,7 @@ const QuickQuizSection = ({ onQuickQuizStart }: QuickQuizSectionProps) => {
   return (
     <Section title="Start a Quick Quiz">
       <p className="text-slate-400 text-sm mb-4">
-        Jump straight into practice with 10 mixed-difficulty questions
+        Jump straight into system-based practice with 10 mixed-subject questions
       </p>
       
       <div className="grid grid-cols-2 gap-3">
@@ -65,7 +72,7 @@ const QuickQuizSection = ({ onQuickQuizStart }: QuickQuizSectionProps) => {
           >
             <div className="flex items-center space-x-3">
               <div className={`w-10 h-10 bg-gradient-to-br ${category.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                <BookOpen className="w-5 h-5 text-white" />
+                {category.icon}
               </div>
               
               <div className="min-w-0 flex-1">
@@ -83,7 +90,7 @@ const QuickQuizSection = ({ onQuickQuizStart }: QuickQuizSectionProps) => {
       <div className="bg-slate-700/50 rounded-lg p-3 mt-4">
         <div className="flex items-center space-x-2 text-xs text-slate-400">
           <Target className="w-4 h-4" />
-          <span>Quick quizzes use default settings: 10 questions, mixed difficulty, no time limit</span>
+          <span>Quick quizzes mix all subjects within the selected system: anatomy, physiology, pathology, etc.</span>
         </div>
       </div>
     </Section>

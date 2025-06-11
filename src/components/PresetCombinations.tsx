@@ -10,8 +10,8 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
     {
       name: "Cardio Focus",
       description: "Heart & circulation basics",
-      subjects: ["Anatomy", "Physiology"],
       systems: ["Cardiovascular System"],
+      subjects: ["Anatomy", "Physiology"],
       difficulty: "Beginner",
       estimatedTime: "8 min",
       color: "from-red-500 to-red-600",
@@ -21,8 +21,8 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
     {
       name: "Respiratory Deep Dive", 
       description: "Breathing & lung function",
-      subjects: ["Anatomy", "Physiology", "Pathology"],
       systems: ["Respiratory System"],
+      subjects: ["Anatomy", "Physiology", "Pathology"],
       difficulty: "Intermediate",
       estimatedTime: "12 min",
       color: "from-blue-500 to-blue-600",
@@ -32,8 +32,8 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
     {
       name: "Neuro Essentials",
       description: "Brain & nervous system",
-      subjects: ["Anatomy", "Physiology"],
       systems: ["Nervous System"],
+      subjects: ["Anatomy", "Physiology"],
       difficulty: "Intermediate",
       estimatedTime: "10 min", 
       color: "from-purple-500 to-purple-600",
@@ -43,8 +43,8 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
     {
       name: "GI Fundamentals",
       description: "Digestive system basics",
-      subjects: ["Anatomy", "Physiology"],
       systems: ["Gastrointestinal System"],
+      subjects: ["Anatomy", "Physiology"],
       difficulty: "Beginner",
       estimatedTime: "7 min",
       color: "from-green-500 to-green-600", 
@@ -52,10 +52,10 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
       questionCount: 12
     },
     {
-      name: "Pharmacology Challenge",
-      description: "Drug mechanisms & effects",
-      subjects: ["Pharmacology"],
+      name: "Multi-System Pharmacology",
+      description: "Drug mechanisms across systems",
       systems: ["Cardiovascular System", "Nervous System"],
+      subjects: ["Pharmacology"],
       difficulty: "Advanced",
       estimatedTime: "15 min",
       color: "from-orange-500 to-orange-600",
@@ -64,9 +64,9 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
     },
     {
       name: "Pathology Review",
-      description: "Disease mechanisms",
-      subjects: ["Pathology"],
+      description: "Disease mechanisms across systems",
       systems: ["Cardiovascular System", "Respiratory System"],
+      subjects: ["Pathology"],
       difficulty: "Advanced", 
       estimatedTime: "18 min",
       color: "from-pink-500 to-pink-600",
@@ -88,7 +88,7 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
     <div className="space-y-4">
       <div className="text-center space-y-2">
         <h3 className="text-lg font-semibold text-white">Quick Start</h3>
-        <p className="text-sm text-slate-400">Popular combinations to get you started</p>
+        <p className="text-sm text-slate-400">Popular system + subject combinations</p>
       </div>
 
       <div className="grid grid-cols-1 gap-3">
@@ -106,6 +106,18 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
                 <div className="text-left">
                   <h4 className="font-semibold text-white">{preset.name}</h4>
                   <p className="text-sm text-slate-400">{preset.description}</p>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {preset.systems.map(system => (
+                      <span key={system} className="text-xs bg-green-600/20 text-green-300 px-2 py-1 rounded-full">
+                        {system.split(' ')[0]}
+                      </span>
+                    ))}
+                    {preset.subjects.map(subject => (
+                      <span key={subject} className="text-xs bg-blue-600/20 text-blue-300 px-2 py-1 rounded-full">
+                        {subject}
+                      </span>
+                    ))}
+                  </div>
                   <div className="flex items-center space-x-3 mt-1">
                     <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(preset.difficulty)}`}>
                       {preset.difficulty}

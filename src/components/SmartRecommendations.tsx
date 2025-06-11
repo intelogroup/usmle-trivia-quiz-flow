@@ -1,3 +1,4 @@
+
 import { TrendingUp, Users, Brain, Clock } from "lucide-react";
 
 interface SmartRecommendationsProps {
@@ -12,9 +13,9 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
       description: "Based on your recent performance",
       combinations: [
         {
-          name: "Pathology Boost",
-          subjects: ["Pathology"],
+          name: "Cardiovascular Pathology Boost",
           systems: ["Cardiovascular System", "Respiratory System"],
+          subjects: ["Pathology"],
           reason: "68% average score - needs focus",
           icon: "🎯",
           color: "from-red-500 to-red-600"
@@ -27,17 +28,17 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
       description: "What other students are practicing",
       combinations: [
         {
-          name: "Cardio + Anatomy", 
-          subjects: ["Anatomy", "Physiology"],
+          name: "Cardio Anatomy & Physiology", 
           systems: ["Cardiovascular System"],
+          subjects: ["Anatomy", "Physiology"],
           reason: "Trending among USMLE prep students",
           icon: "🔥",
           color: "from-orange-500 to-orange-600"
         },
         {
-          name: "Neuro Fundamentals",
-          subjects: ["Anatomy", "Physiology"],
+          name: "Nervous System Fundamentals",
           systems: ["Nervous System"],
+          subjects: ["Anatomy", "Physiology"],
           reason: "Most attempted combination",
           icon: "⭐",
           color: "from-purple-500 to-purple-600"
@@ -50,9 +51,9 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
       description: "Recommended next steps",
       combinations: [
         {
-          name: "Advanced Physiology",
-          subjects: ["Physiology", "Pathology"],
+          name: "Multi-System Physiology",
           systems: ["Endocrine System", "Nervous System"],
+          subjects: ["Physiology", "Pathology"],
           reason: "Build on your anatomy foundation",
           icon: "📈",
           color: "from-blue-500 to-blue-600"
@@ -109,14 +110,14 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
                       <h4 className="font-semibold text-white">{combo.name}</h4>
                       <p className="text-sm text-slate-400">{combo.reason}</p>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {combo.subjects.map(subject => (
-                          <span key={subject} className="text-xs bg-blue-600/20 text-blue-300 px-2 py-1 rounded-full">
-                            {subject}
-                          </span>
-                        ))}
                         {combo.systems.map(system => (
                           <span key={system} className="text-xs bg-green-600/20 text-green-300 px-2 py-1 rounded-full">
                             {system.split(' ')[0]}
+                          </span>
+                        ))}
+                        {combo.subjects.map(subject => (
+                          <span key={subject} className="text-xs bg-blue-600/20 text-blue-300 px-2 py-1 rounded-full">
+                            {subject}
                           </span>
                         ))}
                       </div>
