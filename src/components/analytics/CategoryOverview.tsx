@@ -1,4 +1,3 @@
-
 import { BookOpen, Activity, TrendingUp, Target } from 'lucide-react';
 import { getUSMLEAnalytics, calculateUSMLEInsights } from '@/utils/usmleAnalyticsManager';
 
@@ -7,12 +6,12 @@ const CategoryOverview = () => {
   const insights = calculateUSMLEInsights(analytics);
   const { readinessScore } = analytics;
 
-  // Calculate averages
-  const subjectScores = Object.values(readinessScore.subjectReadiness);
-  const systemScores = Object.values(readinessScore.systemReadiness);
+  // Calculate averages with proper type casting
+  const subjectScores = Object.values(readinessScore.subjectReadiness) as number[];
+  const systemScores = Object.values(readinessScore.systemReadiness) as number[];
   
-  const avgSubjectScore = Math.round(subjectScores.reduce((sum, score) => sum + (score as number), 0) / subjectScores.length);
-  const avgSystemScore = Math.round(systemScores.reduce((sum, score) => sum + (score as number), 0) / systemScores.length);
+  const avgSubjectScore = Math.round(subjectScores.reduce((sum, score) => sum + score, 0) / subjectScores.length);
+  const avgSystemScore = Math.round(systemScores.reduce((sum, score) => sum + score, 0) / systemScores.length);
 
   const getScoreColor = (score: number) => {
     if (score >= 85) return 'text-green-400';

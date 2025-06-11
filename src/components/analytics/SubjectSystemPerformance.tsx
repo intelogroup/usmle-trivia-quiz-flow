@@ -14,7 +14,7 @@ const SubjectSystemPerformance = () => {
 
   const getBarWidth = (score: number) => `${score}%`;
 
-  // Get top 6 subjects and systems for display
+  // Get top 6 subjects and systems for display with proper typing
   const topSubjects = Object.entries(readinessScore.subjectReadiness)
     .sort(([,a], [,b]) => (b as number) - (a as number))
     .slice(0, 6);

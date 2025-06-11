@@ -6,20 +6,12 @@ import USMLEReadinessCard from "./analytics/USMLEReadinessCard";
 import SubjectSystemPerformance from "./analytics/SubjectSystemPerformance";
 import SimplifiedWeaknessAnalysis from "./analytics/SimplifiedWeaknessAnalysis";
 import CategoryOverview from "./analytics/CategoryOverview";
+import DailyActivityChart from "./analytics/DailyActivityChart";
 
 const AnalyticsScreen = () => {
   const userProgress = getUserProgress();
   const usmleAnalytics = getUSMLEAnalytics();
   const insights = calculateUSMLEInsights(usmleAnalytics);
-
-  // Get recent study activity (last 7 days)
-  const recentSessions = usmleAnalytics.sessionAnalytics.slice(0, 7);
-  const weeklyActivity = recentSessions.map(session => ({
-    date: new Date(session.date).toLocaleDateString('en', { weekday: 'short' }),
-    questions: session.questionsAttempted,
-    accuracy: session.accuracy,
-    duration: Math.round(session.duration / 60 * 10) / 10 // Convert to hours
-  }));
 
   // Calculate study streak
   const studyStreak = usmleAnalytics.sessionAnalytics
@@ -87,32 +79,8 @@ const AnalyticsScreen = () => {
       {/* Category Overview */}
       <CategoryOverview />
 
-      {/* Weekly Study Activity */}
-      <div className="bg-slate-800 rounded-xl p-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Activity className="w-6 h-6 text-green-400" />
-          <h3 className="text-lg font-semibold text-white">Weekly Activity</h3>
-        </div>
-        <div className="flex justify-between items-end space-x-2 h-32 mb-4">
-          {weeklyActivity.map((day, index) => (
-            <div key={index} className="flex-1 flex flex-col items-center">
-              <div className="text-xs text-slate-400 mb-2">{day.accuracy}%</div>
-              <div 
-                className="bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md w-full mb-2 transition-all duration-700"
-                style={{ 
-                  height: `${Math.max(day.questions * 3, 4)}px`,
-                  minHeight: '4px'
-                }}
-              ></div>
-              <div className="text-xs text-slate-400">{day.date}</div>
-              <div className="text-xs text-slate-500">{day.duration}h</div>
-            </div>
-          ))}
-        </div>
-        <div className="text-center text-sm text-slate-400">
-          Daily questions attempted and accuracy
-        </div>
-      </div>
+      {/* Enhanced Daily Activity Chart */}
+      <DailyActivityChart />
 
       {/* Subject & System Performance */}
       <SubjectSystemPerformance />
