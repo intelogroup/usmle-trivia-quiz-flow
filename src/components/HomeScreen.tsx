@@ -1,4 +1,3 @@
-
 import { Target, Zap } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
@@ -8,6 +7,7 @@ import RecentQuizzes from "./RecentQuizzes";
 import WeakestSubjects from "./home/WeakestSubjects";
 import ReviewMistakes from "./home/ReviewMistakes";
 import ContinueLearning from "./home/ContinueLearning";
+import QuickStatsWidget from "./home/QuickStatsWidget";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getUserProfile } from "@/utils/dataStore";
 import { useState } from "react";
@@ -96,14 +96,14 @@ const HomeScreen = ({
         </div>
       </div>
 
-      {/* Welcome Message */}
-      
-
       {/* Study Progress Tracker */}
       <StudyProgressTracker />
 
+      {/* Today's Progress Quick Stats */}
+      <QuickStatsWidget />
+
       {/* Start Quiz Button */}
-      <button onClick={() => onNavigate('quiz')} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900" aria-label="Start a new quiz session">
+      <button onClick={() => onNavigate('quiz')} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900" aria-label="Start a new quiz session">
         <Zap size={20} className="fill-current" />
         <span>Start New Quiz</span>
         <Zap size={20} className="fill-current" />
