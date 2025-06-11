@@ -1,5 +1,5 @@
 
-import { Bell, Settings } from "lucide-react";
+import { Target, Zap } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
 import NotificationSystem from "./NotificationSystem";
@@ -69,7 +69,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-white">
             USMLE <span className="text-blue-400">T</span>
             <span className="text-green-400">R</span>
             <span className="text-yellow-400">I</span>
@@ -93,8 +93,14 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Welcome Message */}
       <div className="space-y-3">
         <p className="text-slate-400 text-sm">Welcome back,</p>
-        <h2 className="text-2xl font-bold text-white">{userProfile.name} 👋</h2>
-        <p className="text-slate-400 text-sm">Ready to challenge yourself today? 🎯</p>
+        <div className="flex items-center space-x-2">
+          <h2 className="text-2xl font-bold text-white">{userProfile.name}</h2>
+          <span className="text-2xl">👋</span>
+        </div>
+        <div className="flex items-center space-x-2 text-slate-400 text-sm">
+          <Target size={16} className="text-teal-400" />
+          <span>Ready to challenge yourself today?</span>
+        </div>
       </div>
 
       {/* Study Progress Tracker */}
@@ -106,9 +112,9 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
         className="w-full bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900"
         aria-label="Start a new quiz session"
       >
-        <span className="text-xl">⚡</span>
+        <Zap size={20} className="fill-current" />
         <span>Start New Quiz</span>
-        <span className="text-xl">🚀</span>
+        <Zap size={20} className="fill-current" />
       </button>
 
       {/* Recent Quizzes */}

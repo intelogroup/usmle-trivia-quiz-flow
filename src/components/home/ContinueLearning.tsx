@@ -1,4 +1,6 @@
 
+import { Activity } from "lucide-react";
+
 interface ContinueLearningProps {
   onNavigate: (screen: string) => void;
 }
@@ -15,7 +17,7 @@ const ContinueLearning = ({ onNavigate }: ContinueLearningProps) => {
       <div className="bg-slate-800/50 rounded-xl p-4 space-y-4 shadow-sm">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center">
-            <span className="text-xl">🧬</span>
+            <Activity size={20} className="text-blue-400" />
           </div>
           <div className="flex-1">
             <p className="font-medium text-white">Pathology</p>

@@ -1,5 +1,6 @@
 
 import { getUserProgress } from "@/utils/storageUtils";
+import { RefreshCw } from "lucide-react";
 
 interface ReviewMistakesProps {
   onNavigate: (screen: string) => void;
@@ -18,7 +19,7 @@ const ReviewMistakes = ({ onNavigate }: ReviewMistakesProps) => {
       <div className="bg-slate-800/50 rounded-xl p-4 space-y-4 shadow-sm">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center">
-            <span className="text-xl">🔄</span>
+            <RefreshCw size={20} className="text-blue-400" />
           </div>
           <div className="flex-1">
             <p className="font-medium text-white">{Math.max(userProgress.totalQuestions - userProgress.totalCorrect, 0)} questions need review</p>

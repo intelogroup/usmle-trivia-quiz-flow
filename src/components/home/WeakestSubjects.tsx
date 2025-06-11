@@ -1,5 +1,6 @@
 
 import { getWeakestSubjects } from "@/utils/dataStore";
+import { Activity, Heart, Bone, Pill, Bug, Shield } from "lucide-react";
 
 interface WeakestSubjectsProps {
   onNavigate: (screen: string) => void;
@@ -9,15 +10,15 @@ const WeakestSubjects = ({ onNavigate }: WeakestSubjectsProps) => {
   const weakestSubjects = getWeakestSubjects();
 
   const getSubjectIcon = (subject: string) => {
-    const icons: { [key: string]: string } = {
-      'Pathology': '🧬',
-      'Physiology': '🫀',
-      'Anatomy': '🦴',
-      'Pharmacology': '💊',
-      'Microbiology': '🦠',
-      'Immunology': '🛡️'
+    const iconMap: { [key: string]: React.ComponentType<{ size?: number; className?: string }> } = {
+      'Pathology': Activity,
+      'Physiology': Heart,
+      'Anatomy': Bone,
+      'Pharmacology': Pill,
+      'Microbiology': Bug,
+      'Immunology': Shield
     };
-    return icons[subject] || '📚';
+    return iconMap[subject] || Activity;
   };
 
   const getSubjectColor = (score: number) => {
@@ -34,28 +35,32 @@ const WeakestSubjects = ({ onNavigate }: WeakestSubjectsProps) => {
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-white">Areas for Improvement</h3>
       <div className="space-y-3">
-        {weakestSubjects.map((subject, index) => (
-          <div key={index} className="bg-slate-800/50 rounded-xl p-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className={`w-10 h-10 ${getSubjectColor(subject.score)} rounded-lg flex items-center justify-center shadow-sm`}>
-                  <span className="text-white text-sm">{getSubjectIcon(subject.subject)}</span>
+        {weakestSubjects.map((subject, index) => {
+          const SubjectIcon = getSubjectIcon(subject.subject);
+          
+          return (
+            <div key={index} className="bg-slate-800/50 rounded-xl p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-10 h-10 ${getSubjectColor(subject.score)} rounded-lg flex items-center justify-center shadow-sm`}>
+                    <SubjectIcon size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-white">{subject.subject}</h4>
+                    <p className="text-sm text-slate-400">{subject.score}% average • {subject.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-medium text-white">{subject.subject}</h4>
-                  <p className="text-sm text-slate-400">{subject.score}% average • {subject.description}</p>
-                </div>
+                <button
+                  onClick={() => onNavigate('category')}
+                  className={`${getSubjectColor(subject.score)} text-white px-3 py-1 rounded-lg text-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900`}
+                  aria-label={`Practice ${subject.subject}`}
+                >
+                  Practice
+                </button>
               </div>
-              <button
-                onClick={() => onNavigate('category')}
-                className={`${getSubjectColor(subject.score)} text-white px-3 py-1 rounded-lg text-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900`}
-                aria-label={`Practice ${subject.subject}`}
-              >
-                Practice
-              </button>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
