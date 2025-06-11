@@ -1,4 +1,3 @@
-
 import { TrendingUp, Users, Brain, Clock } from "lucide-react";
 
 interface SmartRecommendationsProps {
@@ -99,7 +98,7 @@ const SmartRecommendations = ({ onRecommendationSelect }: SmartRecommendationsPr
               <button
                 key={comboIndex}
                 onClick={() => onRecommendationSelect(combo.subjects, combo.systems)}
-                className="w-full bg-slate-800/30 hover:bg-slate-700/50 rounded-xl p-4 transition-all duration-200 border border-transparent hover:border-slate-600"
+                className="w-full bg-slate-700/70 hover:bg-slate-600/70 rounded-xl p-4 transition-all duration-200 border border-transparent hover:border-slate-500"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
