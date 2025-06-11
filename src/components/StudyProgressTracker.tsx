@@ -9,17 +9,21 @@ const StudyProgressTracker = () => {
   const userProgress = getUserProgress();
   const weeklyProgress = calculateWeeklyProgress();
 
-  // Generate study calendar data (last 7 days)
+  // Generate study calendar data (last 7 days, Thu-Wed sequence)
   const getStudyCalendar = () => {
     const days = [];
     const today = new Date();
     
+    // Find the Thursday of current week (6 days ago to today)
+    const currentDayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const daysFromThursday = (currentDayOfWeek + 3) % 7; // Days since last Thursday
+    
     for (let i = 6; i >= 0; i--) {
       const date = new Date(today);
-      date.setDate(date.getDate() - i);
+      date.setDate(date.getDate() - daysFromThursday + (i - 6));
       
       // Mock activity data - in real app, this would come from actual quiz history
-      const hasActivity = Math.random() > 0.3;
+      const hasActivity = Math.random() > 0.4;
       const intensity = hasActivity ? Math.floor(Math.random() * 3) + 1 : 0;
       
       days.push({
@@ -27,7 +31,7 @@ const StudyProgressTracker = () => {
         dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
         hasActivity,
         intensity, // 0-3 scale
-        isToday: i === 0
+        isToday: date.toDateString() === today.toDateString()
       });
     }
     
@@ -36,12 +40,13 @@ const StudyProgressTracker = () => {
 
   const studyDays = getStudyCalendar();
 
-  const getIntensityColor = (intensity: number) => {
-    switch (intensity) {
-      case 1: return 'bg-green-200';
-      case 2: return 'bg-green-400';
-      case 3: return 'bg-green-600';
-      default: return 'bg-slate-700';
+  const getDayBubbleStyle = (day: any) => {
+    if (day.isToday) {
+      return 'bg-blue-500 text-white ring-2 ring-blue-400 ring-offset-2 ring-offset-slate-800';
+    } else if (day.hasActivity) {
+      return 'bg-green-500/30 text-green-300 border-2 border-green-500/50';
+    } else {
+      return 'bg-slate-700 text-slate-400 border border-slate-600';
     }
   };
 
@@ -54,38 +59,55 @@ const StudyProgressTracker = () => {
             <Calendar className="w-5 h-5 mr-2 text-blue-400" />
             This Week
           </h3>
-          <div className="text-sm text-slate-400">
-            {weeklyProgress.completed}/{weeklyProgress.goal} goals
-          </div>
         </div>
 
-        {/* Study Calendar */}
-        <div className="grid grid-cols-7 gap-2 mb-4">
-          {studyDays.map((day, index) => (
-            <div key={index} className="text-center">
-              <div className="text-xs text-slate-400 mb-1">{day.dayName}</div>
-              <div
-                className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-medium transition-all ${
-                  getIntensityColor(day.intensity)
-                } ${day.isToday ? 'ring-2 ring-blue-400' : ''}`}
-              >
-                {day.date}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Progress Bar */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="text-slate-400">Weekly Goal Progress</span>
-            <span className="text-blue-400">{Math.round(weeklyProgress.percentage)}%</span>
+        {/* Clearer Goal Statement */}
+        <div className="space-y-3 mb-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium text-slate-300">Weekly Quiz Goal</span>
+            <span className="text-lg font-bold text-blue-400">{weeklyProgress.completed}/{weeklyProgress.goal}</span>
           </div>
-          <div className="w-full bg-slate-700 rounded-full h-2">
+          
+          {/* Progress Bar */}
+          <div className="w-full bg-slate-700 rounded-full h-3">
             <div 
-              className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-500" 
+              className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500" 
               style={{ width: `${weeklyProgress.percentage}%` }}
             ></div>
+          </div>
+          
+          <div className="text-xs text-slate-400 text-center">
+            {Math.round(weeklyProgress.percentage)}% Complete
+          </div>
+        </div>
+
+        {/* Visual Mini-Calendar */}
+        <div className="space-y-3">
+          {/* Day Labels */}
+          <div className="grid grid-cols-7 gap-2">
+            {studyDays.map((day, index) => (
+              <div key={index} className="text-center">
+                <div className="text-xs text-slate-400 mb-1 font-medium">{day.dayName}</div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Day Bubbles */}
+          <div className="grid grid-cols-7 gap-2">
+            {studyDays.map((day, index) => (
+              <div key={index} className="flex justify-center">
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-200 hover:scale-105 ${
+                    getDayBubbleStyle(day)
+                  }`}
+                >
+                  {day.date}
+                  {day.hasActivity && !day.isToday && (
+                    <div className="absolute w-2 h-2 bg-green-400 rounded-full transform translate-x-3 -translate-y-3"></div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
