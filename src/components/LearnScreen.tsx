@@ -1,8 +1,11 @@
 import { BookOpen, FileText, Award, ChevronRight, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import LessonFilters from "./LessonFilters";
+import { getLessonsBySystemAndSubject } from "@/data/lessonData";
+
 interface LearnScreenProps {
   onNavigate: (screen: string) => void;
+  onLessonSelect?: (lessonId: string) => void;
 }
 interface Category {
   id: string;
@@ -11,7 +14,8 @@ interface Category {
   subcategories: string[];
 }
 const LearnScreen = ({
-  onNavigate
+  onNavigate,
+  onLessonSelect
 }: LearnScreenProps) => {
   const [showCategories, setShowCategories] = useState(false);
   const [showLessons, setShowLessons] = useState(false);
@@ -108,7 +112,14 @@ const LearnScreen = ({
   };
   const handleLessonFilterSelect = (system: string, subject: string) => {
     console.log(`Selected lesson: ${system} - ${subject}`);
-    // Here you would navigate to the specific lesson content
+    const availableLessons = getLessonsBySystemAndSubject(system, subject);
+    
+    if (availableLessons.length > 0 && onLessonSelect) {
+      // For now, select the first available lesson
+      onLessonSelect(availableLessons[0].id);
+    } else {
+      console.log('No lessons available for this combination');
+    }
   };
   if (showLessons) {
     return <div className="p-4 pb-20 space-y-6">

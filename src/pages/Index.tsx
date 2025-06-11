@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import HomeScreen from "@/components/HomeScreen";
@@ -14,10 +13,11 @@ import ReviewScreen from "@/components/ReviewScreen";
 import LearnScreen from "@/components/LearnScreen";
 import ContinueStudyingScreen from "@/components/ContinueStudyingScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
+import QuickLessonScreen from "@/components/lessons/QuickLessonScreen";
 import PhoneFrame from "@/components/PhoneFrame";
 import { getQuestionCount } from "@/data/questionBank";
 
-type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review' | 'learn' | 'continue-studying';
+type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review' | 'learn' | 'continue-studying' | 'quick-lesson';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -25,6 +25,7 @@ const Index = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
   const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
+  const [selectedLessonId, setSelectedLessonId] = useState<string>('');
 
   const handleNavigation = (screen: string) => {
     console.log(`Navigation requested: ${screen}`);
@@ -69,6 +70,11 @@ const Index = () => {
     setSelectedSubjects(subjects);
     setSelectedSystems(systems);
     setCurrentScreen('quiz-configuration');
+  };
+
+  const handleLessonSelect = (lessonId: string) => {
+    setSelectedLessonId(lessonId);
+    setCurrentScreen('quick-lesson');
   };
 
   const renderScreen = () => {
@@ -123,7 +129,9 @@ const Index = () => {
       case 'review':
         return <ReviewScreen onNavigate={handleNavigation} />;
       case 'learn':
-        return <LearnScreen onNavigate={handleNavigation} />;
+        return <LearnScreen onNavigate={handleNavigation} onLessonSelect={handleLessonSelect} />;
+      case 'quick-lesson':
+        return <QuickLessonScreen lessonId={selectedLessonId} onNavigate={handleNavigation} />;
       case 'continue-studying':
         console.log('Rendering ContinueStudyingScreen');
         return <ContinueStudyingScreen onNavigate={handleNavigation} />;
