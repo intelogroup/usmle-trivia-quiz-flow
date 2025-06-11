@@ -1,3 +1,4 @@
+
 import { Target, Zap } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
@@ -7,17 +8,20 @@ import RecentQuizzes from "./RecentQuizzes";
 import WeakestSubjects from "./home/WeakestSubjects";
 import ReviewMistakes from "./home/ReviewMistakes";
 import ContinueLearning from "./home/ContinueLearning";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getUserProfile } from "@/utils/dataStore";
 import { useState } from "react";
 
 interface HomeScreenProps {
   onNavigate: (screen: string) => void;
   onQuizRestart?: (subjects: string[], systems: string[]) => void;
+  onProfileClick: () => void;
 }
 
 const HomeScreen = ({
   onNavigate,
-  onQuizRestart
+  onQuizRestart,
+  onProfileClick
 }: HomeScreenProps) => {
   const userProfile = getUserProfile();
 
@@ -74,9 +78,21 @@ const HomeScreen = ({
         </div>
         <div className="flex items-center space-x-3">
           <NotificationSystem notifications={notifications} onMarkAsRead={handleMarkAsRead} onClearAll={handleClearAll} />
-          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center my-[2px]">
-            <span className="text-sm font-semibold">{userProfile.avatar}</span>
-          </div>
+          <button
+            onClick={onProfileClick}
+            className="relative group transition-all duration-200 hover:scale-105"
+            aria-label="View Profile"
+          >
+            <Avatar className="w-8 h-8 ring-2 ring-blue-500/30 group-hover:ring-blue-500/60 transition-all duration-200">
+              <AvatarImage 
+                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100&h=100&fit=crop&crop=face" 
+                alt="Profile" 
+              />
+              <AvatarFallback className="text-sm bg-orange-500 text-white font-semibold group-hover:bg-orange-600 transition-colors duration-200">
+                {userProfile.avatar}
+              </AvatarFallback>
+            </Avatar>
+          </button>
         </div>
       </div>
 

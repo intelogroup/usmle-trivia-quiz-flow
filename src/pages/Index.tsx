@@ -31,13 +31,12 @@ const Index = () => {
     console.log(`Navigation requested: ${screen}`);
     console.log(`Current screen: ${currentScreen}`);
     
-    if (screen === 'profile') {
-      setIsProfileModalOpen(true);
-      return;
-    }
-    
     setCurrentScreen(screen as Screen);
     console.log(`Screen changed to: ${screen}`);
+  };
+
+  const handleProfileClick = () => {
+    setIsProfileModalOpen(true);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -81,7 +80,7 @@ const Index = () => {
     console.log(`Rendering screen: ${currentScreen}`);
     switch (currentScreen) {
       case 'home':
-        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
+        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} onProfileClick={handleProfileClick} />;
       case 'quiz':
         return (
           <QuizScreen 
@@ -135,7 +134,7 @@ const Index = () => {
         return <ContinueStudyingScreen onNavigate={handleNavigation} />;
       default:
         console.log(`Unknown screen: ${currentScreen}, defaulting to home`);
-        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
+        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} onProfileClick={handleProfileClick} />;
     }
   };
 
