@@ -1,6 +1,6 @@
 
 import { getWeakestSubjects } from "@/utils/dataStore";
-import { Activity, Heart, Bone, Pill, Bug, Shield } from "lucide-react";
+import { Activity, Heart, Bone, Pill, Bug, Shield, LucideIcon } from "lucide-react";
 
 interface WeakestSubjectsProps {
   onNavigate: (screen: string) => void;
@@ -9,8 +9,8 @@ interface WeakestSubjectsProps {
 const WeakestSubjects = ({ onNavigate }: WeakestSubjectsProps) => {
   const weakestSubjects = getWeakestSubjects();
 
-  const getSubjectIcon = (subject: string) => {
-    const iconMap: { [key: string]: React.ComponentType<{ size?: number; className?: string }> } = {
+  const getSubjectIcon = (subject: string): LucideIcon => {
+    const iconMap: { [key: string]: LucideIcon } = {
       'Pathology': Activity,
       'Physiology': Heart,
       'Anatomy': Bone,
