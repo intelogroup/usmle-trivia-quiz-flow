@@ -135,7 +135,7 @@ const LearnScreen = ({
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-white">Quick Lessons</h1>
+            <h1 className="text-2xl font-bold text-white my-[30px]">Quick Lessons</h1>
             <p className="text-slate-300">Choose a subject to study</p>
           </div>
         </div>
