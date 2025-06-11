@@ -1,13 +1,10 @@
-
 import React, { useState } from 'react';
-import { X, Settings, Calendar, Target, BookOpen, Star, Trophy, TrendingUp, Clock, Zap, Award, Users } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { X, Trophy, Calendar, Target, TrendingUp, Award, Star, Zap, BookOpen, Brain, Clock } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getUserProfile, getAchievements, calculateWeeklyProgress } from "@/utils/dataStore";
-import { getUserProgress } from "@/utils/storageUtils";
+import { Progress } from '@/components/ui/progress';
+import { getUserProfile } from '@/utils/dataStore';
+import { getUserProgress } from '@/utils/storageUtils';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -15,271 +12,196 @@ interface ProfileModalProps {
   onNavigate: (screen: string) => void;
 }
 
-const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, onNavigate }) => {
+interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  progress: number;
+  maxProgress: number;
+  unlocked: boolean;
+  points: number; // Added missing points property
+}
+
+const ProfileModal = ({ isOpen, onClose, onNavigate }: ProfileModalProps) => {
+  if (!isOpen) return null;
+
   const userProfile = getUserProfile();
   const userProgress = getUserProgress();
-  const achievements = getAchievements();
-  const weeklyProgress = calculateWeeklyProgress();
-  const [activeTab, setActiveTab] = useState('overview');
 
-  const handleSettingsClick = () => {
+  const [selectedTab, setSelectedTab] = useState('achievements');
+
+  const handleTabChange = (value: string) => {
+    setSelectedTab(value);
+  };
+
+  const closeModal = () => {
     onClose();
-    onNavigate('settings');
   };
 
-  const unlockedAchievements = achievements.filter(a => a.unlocked);
-
-  // Mock additional stats
-  const additionalStats = {
-    totalStudyHours: Math.floor(userProgress.totalQuestions * 1.5 / 60),
-    favoriteSubject: 'Pathology',
-    weakestSubject: 'Pharmacology',
-    currentRank: 23,
-    totalUsers: 1247,
-    questionsToday: Math.floor(Math.random() * 30) + 10,
-    perfectScores: Math.floor(userProgress.totalQuizzes * 0.3),
-  };
+  const achievements: Achievement[] = [
+    {
+      id: '1',
+      title: 'First Steps',
+      description: 'Complete your first quiz',
+      icon: '🎯',
+      progress: 1,
+      maxProgress: 1,
+      unlocked: true,
+      points: 50
+    },
+    {
+      id: '2',
+      title: 'Streak Master',
+      description: 'Maintain a 7-day study streak',
+      icon: '🔥',
+      progress: userProfile.studyStreak,
+      maxProgress: 7,
+      unlocked: userProfile.studyStreak >= 7,
+      points: 200
+    },
+    {
+      id: '3',
+      title: 'Quiz Marathon',
+      description: 'Complete 50 quizzes',
+      icon: '🏃‍♂️',
+      progress: userProgress.totalQuizzes,
+      maxProgress: 50,
+      unlocked: userProgress.totalQuizzes >= 50,
+      points: 500
+    },
+    {
+      id: '4',
+      title: 'Perfectionist',
+      description: 'Score 100% on a quiz',
+      icon: '💯',
+      progress: 0,
+      maxProgress: 1,
+      unlocked: false,
+      points: 100
+    },
+    {
+      id: '5',
+      title: 'Knowledge Seeker',
+      description: 'Answer 1000 questions correctly',
+      icon: '🧠',
+      progress: Math.floor(userProgress.totalQuizzes * userProgress.averageScore / 100 * 20),
+      maxProgress: 1000,
+      unlocked: false,
+      points: 1000
+    },
+    {
+      id: '6',
+      title: 'Consistency King',
+      description: 'Study for 30 consecutive days',
+      icon: '👑',
+      progress: userProfile.studyStreak,
+      maxProgress: 30,
+      unlocked: userProfile.studyStreak >= 30,
+      points: 1500
+    }
+  ];
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-800 via-slate-800 to-slate-900 border-slate-600/50 shadow-2xl">
-        <DialogHeader className="relative">
-          <button 
-            onClick={onClose}
-            className="absolute right-0 top-0 p-2 hover:bg-slate-700/50 rounded-lg transition-all duration-200 hover:scale-105"
-          >
-            <X className="w-4 h-4 text-slate-400 hover:text-white" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-slate-900 rounded-xl shadow-lg p-6 w-full max-w-md mx-4">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold text-white">Profile</h2>
+          <button onClick={closeModal} className="hover:opacity-70 transition-opacity duration-200">
+            <X className="w-5 h-5 text-slate-400" />
           </button>
-          
-          <div className="flex flex-col items-center space-y-4 pt-4">
-            <div className="relative group">
-              <Avatar className="w-24 h-24 ring-4 ring-gradient-to-r from-blue-500 to-purple-500 shadow-lg">
-                <AvatarImage 
-                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200&h=200&fit=crop&crop=face" 
-                  alt="Profile" 
-                />
-                <AvatarFallback className="text-white font-bold text-2xl bg-gradient-to-br from-orange-500 to-orange-600">
-                  {userProfile.avatar}
-                </AvatarFallback>
-              </Avatar>
-              <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
-                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-              </div>
-            </div>
-            
-            <div className="text-center">
-              <DialogTitle className="text-xl font-bold text-white mb-1">
-                {userProfile.name}
-              </DialogTitle>
-              <p className="text-slate-400 mb-2">Medical Student</p>
-              <div className="flex items-center justify-center gap-2">
-                <Badge variant="outline" className="text-blue-400 border-blue-400/50 bg-blue-400/10">
-                  Level {userProfile.level}
-                </Badge>
-                <Badge variant="outline" className="text-yellow-400 border-yellow-400/50 bg-yellow-400/10">
-                  {userProfile.totalXP} XP
-                </Badge>
-                <Badge variant="outline" className="text-purple-400 border-purple-400/50 bg-purple-400/10">
-                  #{additionalStats.currentRank}
-                </Badge>
-              </div>
-            </div>
-          </div>
-        </DialogHeader>
+        </div>
 
-        <div className="px-2">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-slate-700/50">
-              <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
-              <TabsTrigger value="stats" className="text-xs">Stats</TabsTrigger>
-              <TabsTrigger value="achievements" className="text-xs">Awards</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="overview" className="space-y-4 mt-4">
-              {/* Quick Stats Grid */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gradient-to-br from-slate-700/70 to-slate-600/70 rounded-lg p-3 text-center border border-slate-600/30">
-                  <Target className="w-4 h-4 text-orange-400 mx-auto mb-1" />
-                  <p className="text-lg font-bold text-white">{userProgress.averageScore}%</p>
-                  <p className="text-slate-400 text-xs">Avg Score</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-slate-700/70 to-slate-600/70 rounded-lg p-3 text-center border border-slate-600/30">
-                  <Zap className="w-4 h-4 text-yellow-400 mx-auto mb-1" />
-                  <p className="text-lg font-bold text-white">{userProfile.studyStreak}</p>
-                  <p className="text-slate-400 text-xs">Day Streak</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-slate-700/70 to-slate-600/70 rounded-lg p-3 text-center border border-slate-600/30">
-                  <BookOpen className="w-4 h-4 text-blue-400 mx-auto mb-1" />
-                  <p className="text-lg font-bold text-white">{userProgress.totalQuizzes}</p>
-                  <p className="text-slate-400 text-xs">Quizzes</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-slate-700/70 to-slate-600/70 rounded-lg p-3 text-center border border-slate-600/30">
-                  <Clock className="w-4 h-4 text-purple-400 mx-auto mb-1" />
-                  <p className="text-lg font-bold text-white">{additionalStats.totalStudyHours}h</p>
-                  <p className="text-slate-400 text-xs">Study Time</p>
-                </div>
-              </div>
-
-              {/* Weekly Progress */}
-              <div className="bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-lg p-4 border border-slate-600/30">
-                <div className="flex items-center gap-2 mb-3">
-                  <Calendar className="w-4 h-4 text-blue-400" />
-                  <span className="font-medium text-white">Weekly Progress</span>
-                </div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-slate-400">This Week</span>
-                  <span className="text-blue-400">{weeklyProgress.completed}/{weeklyProgress.goal} days</span>
-                </div>
-                <Progress value={weeklyProgress.percentage} className="mb-2" />
-                <p className="text-sm text-slate-400 text-center">
-                  {weeklyProgress.completed >= weeklyProgress.goal ? 
-                    'Great job! Weekly goal reached! 🎉' : 
-                    'Keep going to reach your weekly goal! 🔥'
-                  }
-                </p>
-              </div>
-
-              {/* Today's Activity */}
-              <div className="bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-lg p-4 border border-slate-600/30">
-                <div className="flex items-center gap-2 mb-3">
-                  <TrendingUp className="w-4 h-4 text-green-400" />
-                  <span className="font-medium text-white">Today's Activity</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-slate-400 text-sm">Questions Answered</span>
-                    <span className="text-white font-medium">{additionalStats.questionsToday}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400 text-sm">Study Time</span>
-                    <span className="text-white font-medium">{Math.floor(Math.random() * 45) + 15}m</span>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="stats" className="space-y-4 mt-4">
-              {/* Detailed Statistics */}
-              <div className="space-y-3">
-                <div className="bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-lg p-4 border border-slate-600/30">
-                  <h4 className="font-medium text-white mb-3 flex items-center">
-                    <Trophy className="w-4 h-4 text-yellow-400 mr-2" />
-                    Performance
-                  </h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 text-sm">Total Questions</span>
-                      <span className="text-white font-medium">{userProgress.totalQuestions}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 text-sm">Correct Answers</span>
-                      <span className="text-green-400 font-medium">{userProgress.totalCorrect}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 text-sm">Perfect Scores</span>
-                      <span className="text-blue-400 font-medium">{additionalStats.perfectScores}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-lg p-4 border border-slate-600/30">
-                  <h4 className="font-medium text-white mb-3 flex items-center">
-                    <BookOpen className="w-4 h-4 text-blue-400 mr-2" />
-                    Subject Performance
-                  </h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 text-sm">Strongest</span>
-                      <span className="text-green-400 font-medium">{additionalStats.favoriteSubject}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 text-sm">Needs Work</span>
-                      <span className="text-yellow-400 font-medium">{additionalStats.weakestSubject}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-lg p-4 border border-slate-600/30">
-                  <h4 className="font-medium text-white mb-3 flex items-center">
-                    <Users className="w-4 h-4 text-purple-400 mr-2" />
-                    Community
-                  </h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 text-sm">Global Rank</span>
-                      <span className="text-purple-400 font-medium">#{additionalStats.currentRank}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 text-sm">Total Users</span>
-                      <span className="text-slate-400 font-medium">{additionalStats.totalUsers}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="achievements" className="space-y-4 mt-4">
-              <div className="bg-gradient-to-br from-slate-700/50 to-slate-600/50 rounded-lg p-4 border border-slate-600/30">
-                <div className="flex items-center gap-2 mb-4">
-                  <Award className="w-4 h-4 text-yellow-400" />
-                  <span className="font-medium text-white">Achievements</span>
-                  <Badge variant="outline" className="text-yellow-400 border-yellow-400/50 bg-yellow-400/10 ml-auto">
-                    {unlockedAchievements.length}/{achievements.length}
-                  </Badge>
-                </div>
-                <div className="space-y-3">
-                  {achievements.slice(0, 4).map((achievement, index) => (
-                    <div key={index} className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
-                      achievement.unlocked 
-                        ? 'bg-slate-600/50 border border-yellow-500/30' 
-                        : 'bg-slate-700/30 border border-slate-600/30 opacity-60'
-                    }`}>
-                      <span className="text-2xl">{achievement.icon}</span>
-                      <div className="flex-1">
-                        <h4 className="text-sm font-semibold text-white">{achievement.title}</h4>
-                        <p className="text-xs text-slate-400">{achievement.description}</p>
-                      </div>
-                      {achievement.unlocked && (
-                        <div className="text-xs text-yellow-400 font-medium">
-                          +{achievement.points} XP
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                  {achievements.length > 4 && (
-                    <div className="text-center">
-                      <span className="text-xs text-slate-400">
-                        +{achievements.length - 4} more achievements
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
-
-          {/* Action Buttons */}
-          <div className="grid grid-cols-2 gap-4 pt-6">
-            <button 
-              onClick={handleSettingsClick}
-              className="bg-gradient-to-r from-slate-600/70 to-slate-700/70 hover:from-slate-500/70 hover:to-slate-600/70 text-white py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105 font-medium flex items-center justify-center gap-2 border border-slate-600/50"
-            >
-              <Settings className="w-4 h-4" />
-              Settings
-            </button>
-            <button 
-              onClick={onClose}
-              className="bg-gradient-to-r from-blue-600/70 to-blue-700/70 hover:from-blue-500/70 hover:to-blue-600/70 text-white py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105 font-medium border border-blue-600/50"
-            >
-              Close
-            </button>
+        {/* Profile Info */}
+        <div className="flex items-center space-x-4 mb-6">
+          <Avatar className="w-12 h-12 ring-2 ring-blue-500/30">
+            <AvatarImage src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100&h=100&fit=crop&crop=face" alt="Profile" />
+            <AvatarFallback className="text-sm bg-orange-500 text-white font-semibold">{userProfile.avatar}</AvatarFallback>
+          </Avatar>
+          <div>
+            <div className="text-white font-semibold">{userProfile.name}</div>
+            <div className="text-xs text-slate-400">{userProfile.email}</div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+
+        {/* Tabs */}
+        <Tabs value={selectedTab} onValueChange={handleTabChange} className="space-y-4">
+          <TabsList className="bg-slate-800 rounded-lg p-1">
+            <TabsTrigger value="achievements" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-slate-400 hover:text-slate-300 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900">
+              Achievements
+            </TabsTrigger>
+            <TabsTrigger value="stats" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-slate-400 hover:text-slate-300 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900">
+              Stats
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-slate-400 hover:text-slate-300 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900">
+              Settings
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="achievements" className="space-y-4">
+            {achievements.map((achievement) => (
+              <div key={achievement.id} className="bg-slate-800 rounded-lg p-3 flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                    <span>{achievement.icon}</span>
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-white">{achievement.title}</div>
+                    <div className="text-xs text-slate-400">{achievement.description}</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  {achievement.unlocked ? (
+                    <div className="text-green-400 text-xs font-semibold">Unlocked!</div>
+                  ) : (
+                    <div className="text-slate-400 text-xs">{achievement.progress}/{achievement.maxProgress}</div>
+                  )}
+                  <div className="text-yellow-400 text-xs">{achievement.points} Points</div>
+                </div>
+              </div>
+            ))}
+          </TabsContent>
+          <TabsContent value="stats" className="space-y-4">
+            <div className="bg-slate-800 rounded-lg p-4">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4" />
+                </div>
+                <div className="text-sm font-medium text-white">Average Score</div>
+              </div>
+              <div className="text-2xl font-bold text-green-400">{userProgress.averageScore}%</div>
+            </div>
+            <div className="bg-slate-800 rounded-lg p-4">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <div className="text-sm font-medium text-white">Quizzes Taken</div>
+              </div>
+              <div className="text-2xl font-bold text-orange-400">{userProgress.totalQuizzes}</div>
+            </div>
+          </TabsContent>
+          <TabsContent value="settings" className="space-y-4">
+            <button onClick={() => onNavigate('settings')} className="bg-slate-800 rounded-lg p-3 w-full text-left hover:bg-slate-700 transition-colors duration-200">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center">
+                  <Award className="w-4 h-4" />
+                </div>
+                <div className="text-sm font-medium text-white">Account Settings</div>
+              </div>
+            </button>
+            <button onClick={() => onNavigate('settings')} className="bg-slate-800 rounded-lg p-3 w-full text-left hover:bg-slate-700 transition-colors duration-200">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center">
+                  <Star className="w-4 h-4" />
+                </div>
+                <div className="text-sm font-medium text-white">Preferences</div>
+              </div>
+            </button>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
   );
 };
 
