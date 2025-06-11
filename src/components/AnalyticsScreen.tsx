@@ -3,9 +3,9 @@ import { TrendingUp, Clock, Trophy, Calendar, BookOpen, Target, Brain, Activity 
 import { getUserProgress } from "@/utils/storageUtils";
 import { getUSMLEAnalytics, calculateUSMLEInsights } from "@/utils/usmleAnalyticsManager";
 import USMLEReadinessCard from "./analytics/USMLEReadinessCard";
-import SubjectPerformanceRadar from "./analytics/SubjectPerformanceRadar";
-import WeaknessAnalysis from "./analytics/WeaknessAnalysis";
-import ClinicalCorrelationCard from "./analytics/ClinicalCorrelationCard";
+import SubjectSystemPerformance from "./analytics/SubjectSystemPerformance";
+import SimplifiedWeaknessAnalysis from "./analytics/SimplifiedWeaknessAnalysis";
+import CategoryOverview from "./analytics/CategoryOverview";
 
 const AnalyticsScreen = () => {
   const userProgress = getUserProgress();
@@ -46,7 +46,7 @@ const AnalyticsScreen = () => {
           <Brain className="w-8 h-8 text-blue-400" />
         </div>
         <h1 className="text-2xl font-bold text-white">USMLE Analytics</h1>
-        <p className="text-slate-400 text-sm">Advanced insights for your medical exam preparation</p>
+        <p className="text-slate-400 text-sm">Track your progress across subjects and systems</p>
       </div>
 
       {/* Key Performance Metrics */}
@@ -84,6 +84,9 @@ const AnalyticsScreen = () => {
       {/* USMLE Readiness */}
       <USMLEReadinessCard />
 
+      {/* Category Overview */}
+      <CategoryOverview />
+
       {/* Weekly Study Activity */}
       <div className="bg-slate-800 rounded-xl p-6">
         <div className="flex items-center space-x-2 mb-4">
@@ -111,68 +114,11 @@ const AnalyticsScreen = () => {
         </div>
       </div>
 
-      {/* Subject Performance Radar */}
-      <SubjectPerformanceRadar />
+      {/* Subject & System Performance */}
+      <SubjectSystemPerformance />
 
-      {/* Clinical Correlation */}
-      <ClinicalCorrelationCard />
-
-      {/* Strength & Weakness Analysis */}
-      <div className="grid grid-cols-1 gap-6">
-        {/* Strongest Areas */}
-        <div className="bg-slate-800 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
-            <Trophy className="w-5 h-5 text-yellow-400" />
-            <span>Strongest Areas</span>
-          </h3>
-          <div className="space-y-3">
-            {insights.strongestSubjects.map((subject, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <span className="text-slate-300">{subject.subject}</span>
-                <div className="flex items-center space-x-2">
-                  <div className="w-20 bg-slate-700 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-green-500 to-green-400 h-2 rounded-full"
-                      style={{ width: `${subject.score}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-green-400 font-medium text-sm">{subject.score}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Areas for Improvement */}
-        <div className="bg-slate-800 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
-            <Target className="w-5 h-5 text-orange-400" />
-            <span>Focus Areas</span>
-          </h3>
-          <div className="space-y-3">
-            {insights.weakestSubjects.map((subject, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <span className="text-slate-300">{subject.subject}</span>
-                <div className="flex items-center space-x-2">
-                  <div className="w-20 bg-slate-700 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full"
-                      style={{ width: `${subject.score}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-orange-400 font-medium text-sm">{subject.score}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button className="w-full mt-4 bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg transition-colors text-sm">
-            Practice Weak Areas
-          </button>
-        </div>
-      </div>
-
-      {/* Weakness Patterns Analysis */}
-      <WeaknessAnalysis />
+      {/* Focus Areas */}
+      <SimplifiedWeaknessAnalysis />
 
       {/* Study Insights */}
       <div className="bg-slate-800 rounded-xl p-6">
@@ -194,12 +140,6 @@ const AnalyticsScreen = () => {
             <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
             <span className="text-sm text-slate-300">
               Focus needed in {insights.weakestSubjects[0]?.subject} for optimal USMLE preparation
-            </span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-            <span className="text-sm text-slate-300">
-              Average study time: {Math.round(totalStudyHours / 30 * 10) / 10}h per day over last 30 days
             </span>
           </div>
         </div>
