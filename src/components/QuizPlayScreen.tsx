@@ -3,6 +3,7 @@ import { ChevronLeft, Clock } from "lucide-react";
 import { getFilteredQuestions, Question } from "@/data/questionBank";
 import { QuizConfig } from "./QuizConfigurationScreen";
 import { saveQuizResult, generateQuizName } from "@/utils/storageUtils";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface QuizPlayScreenProps {
   selectedSubjects: string[];
@@ -235,12 +236,15 @@ const QuizPlayScreen = ({ selectedSubjects, selectedSystems, quizConfig, onNavig
       <div className="space-y-4">
         <h2 className="text-lg font-semibold leading-relaxed text-white">{currentQ.question}</h2>
         
-        <div className="space-y-3">
+        <RadioGroup 
+          value={selectedAnswer?.toString() || ""} 
+          onValueChange={(value) => handleAnswerSelect(parseInt(value))}
+          disabled={showResult}
+          className="space-y-3"
+        >
           {currentQ.options.map((option, index) => (
-            <button
+            <div
               key={index}
-              onClick={() => handleAnswerSelect(index)}
-              disabled={showResult}
               className={`w-full p-4 rounded-xl text-left transition-colors ${
                 selectedAnswer === index
                   ? showResult
@@ -254,18 +258,12 @@ const QuizPlayScreen = ({ selectedSubjects, selectedSystems, quizConfig, onNavig
               } border`}
             >
               <div className="flex items-center space-x-3">
-                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                  selectedAnswer === index ? 'border-white bg-white' : 'border-slate-400'
-                }`}>
-                  {selectedAnswer === index && (
-                    <div className="w-3 h-3 rounded-full bg-slate-800"></div>
-                  )}
-                </div>
+                <RadioGroupItem value={index.toString()} className="border-white" />
                 <span className="flex-1">{option}</span>
               </div>
-            </button>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
 
         {showResult && currentQ.explanation && (
           <div className="bg-slate-800 rounded-xl p-4 border-l-4 border-blue-500">
