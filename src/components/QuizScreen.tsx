@@ -1,37 +1,34 @@
-
 import PresetCombinations from "./PresetCombinations";
 import SmartRecommendations from "./SmartRecommendations";
 import CustomQuizSection from "./CustomQuizSection";
 import QuickQuizSection from "./QuickQuizSection";
-
 interface QuizScreenProps {
   onNavigate: (screen: string) => void;
   onCategorySelect: (category: string) => void;
   onPresetSelect?: (subjects: string[], systems: string[]) => void;
 }
-
-const QuizScreen = ({ onNavigate, onCategorySelect, onPresetSelect }: QuizScreenProps) => {
+const QuizScreen = ({
+  onNavigate,
+  onCategorySelect,
+  onPresetSelect
+}: QuizScreenProps) => {
   const handleCreateCustomQuiz = () => {
     onNavigate('subject-system-selection');
   };
-
   const handleQuickQuizStart = (category: string) => {
     // Start quick quiz with default settings
     onCategorySelect(category);
   };
-
   const handlePresetSelect = (subjects: string[], systems: string[]) => {
     if (onPresetSelect) {
       onPresetSelect(subjects, systems);
     }
   };
-
-  return (
-    <div className="p-4 pb-20 space-y-8">
+  return <div className="p-4 pb-20 space-y-8">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-white">Choose Your Study Path</h1>
-        <p className="text-slate-400">Quick practice or detailed customization</p>
+        <h1 className="text-2xl font-bold text-white py-0 my-[50px]">Choose Your Study Path</h1>
+        
       </div>
 
       {/* Custom Quiz Section */}
@@ -57,8 +54,6 @@ const QuizScreen = ({ onNavigate, onCategorySelect, onPresetSelect }: QuizScreen
           <div className="text-sm text-slate-400">Day Streak</div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default QuizScreen;
