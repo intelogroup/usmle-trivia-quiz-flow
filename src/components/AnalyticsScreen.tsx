@@ -1,227 +1,207 @@
 
-import { TrendingUp, Target, Clock, Trophy, Calendar, BookOpen, ChevronUp, ChevronDown } from "lucide-react";
-import { getUserProfile, getSubjectStats, getWeeklyActivity } from "@/utils/dataStore";
-import { getUserProgress, getQuizHistory } from "@/utils/storageUtils";
+import { TrendingUp, Clock, Trophy, Calendar, BookOpen, Target, Brain, Activity } from "lucide-react";
+import { getUserProgress } from "@/utils/storageUtils";
+import { getUSMLEAnalytics, calculateUSMLEInsights } from "@/utils/usmleAnalyticsManager";
+import USMLEReadinessCard from "./analytics/USMLEReadinessCard";
+import SubjectPerformanceRadar from "./analytics/SubjectPerformanceRadar";
+import WeaknessAnalysis from "./analytics/WeaknessAnalysis";
+import ClinicalCorrelationCard from "./analytics/ClinicalCorrelationCard";
 
 const AnalyticsScreen = () => {
-  const userProfile = getUserProfile();
   const userProgress = getUserProgress();
-  const subjectStats = getSubjectStats();
-  const quizHistory = getQuizHistory();
+  const usmleAnalytics = getUSMLEAnalytics();
+  const insights = calculateUSMLEInsights(usmleAnalytics);
 
-  // Calculate total study time (estimated 1.2 minutes per question)
-  const totalTime = userProgress.totalQuestions * 1.2;
+  // Get recent study activity (last 7 days)
+  const recentSessions = usmleAnalytics.sessionAnalytics.slice(0, 7);
+  const weeklyActivity = recentSessions.map(session => ({
+    date: new Date(session.date).toLocaleDateString('en', { weekday: 'short' }),
+    questions: session.questionsAttempted,
+    accuracy: session.accuracy,
+    duration: Math.round(session.duration / 60 * 10) / 10 // Convert to hours
+  }));
 
-  // Calculate weekly data for the last 7 days
-  const getWeeklyData = () => {
-    const today = new Date();
-    const weeklyData = [];
-    
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      const dayName = date.toLocaleDateString('en', { weekday: 'short' });
+  // Calculate study streak
+  const studyStreak = usmleAnalytics.sessionAnalytics
+    .slice(0, 30)
+    .reduce((streak, session, index) => {
+      const sessionDate = new Date(session.date);
+      const expectedDate = new Date();
+      expectedDate.setDate(expectedDate.getDate() - index);
       
-      const dayQuizzes = quizHistory.filter(quiz => {
-        const quizDate = new Date(quiz.date);
-        return quizDate.toDateString() === date.toDateString();
-      });
-      
-      const dayScore = dayQuizzes.length > 0 
-        ? Math.round(dayQuizzes.reduce((sum, quiz) => sum + (quiz.score / quiz.totalQuestions) * 100, 0) / dayQuizzes.length)
-        : 0;
-      
-      weeklyData.push({
-        day: dayName,
-        quizzes: dayQuizzes.length,
-        score: dayScore
-      });
-    }
-    
-    return weeklyData;
-  };
+      if (sessionDate.toDateString() === expectedDate.toDateString()) {
+        return streak + 1;
+      }
+      return streak;
+    }, 0);
 
-  const weeklyData = getWeeklyData();
-
-  // Filter subject performance to only show subjects with data
-  const subjectPerformance = subjectStats
-    .filter(stat => stat.totalQuestions > 0)
-    .map(stat => ({
-      subject: stat.subject,
-      score: stat.averageScore,
-      quizzes: Math.floor(stat.totalQuestions / 10), // Approximate number of quizzes
-      trend: Math.random() > 0.5 ? 'up' : 'down' // Mock trend data
-    }))
-    .sort((a, b) => b.score - a.score);
-
-  const formatTime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = Math.round(minutes % 60);
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
-  };
-
-  const getSubjectIcon = (subject: string) => {
-    const icons: { [key: string]: string } = {
-      'Pathology': '🧬',
-      'Physiology': '🫀',
-      'Anatomy': '🦴',
-      'Pharmacology': '💊',
-      'Microbiology': '🦠',
-      'Immunology': '🛡️'
-    };
-    return icons[subject] || '📚';
-  };
-
-  // Find best and worst performing subjects
-  const bestSubject = subjectPerformance.length > 0 ? subjectPerformance[0] : null;
-  const worstSubject = subjectPerformance.length > 0 ? subjectPerformance[subjectPerformance.length - 1] : null;
+  const totalStudyHours = Math.round(insights.totalStudyHours);
+  const averageSessionAccuracy = insights.recentTrend;
 
   return (
-    <div className="p-4 pb-20 space-y-8">
+    <div className="p-4 pb-20 space-y-6">
       {/* Header */}
       <div className="text-center space-y-3">
         <div className="w-16 h-16 bg-slate-800 rounded-xl flex items-center justify-center mx-auto shadow-md">
-          <TrendingUp className="w-8 h-8 text-teal-400" />
+          <Brain className="w-8 h-8 text-blue-400" />
         </div>
-        <h1 className="text-2xl font-bold text-white">Analytics</h1>
-        <p className="text-slate-400 text-sm">Track your learning progress</p>
+        <h1 className="text-2xl font-bold text-white">USMLE Analytics</h1>
+        <p className="text-slate-400 text-sm">Advanced insights for your medical exam preparation</p>
       </div>
 
-      {/* Key Stats */}
+      {/* Key Performance Metrics */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-slate-800 rounded-xl p-4 text-center h-24 flex flex-col justify-center shadow-sm hover:shadow-md transition-shadow">
-          <div className="w-8 h-8 bg-teal-500/10 rounded-lg flex items-center justify-center mx-auto mb-2">
-            <BookOpen className="w-5 h-5 text-teal-400" />
+        <div className="bg-slate-800 rounded-xl p-4 text-center">
+          <div className="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center mx-auto mb-2">
+            <Target className="w-5 h-5 text-blue-400" />
           </div>
-          <div className="text-xl font-bold text-white">{userProgress.totalQuizzes}</div>
-          <div className="text-xs text-slate-400">
-            {userProgress.totalQuizzes === 1 ? 'Quiz Completed' : 'Quizzes Completed'}
-          </div>
+          <div className="text-xl font-bold text-white">{averageSessionAccuracy}%</div>
+          <div className="text-xs text-slate-400">7-Day Average</div>
         </div>
-        <div className="bg-slate-800 rounded-xl p-4 text-center h-24 flex flex-col justify-center shadow-sm hover:shadow-md transition-shadow">
-          <div className="w-8 h-8 bg-teal-500/10 rounded-lg flex items-center justify-center mx-auto mb-2">
-            <Target className="w-5 h-5 text-teal-400" />
-          </div>
-          <div className="text-xl font-bold text-white flex items-center justify-center gap-1">
-            {userProgress.averageScore}%
-            <ChevronUp className="w-3 h-3 text-green-400" />
-          </div>
-          <div className="text-xs text-slate-400">Average Score</div>
-        </div>
-        <div className="bg-slate-800 rounded-xl p-4 text-center h-24 flex flex-col justify-center shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-slate-800 rounded-xl p-4 text-center">
           <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center mx-auto mb-2">
             <Clock className="w-5 h-5 text-orange-400" />
           </div>
-          <div className="text-xl font-bold text-white">{formatTime(totalTime)}</div>
-          <div className="text-xs text-slate-400">Study Time</div>
+          <div className="text-xl font-bold text-white">{totalStudyHours}h</div>
+          <div className="text-xs text-slate-400">Total Study Time</div>
         </div>
-        <div className="bg-slate-800 rounded-xl p-4 text-center h-24 flex flex-col justify-center shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-slate-800 rounded-xl p-4 text-center">
+          <div className="w-8 h-8 bg-green-500/10 rounded-lg flex items-center justify-center mx-auto mb-2">
+            <BookOpen className="w-5 h-5 text-green-400" />
+          </div>
+          <div className="text-xl font-bold text-white">{insights.questionsCompleted}</div>
+          <div className="text-xs text-slate-400">Questions Completed</div>
+        </div>
+        <div className="bg-slate-800 rounded-xl p-4 text-center">
           <div className="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center mx-auto mb-2">
             <Trophy className="w-5 h-5 text-purple-400" />
           </div>
-          <div className="text-xl font-bold text-white flex items-center justify-center gap-1">
-            {userProfile.studyStreak}
-            <ChevronUp className="w-3 h-3 text-green-400" />
-          </div>
-          <div className="text-xs text-slate-400">Current Streak</div>
+          <div className="text-xl font-bold text-white">{studyStreak}</div>
+          <div className="text-xs text-slate-400">Day Streak</div>
         </div>
       </div>
 
-      {/* Weekly Activity */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-white">Weekly Activity</h3>
-        <div className="bg-slate-800 rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-end space-x-2 h-32 mb-4">
-            {weeklyData.map((day, index) => (
-              <div key={index} className="flex-1 flex flex-col items-center">
-                <div 
-                  className="bg-gradient-to-t from-teal-600 to-teal-400 rounded-t-md w-full mb-2 transition-all duration-700 ease-out"
-                  style={{ 
-                    height: `${Math.max(day.quizzes * 20, 4)}px`,
-                    minHeight: '4px',
-                    animationDelay: `${index * 100}ms`
-                  }}
-                ></div>
-                <div className="text-xs text-slate-400">{day.day}</div>
-              </div>
-            ))}
-          </div>
-          <div className="border-t border-slate-700 pt-3">
-            <p className="text-sm text-slate-400 text-center">Quizzes completed this week</p>
-          </div>
+      {/* USMLE Readiness */}
+      <USMLEReadinessCard />
+
+      {/* Weekly Study Activity */}
+      <div className="bg-slate-800 rounded-xl p-6">
+        <div className="flex items-center space-x-2 mb-4">
+          <Activity className="w-6 h-6 text-green-400" />
+          <h3 className="text-lg font-semibold text-white">Weekly Activity</h3>
+        </div>
+        <div className="flex justify-between items-end space-x-2 h-32 mb-4">
+          {weeklyActivity.map((day, index) => (
+            <div key={index} className="flex-1 flex flex-col items-center">
+              <div className="text-xs text-slate-400 mb-2">{day.accuracy}%</div>
+              <div 
+                className="bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md w-full mb-2 transition-all duration-700"
+                style={{ 
+                  height: `${Math.max(day.questions * 3, 4)}px`,
+                  minHeight: '4px'
+                }}
+              ></div>
+              <div className="text-xs text-slate-400">{day.date}</div>
+              <div className="text-xs text-slate-500">{day.duration}h</div>
+            </div>
+          ))}
+        </div>
+        <div className="text-center text-sm text-slate-400">
+          Daily questions attempted and accuracy
         </div>
       </div>
 
-      {/* Subject Performance */}
-      {subjectPerformance.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-white">Subject Performance</h3>
+      {/* Subject Performance Radar */}
+      <SubjectPerformanceRadar />
+
+      {/* Clinical Correlation */}
+      <ClinicalCorrelationCard />
+
+      {/* Strength & Weakness Analysis */}
+      <div className="grid grid-cols-1 gap-6">
+        {/* Strongest Areas */}
+        <div className="bg-slate-800 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
+            <Trophy className="w-5 h-5 text-yellow-400" />
+            <span>Strongest Areas</span>
+          </h3>
           <div className="space-y-3">
-            {subjectPerformance.map((subject, index) => (
-              <div key={index} className="bg-slate-800 rounded-xl p-4 shadow-sm">
-                <div className="flex justify-between items-center mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-slate-700/50 rounded-lg flex items-center justify-center">
-                      <span className="text-sm">{getSubjectIcon(subject.subject)}</span>
-                    </div>
-                    <span className="font-medium text-white">{subject.subject}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-slate-400">{subject.quizzes} quiz{subject.quizzes !== 1 ? 'es' : ''}</span>
-                    {subject.trend === 'up' ? (
-                      <ChevronUp className="w-3 h-3 text-green-400" />
-                    ) : (
-                      <ChevronDown className="w-3 h-3 text-red-400" />
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="flex-1 bg-slate-700 rounded-full h-2">
+            {insights.strongestSubjects.map((subject, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <span className="text-slate-300">{subject.subject}</span>
+                <div className="flex items-center space-x-2">
+                  <div className="w-20 bg-slate-700 rounded-full h-2">
                     <div 
-                      className={`h-2 rounded-full transition-all duration-500 ${
-                        subject.score >= 80 ? 'bg-gradient-to-r from-green-500 to-green-400' : 
-                        subject.score >= 70 ? 'bg-gradient-to-r from-yellow-500 to-yellow-400' : 
-                        'bg-gradient-to-r from-red-500 to-red-400'
-                      }`}
+                      className="bg-gradient-to-r from-green-500 to-green-400 h-2 rounded-full"
                       style={{ width: `${subject.score}%` }}
                     ></div>
                   </div>
-                  <span className="text-sm font-semibold text-white">{subject.score}%</span>
+                  <span className="text-green-400 font-medium text-sm">{subject.score}%</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      )}
+
+        {/* Areas for Improvement */}
+        <div className="bg-slate-800 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
+            <Target className="w-5 h-5 text-orange-400" />
+            <span>Focus Areas</span>
+          </h3>
+          <div className="space-y-3">
+            {insights.weakestSubjects.map((subject, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <span className="text-slate-300">{subject.subject}</span>
+                <div className="flex items-center space-x-2">
+                  <div className="w-20 bg-slate-700 rounded-full h-2">
+                    <div 
+                      className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full"
+                      style={{ width: `${subject.score}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-orange-400 font-medium text-sm">{subject.score}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="w-full mt-4 bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg transition-colors text-sm">
+            Practice Weak Areas
+          </button>
+        </div>
+      </div>
+
+      {/* Weakness Patterns Analysis */}
+      <WeaknessAnalysis />
 
       {/* Study Insights */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-white">Study Insights</h3>
-        <div className="bg-slate-800 rounded-xl p-4 space-y-3 shadow-sm">
-          {userProgress.totalQuizzes > 1 && (
-            <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
-              <span className="text-sm text-slate-300">You've completed {userProgress.totalQuizzes} quizzes with {userProgress.averageScore}% accuracy</span>
-            </div>
-          )}
-          {bestSubject && (
-            <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-sm text-slate-300">Strongest subject: {bestSubject.subject} ({bestSubject.score}% avg)</span>
-            </div>
-          )}
-          {worstSubject && worstSubject.score < 80 && (
-            <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-              <span className="text-sm text-slate-300">Focus area: {worstSubject.subject} needs improvement</span>
-            </div>
-          )}
-          {userProgress.totalQuizzes === 0 && (
-            <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
-              <span className="text-sm text-slate-300">Start taking quizzes to see your analytics here</span>
-            </div>
-          )}
+      <div className="bg-slate-800 rounded-xl p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">Study Insights</h3>
+        <div className="space-y-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <span className="text-sm text-slate-300">
+              You've maintained a {studyStreak}-day study streak with {insights.studyConsistency}/7 days this week
+            </span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span className="text-sm text-slate-300">
+              Strongest performance in {insights.strongestSubjects[0]?.subject} ({insights.strongestSubjects[0]?.score}%)
+            </span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+            <span className="text-sm text-slate-300">
+              Focus needed in {insights.weakestSubjects[0]?.subject} for optimal USMLE preparation
+            </span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+            <span className="text-sm text-slate-300">
+              Average study time: {Math.round(totalStudyHours / 30 * 10) / 10}h per day over last 30 days
+            </span>
+          </div>
         </div>
       </div>
     </div>
