@@ -61,7 +61,7 @@ const HomeScreen = ({
       {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-white my-[2px]">
             USMLE <span className="text-blue-400">T</span>
             <span className="text-green-400">R</span>
             <span className="text-yellow-400">I</span>
@@ -72,24 +72,14 @@ const HomeScreen = ({
         </div>
         <div className="flex items-center space-x-3">
           <NotificationSystem notifications={notifications} onMarkAsRead={handleMarkAsRead} onClearAll={handleClearAll} />
-          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center my-[2px]">
             <span className="text-sm font-semibold">{userProfile.avatar}</span>
           </div>
         </div>
       </div>
 
       {/* Welcome Message */}
-      <div className="space-y-3">
-        <p className="text-slate-400 text-sm">Welcome back,</p>
-        <div className="flex items-center space-x-2">
-          
-          <span className="text-2xl">👋</span>
-        </div>
-        <div className="flex items-center space-x-2 text-slate-400 text-sm">
-          <Target size={16} className="text-teal-400" />
-          
-        </div>
-      </div>
+      
 
       {/* Study Progress Tracker */}
       <StudyProgressTracker />
