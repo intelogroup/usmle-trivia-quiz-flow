@@ -9,10 +9,12 @@ import ReviewMistakes from "./home/ReviewMistakes";
 import ContinueLearning from "./home/ContinueLearning";
 import { getUserProfile } from "@/utils/dataStore";
 import { useState } from "react";
+
 interface HomeScreenProps {
   onNavigate: (screen: string) => void;
   onQuizRestart?: (subjects: string[], systems: string[]) => void;
 }
+
 const HomeScreen = ({
   onNavigate,
   onQuizRestart
@@ -85,7 +87,7 @@ const HomeScreen = ({
       <StudyProgressTracker />
 
       {/* Start Quiz Button */}
-      <button onClick={() => onNavigate('quiz')} className="w-full bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900" aria-label="Start a new quiz session">
+      <button onClick={() => onNavigate('quiz')} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900" aria-label="Start a new quiz session">
         <Zap size={20} className="fill-current" />
         <span>Start New Quiz</span>
         <Zap size={20} className="fill-current" />
@@ -110,4 +112,5 @@ const HomeScreen = ({
       </div>
     </div>;
 };
+
 export default HomeScreen;
