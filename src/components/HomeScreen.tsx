@@ -87,7 +87,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
   };
 
   return (
-    <div className="p-4 pb-20 space-y-6">
+    <div className="p-4 pb-20 space-y-8">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
@@ -113,10 +113,10 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       </div>
 
       {/* Welcome Message */}
-      <div className="space-y-2">
-        <p className="text-slate-300">Welcome back,</p>
+      <div className="space-y-3">
+        <p className="text-slate-400 text-sm">Welcome back,</p>
         <h2 className="text-2xl font-bold text-white">{userProfile.name} 👋</h2>
-        <p className="text-slate-300">Ready to challenge yourself today? 🎯</p>
+        <p className="text-slate-400 text-sm">Ready to challenge yourself today? 🎯</p>
       </div>
 
       {/* Study Progress Tracker */}
@@ -125,7 +125,8 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       {/* Start Quiz Button */}
       <button
         onClick={() => onNavigate('quiz')}
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg"
+        className="w-full bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+        aria-label="Start a new quiz session"
       >
         <span className="text-xl">⚡</span>
         <span>Start New Quiz</span>
@@ -140,24 +141,25 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
 
       {/* Weakest Subjects */}
       {weakestSubjects.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold">Areas for Improvement</h3>
-          <div className="space-y-2">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-white">Areas for Improvement</h3>
+          <div className="space-y-3">
             {weakestSubjects.map((subject, index) => (
-              <div key={index} className="bg-slate-800/50 rounded-xl p-4">
+              <div key={index} className="bg-slate-800/50 rounded-xl p-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className={`w-10 h-10 ${getSubjectColor(subject.score)} rounded-lg flex items-center justify-center`}>
+                    <div className={`w-10 h-10 ${getSubjectColor(subject.score)} rounded-lg flex items-center justify-center shadow-sm`}>
                       <span className="text-white text-sm">{getSubjectIcon(subject.subject)}</span>
                     </div>
                     <div>
-                      <h4 className="font-medium">{subject.subject}</h4>
+                      <h4 className="font-medium text-white">{subject.subject}</h4>
                       <p className="text-sm text-slate-400">{subject.score}% average • {subject.description}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => onNavigate('category')}
-                    className={`${getSubjectColor(subject.score)} text-white px-3 py-1 rounded-lg text-sm transition-colors`}
+                    className={`${getSubjectColor(subject.score)} text-white px-3 py-1 rounded-lg text-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900`}
+                    aria-label={`Practice ${subject.subject}`}
                   >
                     Practice
                   </button>
@@ -170,21 +172,22 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
 
       {/* Review Mistakes */}
       {userProgress.totalQuizzes > 0 && (
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold">Review Mistakes</h3>
-          <div className="bg-slate-800/50 rounded-xl p-4 space-y-3">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-white">Review Mistakes</h3>
+          <div className="bg-slate-800/50 rounded-xl p-4 space-y-4 shadow-sm">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center">
                 <span className="text-xl">🔄</span>
               </div>
               <div className="flex-1">
-                <p className="font-medium">{Math.max(userProgress.totalQuestions - userProgress.totalCorrect, 0)} questions need review</p>
+                <p className="font-medium text-white">{Math.max(userProgress.totalQuestions - userProgress.totalCorrect, 0)} questions need review</p>
                 <p className="text-sm text-slate-400">Focus on your recent mistakes</p>
               </div>
             </div>
             <button 
               onClick={() => onNavigate('review')}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+              aria-label="Start reviewing mistakes"
             >
               Start Review
             </button>
@@ -193,11 +196,11 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       )}
 
       {/* Continue Learning */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <h3 className="text-lg font-semibold text-white">Continue Learning</h3>
-        <div className="bg-slate-800/50 rounded-xl p-4 space-y-3">
+        <div className="bg-slate-800/50 rounded-xl p-4 space-y-4 shadow-sm">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center">
               <span className="text-xl">🧬</span>
             </div>
             <div className="flex-1">
@@ -207,7 +210,8 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
           </div>
           <button 
             onClick={handleContinueStudying}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+            aria-label="Continue studying Pathology"
           >
             Continue Studying
           </button>
@@ -215,7 +219,7 @@ const HomeScreen = ({ onNavigate, onQuizRestart }: HomeScreenProps) => {
       </div>
 
       {/* Quick Actions */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <h3 className="text-lg font-semibold text-white">Quick Actions</h3>
         <QuickActions onNavigate={onNavigate} />
       </div>

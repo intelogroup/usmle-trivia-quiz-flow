@@ -16,7 +16,7 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-slate-800 border-t border-slate-700">
+    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-slate-800/95 backdrop-blur-sm border-t border-slate-700">
       <div className="flex justify-around items-center py-2">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -26,14 +26,17 @@ const Navigation = ({ currentScreen, onNavigate }: NavigationProps) => {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+              className={`flex flex-col items-center py-2 px-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-800 ${
                 isActive 
-                  ? 'text-blue-400' 
-                  : 'text-slate-400 hover:text-slate-300'
+                  ? 'text-teal-400 bg-teal-500/10' 
+                  : 'text-slate-400 hover:text-slate-300 hover:bg-slate-700/50'
               }`}
+              aria-label={`Navigate to ${item.label}`}
             >
-              <Icon size={20} />
-              <span className="text-xs mt-1">{item.label}</span>
+              <Icon size={20} className={isActive ? 'fill-current' : ''} />
+              <span className={`text-xs mt-1 font-medium ${isActive ? 'text-teal-400' : ''}`}>
+                {item.label}
+              </span>
             </button>
           );
         })}
