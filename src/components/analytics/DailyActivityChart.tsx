@@ -1,5 +1,5 @@
 
-import { Activity, TrendingUp, Clock, Target } from 'lucide-react';
+import { Activity, TrendingUp } from 'lucide-react';
 import { getUSMLEAnalytics } from '@/utils/usmleAnalyticsManager';
 
 const DailyActivityChart = () => {
@@ -23,7 +23,7 @@ const DailyActivityChart = () => {
 
   const getBarHeight = (questions: number) => {
     const maxQuestions = Math.max(...weeklyActivity.map(d => d.questions));
-    return Math.max((questions / maxQuestions) * 100, 8); // Min 8% for visibility
+    return Math.max((questions / maxQuestions) * 100, 5); // Min 5% for visibility
   };
 
   const getAccuracyColor = (accuracy: number) => {
@@ -33,96 +33,93 @@ const DailyActivityChart = () => {
   };
 
   return (
-    <div className="bg-slate-800 rounded-xl p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-slate-800 rounded-xl p-5">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
         <div className="flex items-center space-x-2">
-          <Activity className="w-6 h-6 text-blue-400" />
+          <Activity className="w-5 h-5 text-blue-400" />
           <h3 className="text-lg font-semibold text-white">Daily Study Activity</h3>
         </div>
         <div className="text-xs text-slate-400">Last 7 days</div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-4 gap-3 mb-6">
-        <div className="text-center">
-          <div className="text-lg font-bold text-blue-400">{totalQuestions}</div>
-          <div className="text-xs text-slate-400">Total Questions</div>
+      {/* Quick Stats - Redesigned for better spacing */}
+      <div className="grid grid-cols-4 gap-3 mb-5">
+        <div className="text-center p-2 bg-slate-700/30 rounded-lg">
+          <div className="text-xl font-bold text-blue-400">{totalQuestions}</div>
+          <div className="text-xs text-slate-400 mt-1">Total Questions</div>
         </div>
-        <div className="text-center">
-          <div className={`text-lg font-bold ${getAccuracyColor(avgAccuracy)}`}>{avgAccuracy}%</div>
-          <div className="text-xs text-slate-400">Avg Accuracy</div>
+        <div className="text-center p-2 bg-slate-700/30 rounded-lg">
+          <div className={`text-xl font-bold ${getAccuracyColor(avgAccuracy)}`}>{avgAccuracy}%</div>
+          <div className="text-xs text-slate-400 mt-1">Avg Accuracy</div>
         </div>
-        <div className="text-center">
-          <div className="text-lg font-bold text-orange-400">{totalHours.toFixed(1)}h</div>
-          <div className="text-xs text-slate-400">Study Time</div>
+        <div className="text-center p-2 bg-slate-700/30 rounded-lg">
+          <div className="text-xl font-bold text-orange-400">{totalHours.toFixed(1)}h</div>
+          <div className="text-xs text-slate-400 mt-1">Study Time</div>
         </div>
-        <div className="text-center">
-          <div className="text-lg font-bold text-green-400">{bestDay.questions}</div>
-          <div className="text-xs text-slate-400">Best Day</div>
+        <div className="text-center p-2 bg-slate-700/30 rounded-lg">
+          <div className="text-xl font-bold text-green-400">{bestDay.questions}</div>
+          <div className="text-xs text-slate-400 mt-1">Best Day</div>
         </div>
       </div>
 
-      {/* Activity Chart */}
-      <div className="relative">
-        <div className="flex items-end justify-between space-x-2 h-32 mb-4 bg-slate-700/30 rounded-lg p-3">
+      {/* Activity Chart - Improved spacing and sizing */}
+      <div className="bg-slate-700/20 rounded-lg p-4 mb-4">
+        <div className="flex items-end justify-between space-x-2 h-28">
           {weeklyActivity.map((day, index) => (
-            <div key={index} className="flex-1 flex flex-col items-center h-full justify-end">
-              {/* Accuracy indicator */}
+            <div key={index} className="flex-1 flex flex-col items-center h-full justify-end max-w-[40px]">
+              {/* Accuracy indicator - simplified */}
               <div className={`text-xs font-medium mb-1 ${getAccuracyColor(day.accuracy)}`}>
                 {day.accuracy}%
               </div>
               
-              {/* Activity bar */}
-              <div className="relative w-full flex flex-col justify-end h-full">
+              {/* Activity bar - cleaner design */}
+              <div className="relative w-full flex flex-col justify-end h-20">
                 <div 
-                  className="bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-md w-full transition-all duration-700 hover:from-blue-500 hover:to-blue-300 cursor-pointer group"
+                  className="bg-gradient-to-t from-blue-600 to-blue-400 rounded-md w-full transition-all duration-300 hover:from-blue-500 hover:to-blue-300 cursor-pointer group"
                   style={{ height: `${getBarHeight(day.questions)}%` }}
                 >
-                  {/* Hover tooltip */}
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-slate-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                    {day.questions} questions<br />
-                    {day.correctAnswers} correct<br />
-                    {day.duration}h study
+                  {/* Simplified hover tooltip */}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-slate-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg">
+                    {day.questions} questions
                   </div>
                 </div>
               </div>
               
-              {/* Day label */}
+              {/* Day label - better spacing */}
               <div className="text-xs text-slate-400 mt-2 font-medium">{day.date}</div>
-              
-              {/* Study time */}
-              <div className="text-xs text-slate-500">{day.duration}h</div>
+              <div className="text-xs text-slate-500 mt-0.5">{day.duration}h</div>
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Legend */}
-        <div className="flex items-center justify-center space-x-6 text-xs text-slate-400">
-          <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 bg-blue-500 rounded"></div>
-            <span>Questions Attempted</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 bg-green-400 rounded"></div>
-            <span>High Accuracy (85%+)</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 bg-yellow-400 rounded"></div>
-            <span>Good Accuracy (70-84%)</span>
-          </div>
+      {/* Simplified Legend */}
+      <div className="flex items-center justify-center space-x-4 text-xs text-slate-400 mb-4">
+        <div className="flex items-center space-x-1">
+          <div className="w-2 h-2 bg-blue-500 rounded"></div>
+          <span>Questions</span>
+        </div>
+        <div className="flex items-center space-x-1">
+          <div className="w-2 h-2 bg-green-400 rounded"></div>
+          <span>High (85%+)</span>
+        </div>
+        <div className="flex items-center space-x-1">
+          <div className="w-2 h-2 bg-yellow-400 rounded"></div>
+          <span>Good (70-84%)</span>
         </div>
       </div>
 
-      {/* Insights */}
-      <div className="mt-4 p-3 bg-slate-700/50 rounded-lg">
+      {/* Compact Insights */}
+      <div className="p-3 bg-slate-700/30 rounded-lg">
         <div className="flex items-center space-x-2 mb-2">
           <TrendingUp className="w-4 h-4 text-green-400" />
           <span className="text-sm font-medium text-white">Weekly Insights</span>
         </div>
         <div className="text-xs text-slate-300 space-y-1">
-          <div>• Most productive day: {bestDay.date} ({bestDay.questions} questions)</div>
-          <div>• Average {Math.round(totalQuestions / 7)} questions per day</div>
-          <div>• Consistency: {weeklyActivity.filter(d => d.questions > 0).length}/7 days active</div>
+          <div>• Best day: {bestDay.date} ({bestDay.questions} questions)</div>
+          <div>• Daily average: {Math.round(totalQuestions / 7)} questions</div>
+          <div>• Active days: {weeklyActivity.filter(d => d.questions > 0).length}/7</div>
         </div>
       </div>
     </div>

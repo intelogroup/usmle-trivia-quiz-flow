@@ -37,7 +37,7 @@ const SubjectSystemPerformance = () => {
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-slate-300">{subject}</span>
                 <span className={`text-sm font-bold px-2 py-1 rounded ${getScoreColor(score as number)}`}>
-                  {score}%
+                  {(score as number)}%
                 </span>
               </div>
               <div className="w-full bg-slate-700 rounded-full h-2">
@@ -63,7 +63,7 @@ const SubjectSystemPerformance = () => {
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-slate-300">{system}</span>
                 <span className={`text-sm font-bold px-2 py-1 rounded ${getScoreColor(score as number)}`}>
-                  {score}%
+                  {(score as number)}%
                 </span>
               </div>
               <div className="w-full bg-slate-700 rounded-full h-2">
