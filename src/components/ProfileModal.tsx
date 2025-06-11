@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { X, Trophy, Calendar, Target, TrendingUp, Award, Star, Zap, BookOpen, Brain, Clock } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -20,7 +21,7 @@ interface Achievement {
   progress: number;
   maxProgress: number;
   unlocked: boolean;
-  points: number; // Added missing points property
+  points: number;
 }
 
 const ProfileModal = ({ isOpen, onClose, onNavigate }: ProfileModalProps) => {
@@ -121,7 +122,7 @@ const ProfileModal = ({ isOpen, onClose, onNavigate }: ProfileModalProps) => {
           </Avatar>
           <div>
             <div className="text-white font-semibold">{userProfile.name}</div>
-            <div className="text-xs text-slate-400">{userProfile.email}</div>
+            <div className="text-xs text-slate-400">Medical Student</div>
           </div>
         </div>
 
