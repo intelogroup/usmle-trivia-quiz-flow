@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import HomeScreen from "@/components/HomeScreen";
@@ -14,6 +13,7 @@ import ReviewScreen from "@/components/ReviewScreen";
 import LearnScreen from "@/components/LearnScreen";
 import ContinueStudyingScreen from "@/components/ContinueStudyingScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
+import ProfileModal from "@/components/ProfileModal";
 import PhoneFrame from "@/components/PhoneFrame";
 import { getQuestionCount } from "@/data/questionBank";
 
@@ -25,10 +25,17 @@ const Index = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
   const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const handleNavigation = (screen: string) => {
     console.log(`Navigation requested: ${screen}`);
     console.log(`Current screen: ${currentScreen}`);
+    
+    if (screen === 'profile') {
+      setIsProfileModalOpen(true);
+      return;
+    }
+    
     setCurrentScreen(screen as Screen);
     console.log(`Screen changed to: ${screen}`);
   };
@@ -137,6 +144,11 @@ const Index = () => {
       <div className="max-w-md mx-auto bg-slate-900 min-h-screen relative">
         {renderScreen()}
         <Navigation currentScreen={currentScreen} onNavigate={handleNavigation} />
+        <ProfileModal 
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          onNavigate={handleNavigation}
+        />
       </div>
     </PhoneFrame>
   );
