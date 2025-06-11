@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import HomeScreen from "@/components/HomeScreen";
@@ -13,7 +14,6 @@ import ReviewScreen from "@/components/ReviewScreen";
 import LearnScreen from "@/components/LearnScreen";
 import ContinueStudyingScreen from "@/components/ContinueStudyingScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
-import ProfileModal from "@/components/ProfileModal";
 import PhoneFrame from "@/components/PhoneFrame";
 import { getQuestionCount } from "@/data/questionBank";
 
@@ -25,7 +25,6 @@ const Index = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
   const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const handleNavigation = (screen: string) => {
     console.log(`Navigation requested: ${screen}`);
@@ -33,10 +32,6 @@ const Index = () => {
     
     setCurrentScreen(screen as Screen);
     console.log(`Screen changed to: ${screen}`);
-  };
-
-  const handleProfileClick = () => {
-    setIsProfileModalOpen(true);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -80,7 +75,7 @@ const Index = () => {
     console.log(`Rendering screen: ${currentScreen}`);
     switch (currentScreen) {
       case 'home':
-        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} onProfileClick={handleProfileClick} />;
+        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
       case 'quiz':
         return (
           <QuizScreen 
@@ -134,7 +129,7 @@ const Index = () => {
         return <ContinueStudyingScreen onNavigate={handleNavigation} />;
       default:
         console.log(`Unknown screen: ${currentScreen}, defaulting to home`);
-        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} onProfileClick={handleProfileClick} />;
+        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
     }
   };
 
@@ -143,11 +138,6 @@ const Index = () => {
       <div className="max-w-md mx-auto bg-slate-900 min-h-screen relative">
         {renderScreen()}
         <Navigation currentScreen={currentScreen} onNavigate={handleNavigation} />
-        <ProfileModal 
-          isOpen={isProfileModalOpen}
-          onClose={() => setIsProfileModalOpen(false)}
-          onNavigate={handleNavigation}
-        />
       </div>
     </PhoneFrame>
   );

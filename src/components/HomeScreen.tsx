@@ -16,13 +16,11 @@ import { useState } from "react";
 interface HomeScreenProps {
   onNavigate: (screen: string) => void;
   onQuizRestart?: (subjects: string[], systems: string[]) => void;
-  onProfileClick: () => void;
 }
 
 const HomeScreen = ({
   onNavigate,
-  onQuizRestart,
-  onProfileClick
+  onQuizRestart
 }: HomeScreenProps) => {
   const userProfile = getUserProfile();
 
@@ -67,6 +65,10 @@ const HomeScreen = ({
     onNavigate('review');
   };
 
+  const handleProfileClick = () => {
+    onNavigate('profile');
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 p-4 pb-20 space-y-8">
       {/* Header */}
@@ -84,7 +86,7 @@ const HomeScreen = ({
         <div className="flex items-center space-x-3">
           <NotificationSystem notifications={notifications} onMarkAsRead={handleMarkAsRead} onClearAll={handleClearAll} />
           <button
-            onClick={onProfileClick}
+            onClick={handleProfileClick}
             className="relative group transition-all duration-200 hover:scale-105"
             aria-label="View Profile"
           >
