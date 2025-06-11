@@ -96,7 +96,7 @@ const PresetCombinations = ({ onPresetSelect }: PresetCombinationsProps) => {
           <button
             key={index}
             onClick={() => onPresetSelect(preset.subjects, preset.systems)}
-            className="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 transition-all duration-200 border border-transparent hover:border-slate-600"
+            className="bg-slate-700/70 hover:bg-slate-600/70 rounded-xl p-4 transition-all duration-200 border border-transparent hover:border-slate-500"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">

@@ -61,7 +61,7 @@ const QuickQuizSection = ({ onQuickQuizStart }: QuickQuizSectionProps) => {
           <button
             key={index}
             onClick={() => handleQuickStart(category.name)}
-            className="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 transition-colors text-left"
+            className="bg-slate-700/70 hover:bg-slate-600/70 rounded-xl p-4 transition-colors text-left"
           >
             <div className="flex items-center space-x-3">
               <div className={`w-10 h-10 bg-gradient-to-br ${category.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
@@ -80,7 +80,7 @@ const QuickQuizSection = ({ onQuickQuizStart }: QuickQuizSectionProps) => {
         ))}
       </div>
       
-      <div className="bg-slate-800/30 rounded-lg p-3 mt-4">
+      <div className="bg-slate-700/50 rounded-lg p-3 mt-4">
         <div className="flex items-center space-x-2 text-xs text-slate-400">
           <Target className="w-4 h-4" />
           <span>Quick quizzes use default settings: 10 questions, mixed difficulty, no time limit</span>

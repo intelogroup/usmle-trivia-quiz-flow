@@ -1,3 +1,4 @@
+
 import PresetCombinations from "./PresetCombinations";
 import SmartRecommendations from "./SmartRecommendations";
 import CustomQuizSection from "./CustomQuizSection";
@@ -45,11 +46,11 @@ const QuizScreen = ({
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+        <div className="bg-slate-700/70 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-blue-400">73%</div>
           <div className="text-sm text-slate-400">Overall Progress</div>
         </div>
-        <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+        <div className="bg-slate-700/70 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-green-400">12</div>
           <div className="text-sm text-slate-400">Day Streak</div>
         </div>
