@@ -14,10 +14,12 @@ import LearnScreen from "@/components/LearnScreen";
 import ContinueStudyingScreen from "@/components/ContinueStudyingScreen";
 import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
 import QuickLessonScreen from "@/components/lessons/QuickLessonScreen";
+import ModuleSelectionScreen from "@/components/lessons/ModuleSelectionScreen";
+import ModuleLessonScreen from "@/components/lessons/ModuleLessonScreen";
 import PhoneFrame from "@/components/PhoneFrame";
 import { getQuestionCount } from "@/data/questionBank";
 
-type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review' | 'learn' | 'continue-studying' | 'quick-lesson';
+type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review' | 'learn' | 'continue-studying' | 'quick-lesson' | 'module-selection' | 'module-lesson';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -31,7 +33,13 @@ const Index = () => {
     console.log(`Navigation requested: ${screen}`);
     console.log(`Current screen: ${currentScreen}`);
     
-    setCurrentScreen(screen as Screen);
+    if (screen === 'module-selection') {
+      setCurrentScreen('module-selection' as Screen);
+    } else if (screen === 'module-lesson') {
+      setCurrentScreen('module-lesson' as Screen);
+    } else {
+      setCurrentScreen(screen as Screen);
+    }
     console.log(`Screen changed to: ${screen}`);
   };
 
@@ -75,6 +83,11 @@ const Index = () => {
   const handleLessonSelect = (lessonId: string) => {
     setSelectedLessonId(lessonId);
     setCurrentScreen('quick-lesson');
+  };
+
+  const handleModuleSelect = (moduleId: string) => {
+    setSelectedLessonId(moduleId);
+    setCurrentScreen('module-lesson');
   };
 
   const renderScreen = () => {
@@ -135,6 +148,10 @@ const Index = () => {
       case 'continue-studying':
         console.log('Rendering ContinueStudyingScreen');
         return <ContinueStudyingScreen onNavigate={handleNavigation} />;
+      case 'module-selection':
+        return <ModuleSelectionScreen system="Cardiovascular System" onNavigate={handleNavigation} onModuleSelect={handleModuleSelect} />;
+      case 'module-lesson':
+        return <ModuleLessonScreen moduleId={selectedLessonId} onNavigate={handleNavigation} />;
       default:
         console.log(`Unknown screen: ${currentScreen}, defaulting to home`);
         return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;

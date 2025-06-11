@@ -129,7 +129,7 @@ const LearnScreen = ({
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-white">Lessons</h1>
+            <h1 className="text-2xl font-bold text-white">Interactive Lessons</h1>
             <p className="text-slate-300">Choose by system and subject</p>
           </div>
         </div>
@@ -181,15 +181,29 @@ const LearnScreen = ({
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-white">Learning Resources</h3>
         <div className="grid grid-cols-1 gap-3">
-          {/* Lessons Button */}
+          {/* Module Lessons Button */}
+          <button onClick={() => onNavigate('module-selection')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <BookOpen className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium text-white">Module Lessons</h4>
+                <p className="text-sm text-slate-400">Progressive learning with unlockable modules</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-slate-400" />
+            </div>
+          </button>
+
+          {/* Interactive Lessons Button */}
           <button onClick={() => setShowLessons(true)} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h4 className="font-medium text-white">Lessons</h4>
-                <p className="text-sm text-slate-400">Study by system and subject</p>
+                <h4 className="font-medium text-white">Interactive Lessons</h4>
+                <p className="text-sm text-slate-400">Fill-in-the-blank style lessons</p>
               </div>
               <ChevronRight className="w-5 h-5 text-slate-400" />
             </div>
