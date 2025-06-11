@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
-import TopNavigation from "@/components/TopNavigation";
 import HomeScreen from "@/components/HomeScreen";
 import QuizScreen from "@/components/QuizScreen";
 import LeaderboardScreen from "@/components/LeaderboardScreen";
@@ -31,12 +30,14 @@ const Index = () => {
   const handleNavigation = (screen: string) => {
     console.log(`Navigation requested: ${screen}`);
     console.log(`Current screen: ${currentScreen}`);
+    
+    if (screen === 'profile') {
+      setIsProfileModalOpen(true);
+      return;
+    }
+    
     setCurrentScreen(screen as Screen);
     console.log(`Screen changed to: ${screen}`);
-  };
-
-  const handleProfileClick = () => {
-    setIsProfileModalOpen(true);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -141,10 +142,7 @@ const Index = () => {
   return (
     <PhoneFrame>
       <div className="max-w-md mx-auto bg-slate-900 min-h-screen relative">
-        <TopNavigation onProfileClick={handleProfileClick} />
-        <div className="pt-16 pb-20">
-          {renderScreen()}
-        </div>
+        {renderScreen()}
         <Navigation currentScreen={currentScreen} onNavigate={handleNavigation} />
         <ProfileModal 
           isOpen={isProfileModalOpen}
