@@ -1,3 +1,4 @@
+
 import { Target, Zap } from "lucide-react";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";
@@ -33,7 +34,6 @@ const HomeScreen = ({
     message: 'Congratulations on completing your first quiz. Keep up the great work!',
     icon: '🏆',
     timestamp: new Date(Date.now() - 1000 * 60 * 30),
-    // 30 minutes ago
     read: false
   }, {
     id: '2',
@@ -42,28 +42,33 @@ const HomeScreen = ({
     message: `You're on a ${userProfile.studyStreak} day streak! Don't break it now.`,
     icon: '🔥',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    // 2 hours ago
     read: false
   }]);
+
   const handleMarkAsRead = (id: string) => {
     setNotifications(prev => prev.map(notification => notification.id === id ? {
       ...notification,
       read: true
     } : notification));
   };
+
   const handleClearAll = () => {
     setNotifications([]);
   };
+
   const handleQuizRestart = (subjects: string[], systems: string[]) => {
     if (onQuizRestart) {
       onQuizRestart(subjects, systems);
     }
   };
+
   const handleQuizContinue = (quizId: string) => {
     console.log('Continue quiz:', quizId);
     onNavigate('review');
   };
-  return <div className="p-4 pb-20 space-y-8">
+
+  return (
+    <div className="min-h-screen bg-slate-900 p-4 pb-20 space-y-8">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
@@ -126,7 +131,8 @@ const HomeScreen = ({
         <h3 className="text-lg font-semibold text-white">Quick Actions</h3>
         <QuickActions onNavigate={onNavigate} />
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default HomeScreen;
