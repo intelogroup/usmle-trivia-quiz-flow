@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, BookOpen, Clock, ChevronRight, CheckCircle, Star, Award, Trophy, Zap, Brain, Heart, Lungs, Target, Eye, Activity } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, ChevronRight, CheckCircle, Star, Award, Trophy, Zap, Brain, Heart, Target, Eye, Activity } from 'lucide-react';
 import { getModuleById, getUserProgress, saveUserProgress, LessonModule, Lesson } from '@/data/moduleData';
 import LessonProgress from './LessonProgress';
 
@@ -95,7 +95,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
       case 'Cardiovascular System':
         return <Heart className="w-6 h-6 text-red-400" />;
       case 'Respiratory System':
-        return <Lungs className="w-6 h-6 text-blue-400" />;
+        return <Activity className="w-6 h-6 text-blue-400" />;
       case 'Nervous System':
         return <Brain className="w-6 h-6 text-purple-400" />;
       default:
