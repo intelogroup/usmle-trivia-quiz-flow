@@ -1,14 +1,13 @@
-
 import { useState } from 'react';
 import { Target, TrendingUp, Clock, BookOpen, Award, AlertTriangle, Brain, Calendar, CheckCircle, XCircle } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { getUSMLEAnalytics, calculateUSMLEInsights } from '@/utils/usmleAnalyticsManager';
-
 interface AnalyticsScreenProps {
   onNavigate: (screen: string) => void;
 }
-
-const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
+const AnalyticsScreen = ({
+  onNavigate
+}: AnalyticsScreenProps) => {
   const [activeTab, setActiveTab] = useState('overview');
   const analytics = getUSMLEAnalytics();
   const insights = calculateUSMLEInsights(analytics);
@@ -36,22 +35,19 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
       avgTimePerQuestion: Math.round(avgTime) || 0,
       improvement: Math.floor(Math.random() * 20) - 10,
       lastStudied: subjectTopics[0]?.lastPracticed || new Date().toISOString(),
-      status: (score as number) >= 80 ? 'strong' : (score as number) >= 60 ? 'fair' : 'weak'
+      status: score as number >= 80 ? 'strong' : score as number >= 60 ? 'fair' : 'weak'
     };
   }).sort((a, b) => b.score - a.score);
-
   const getScoreColor = (score: number) => {
     if (score >= 85) return 'text-emerald-400';
     if (score >= 70) return 'text-amber-400';
     return 'text-rose-400';
   };
-
   const getScoreBadge = (score: number) => {
     if (score >= 85) return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
     if (score >= 70) return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
     return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
   };
-
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'strong':
@@ -64,51 +60,44 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
         return <Clock className="w-4 h-4 text-slate-400" />;
     }
   };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric'
     });
   };
-
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: Target },
-    { id: 'subjects', label: 'Performance', icon: BookOpen },
-    { id: 'progress', label: 'Progress', icon: TrendingUp }
-  ];
-
-  return (
-    <div className="p-4 pb-20 space-y-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
+  const tabs = [{
+    id: 'overview',
+    label: 'Overview',
+    icon: Target
+  }, {
+    id: 'subjects',
+    label: 'Performance',
+    icon: BookOpen
+  }, {
+    id: 'progress',
+    label: 'Progress',
+    icon: TrendingUp
+  }];
+  return <div className="p-4 pb-20 space-y-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-white my-[50px]">📊 Study Analytics</h1>
+        <h1 className="text-3xl font-bold text-white my-[50px]">Study Analytics</h1>
         <p className="text-slate-300">Track your USMLE preparation progress</p>
       </div>
 
       {/* Tab Navigation */}
       <div className="flex space-x-1 bg-slate-800/50 p-1 rounded-xl backdrop-blur-sm">
         {tabs.map(tab => {
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg transition-all duration-200 ${
-                activeTab === tab.id 
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' 
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-              }`}
-            >
+        const Icon = tab.icon;
+        return <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg transition-all duration-200 ${activeTab === tab.id ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' : 'text-slate-300 hover:text-white hover:bg-slate-700/50'}`}>
               <Icon className="w-4 h-4" />
               <span className="text-sm font-medium">{tab.label}</span>
-            </button>
-          );
-        })}
+            </button>;
+      })}
       </div>
 
       {/* Overview Tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
+      {activeTab === 'overview' && <div className="space-y-6">
           {/* Key Metrics Cards */}
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-6 border border-slate-600/50">
@@ -188,12 +177,10 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
       {/* Performance Tab */}
-      {activeTab === 'subjects' && (
-        <div className="space-y-6">
+      {activeTab === 'subjects' && <div className="space-y-6">
           <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-6 border border-slate-600/50">
             <h3 className="text-xl font-semibold text-white mb-6 flex items-center space-x-2">
               <BookOpen className="w-6 h-6 text-blue-400" />
@@ -215,8 +202,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {subjectPerformance.map((subject, index) => (
-                    <TableRow key={index} className="border-slate-600/30 hover:bg-slate-700/20 transition-colors">
+                  {subjectPerformance.map((subject, index) => <TableRow key={index} className="border-slate-600/30 hover:bg-slate-700/20 transition-colors">
                       <TableCell className="font-medium text-white">
                         <div className="flex items-center space-x-2">
                           {getStatusIcon(subject.status)}
@@ -224,11 +210,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                          subject.status === 'strong' ? 'bg-emerald-500/20 text-emerald-400' :
-                          subject.status === 'fair' ? 'bg-amber-500/20 text-amber-400' :
-                          'bg-rose-500/20 text-rose-400'
-                        }`}>
+                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${subject.status === 'strong' ? 'bg-emerald-500/20 text-emerald-400' : subject.status === 'fair' ? 'bg-amber-500/20 text-amber-400' : 'bg-rose-500/20 text-rose-400'}`}>
                           {subject.status.toUpperCase()}
                         </span>
                       </TableCell>
@@ -251,8 +233,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
                       <TableCell className="text-slate-400 text-sm">
                         {formatDate(subject.lastStudied)}
                       </TableCell>
-                    </TableRow>
-                  ))}
+                    </TableRow>)}
                 </TableBody>
               </Table>
             </div>
@@ -265,8 +246,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
               <h3 className="text-xl font-semibold text-white">🎯 Study Recommendations</h3>
             </div>
             <div className="space-y-3">
-              {insights.weakestSubjects.slice(0, 3).map((subject, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg border border-slate-600/30">
+              {insights.weakestSubjects.slice(0, 3).map((subject, index) => <div key={index} className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg border border-slate-600/30">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center">
                       <span className="text-orange-400 font-bold text-sm">{index + 1}</span>
@@ -276,22 +256,16 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
                       <div className="text-xs text-slate-400">Current score: {subject.score}% • Needs improvement</div>
                     </div>
                   </div>
-                  <button 
-                    onClick={() => onNavigate('quiz')}
-                    className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
-                  >
+                  <button onClick={() => onNavigate('quiz')} className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                     Practice Now
                   </button>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
       {/* Progress Tab */}
-      {activeTab === 'progress' && (
-        <div className="space-y-6">
+      {activeTab === 'progress' && <div className="space-y-6">
           {/* Weekly Progress */}
           <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-6 border border-slate-600/50">
             <h3 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
@@ -299,8 +273,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
               <span>Weekly Study Progress</span>
             </h3>
             <div className="space-y-3">
-              {recentSessions.map((session, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg border border-slate-600/30">
+              {recentSessions.map((session, index) => <div key={index} className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg border border-slate-600/30">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
                       <span className="text-white text-sm font-bold">
@@ -309,7 +282,9 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
                     </div>
                     <div>
                       <div className="text-sm font-semibold text-white">
-                        {new Date(session.date).toLocaleDateString('en-US', { weekday: 'long' })}
+                        {new Date(session.date).toLocaleDateString('en-US', {
+                    weekday: 'long'
+                  })}
                       </div>
                       <div className="text-xs text-slate-400">
                         {session.questionsAttempted} questions • {Math.round(session.duration / 60)}h study time
@@ -322,8 +297,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
                     </div>
                     <div className="text-xs text-slate-400">accuracy</div>
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
 
@@ -342,10 +316,9 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
                   </span>
                 </div>
                 <div className="w-full bg-slate-700 rounded-full h-3">
-                  <div 
-                    className="bg-gradient-to-r from-blue-500 to-blue-400 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${readinessScore.step1Readiness}%` }}
-                  ></div>
+                  <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-3 rounded-full transition-all duration-500" style={{
+                width: `${readinessScore.step1Readiness}%`
+              }}></div>
                 </div>
               </div>
               
@@ -357,10 +330,9 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
                   </span>
                 </div>
                 <div className="w-full bg-slate-700 rounded-full h-3">
-                  <div 
-                    className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${readinessScore.step2Readiness}%` }}
-                  ></div>
+                  <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-3 rounded-full transition-all duration-500" style={{
+                width: `${readinessScore.step2Readiness}%`
+              }}></div>
                 </div>
               </div>
             </div>
@@ -375,10 +347,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
+        </div>}
+    </div>;
 };
-
 export default AnalyticsScreen;
