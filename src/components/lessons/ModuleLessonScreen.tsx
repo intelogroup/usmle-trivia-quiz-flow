@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { ArrowLeft, BookOpen, Clock, ChevronRight, CheckCircle, Star, Award, Trophy, Zap } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, ChevronRight, CheckCircle, Star, Award, Trophy, Zap, Brain, Heart, Lungs, Target, Eye, Activity } from 'lucide-react';
 import { getModuleById, getUserProgress, saveUserProgress, LessonModule, Lesson } from '@/data/moduleData';
 import LessonProgress from './LessonProgress';
 
@@ -28,14 +27,12 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
     if (moduleData) {
       setModule(moduleData);
       
-      // Find the specific lesson
       const lessonIndex = moduleData.lessons.findIndex(lesson => lesson.id === lessonId);
       if (lessonIndex !== -1) {
         setCurrentLesson(moduleData.lessons[lessonIndex]);
         setCurrentLessonIndex(lessonIndex);
       }
       
-      // Load user progress
       const progress = getUserProgress();
       const moduleProgress = progress[moduleId];
       if (moduleProgress) {
@@ -53,19 +50,16 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
     newCompletedLessons.add(currentLessonIndex);
     setCompletedLessons(newCompletedLessons);
 
-    // Add points reward if lesson wasn't already completed
     if (!wasAlreadyCompleted) {
       const newPoints = earnedPoints + currentLesson.pointsReward;
       setEarnedPoints(newPoints);
       setShowPointsReward(true);
       setTimeout(() => setShowPointsReward(false), 2000);
       
-      // Save progress with points
       const isModuleComplete = newCompletedLessons.size === module.lessons.length;
       saveUserProgress(moduleId, currentLessonIndex, newCompletedLessons.size, isModuleComplete, newPoints);
     }
 
-    // Navigate back to lesson list after delay
     setTimeout(() => {
       onComplete();
     }, wasAlreadyCompleted ? 500 : 2000);
@@ -93,9 +87,27 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
   };
 
   const handleStepClick = (step: number) => {
-    // For now, we'll just stay on the current lesson
-    // In a full implementation, this would navigate between lessons
     console.log('Step clicked:', step);
+  };
+
+  const getSystemIcon = (system: string) => {
+    switch (system) {
+      case 'Cardiovascular System':
+        return <Heart className="w-6 h-6 text-red-400" />;
+      case 'Respiratory System':
+        return <Lungs className="w-6 h-6 text-blue-400" />;
+      case 'Nervous System':
+        return <Brain className="w-6 h-6 text-purple-400" />;
+      default:
+        return <Activity className="w-6 h-6 text-green-400" />;
+    }
+  };
+
+  const getLessonTypeIcon = () => {
+    if (currentLesson?.type === 'interactive') {
+      return <Target className="w-4 h-4 text-orange-400" />;
+    }
+    return <BookOpen className="w-4 h-4 text-blue-400" />;
   };
 
   if (!module || !currentLesson) {
@@ -129,7 +141,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
         </div>
       )}
 
-      {/* Modern Header */}
+      {/* Enhanced Header with System Context */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl blur-xl"></div>
         <div className="relative bg-gradient-to-r from-slate-800/90 to-slate-700/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-600/30">
@@ -138,15 +150,18 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
               <ArrowLeft className="w-6 h-6" />
             </button>
             <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-2">
-                <span className="text-2xl">{module.icon}</span>
-                <h1 className="text-xl font-bold text-white">{module.title}</h1>
-                {isLessonCompleted && <CheckCircle className="w-5 h-5 text-green-400" />}
+              <div className="flex items-center space-x-3 mb-2">
+                {getSystemIcon(module.system)}
+                <div className="flex items-center space-x-2">
+                  <span className="text-2xl">{module.icon}</span>
+                  <h1 className="text-xl font-bold text-white">{module.title}</h1>
+                  {isLessonCompleted && <CheckCircle className="w-5 h-5 text-green-400" />}
+                </div>
               </div>
               <div className="flex items-center space-x-6 text-sm text-slate-400">
                 <div className="flex items-center space-x-2">
-                  <BookOpen className="w-4 h-4" />
-                  <span>{module.system}</span>
+                  {getLessonTypeIcon()}
+                  <span>{currentLesson.type === 'interactive' ? 'Interactive' : 'Reading'}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Clock className="w-4 h-4" />
@@ -169,31 +184,54 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
         </div>
       </div>
 
-      {/* Progress */}
+      {/* Enhanced Progress Indicator */}
       <LessonProgress 
         currentStep={currentLessonIndex}
         totalSteps={module.lessons.length}
         onStepClick={handleStepClick}
       />
 
-      {/* Modern Lesson Content */}
+      {/* Enhanced Lesson Content with Better Hierarchy */}
       <div className="space-y-6">
-        {/* Lesson Header Card */}
+        {/* Lesson Header Card with Learning Objectives */}
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl blur-lg"></div>
           <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-700/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-600/30">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-white mb-3">{currentLesson.title}</h2>
-                <p className="text-slate-300 text-lg leading-relaxed">{currentLesson.description}</p>
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600/20 to-purple-600/20 border border-blue-600/30 rounded-xl flex items-center justify-center">
+                    {getLessonTypeIcon()}
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">{currentLesson.title}</h2>
+                    <div className="flex items-center space-x-2 text-sm text-slate-400">
+                      <span>Lesson {currentLessonIndex + 1} of {module.lessons.length}</span>
+                      <span>•</span>
+                      <span>{module.system}</span>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-slate-300 text-lg leading-relaxed mb-4">{currentLesson.description}</p>
+                
+                {/* Learning Objective */}
+                <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600/30">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Eye className="w-4 h-4 text-blue-400" />
+                    <span className="text-sm font-medium text-blue-400">Learning Objective</span>
+                  </div>
+                  <p className="text-sm text-slate-300">
+                    By the end of this lesson, you'll understand the key concepts of {currentLesson.title.toLowerCase()} and be able to apply this knowledge in clinical scenarios.
+                  </p>
+                </div>
                 
                 {!showQuiz && (
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <span className="text-sm font-medium text-slate-300">
-                        Progress: {currentParagraph + 1} of {currentLesson.content.length}
+                        Reading Progress: {currentParagraph + 1} of {currentLesson.content.length}
                       </span>
-                      <div className="w-24 bg-slate-600 rounded-full h-2">
+                      <div className="w-32 bg-slate-600 rounded-full h-2">
                         <div 
                           className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${progressPercentage}%` }}
@@ -215,51 +253,71 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
           </div>
         </div>
 
-        {/* Image if available */}
+        {/* Enhanced Image Display */}
         {currentLesson.image && !showQuiz && (
           <div className="text-center">
-            <div className="inline-block rounded-2xl overflow-hidden border border-slate-600/30 shadow-2xl">
+            <div className="relative inline-block rounded-2xl overflow-hidden border border-slate-600/30 shadow-2xl">
               <img 
-                src={currentLesson.image} 
+                src={`https://images.unsplash.com/${currentLesson.image}?w=600&h=400&fit=crop`}
                 alt={currentLesson.imageDescription || currentLesson.title}
-                className="w-full max-w-md mx-auto bg-slate-700"
+                className="w-full max-w-lg mx-auto bg-slate-700"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
             </div>
             {currentLesson.imageDescription && (
-              <p className="text-sm text-slate-400 mt-4 max-w-md mx-auto">{currentLesson.imageDescription}</p>
+              <div className="mt-4 max-w-lg mx-auto">
+                <p className="text-sm text-slate-400 bg-slate-800/50 rounded-lg p-3 border border-slate-600/30">
+                  📊 {currentLesson.imageDescription}
+                </p>
+              </div>
             )}
           </div>
         )}
 
-        {/* Content or Quiz */}
+        {/* Enhanced Content Display */}
         {!showQuiz ? (
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-slate-800/40 to-slate-700/40 rounded-2xl blur-lg"></div>
             <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-sm rounded-2xl p-8 border border-slate-600/30 shadow-xl">
+              {/* Content with Better Typography */}
               <div className="prose prose-invert max-w-none">
                 <div className="text-xl leading-relaxed text-white font-light mb-8 min-h-[120px] flex items-center">
-                  {currentLesson.content[currentParagraph]}
+                  <div className="relative">
+                    <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
+                    <p className="pl-4">{currentLesson.content[currentParagraph]}</p>
+                  </div>
                 </div>
               </div>
 
+              {/* Enhanced Progress Dots */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex space-x-2">
                   {currentLesson.content.map((_, index) => (
                     <div
                       key={index}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      className={`relative transition-all duration-300 ${
+                        index <= currentParagraph 
+                          ? 'w-8 h-3' 
+                          : 'w-3 h-3'
+                      } rounded-full ${
                         index <= currentParagraph 
                           ? 'bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg' 
                           : 'bg-slate-600'
                       }`}
-                    />
+                    >
+                      {index === currentParagraph && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse"></div>
+                      )}
+                    </div>
                   ))}
                 </div>
-                <span className="text-sm text-slate-400">
-                  {currentParagraph + 1} / {currentLesson.content.length}
-                </span>
+                <div className="flex items-center space-x-2 text-sm text-slate-400">
+                  <BookOpen className="w-4 h-4" />
+                  <span>{currentParagraph + 1} / {currentLesson.content.length}</span>
+                </div>
               </div>
 
+              {/* Enhanced Continue Button */}
               <button
                 onClick={handleNextParagraph}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"

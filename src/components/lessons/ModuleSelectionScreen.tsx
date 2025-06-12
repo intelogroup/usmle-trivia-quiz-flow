@@ -1,11 +1,14 @@
+
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Clock, BookOpen, Lock, CheckCircle, Eye, Star, Award, TrendingUp } from 'lucide-react';
-import { getModulesBySystem, getUserProgress, getUnlockedLevel, getTotalUserXp, LessonModule } from '@/data/moduleData';
+import { getModulesBySystem, getUserProgress, getUnlockedLevel, getTotalUserPoints, LessonModule } from '@/data/moduleData';
+
 interface ModuleSelectionScreenProps {
   system: string;
   onNavigate: (screen: string) => void;
   onModuleSelect: (moduleId: string) => void;
 }
+
 const ModuleSelectionScreen = ({
   system,
   onNavigate,
@@ -14,20 +17,24 @@ const ModuleSelectionScreen = ({
   const [modules, setModules] = useState<LessonModule[]>([]);
   const [userProgress, setUserProgress] = useState<any>({});
   const [unlockedLevel, setUnlockedLevel] = useState(0);
-  const [totalXp, setTotalXp] = useState(0);
+  const [totalPoints, setTotalPoints] = useState(0);
+
   useEffect(() => {
     const systemModules = getModulesBySystem(system);
     setModules(systemModules);
     setUserProgress(getUserProgress());
     setUnlockedLevel(getUnlockedLevel());
-    setTotalXp(getTotalUserXp());
+    setTotalPoints(getTotalUserPoints());
   }, [system]);
+
   const isModuleUnlocked = (module: LessonModule) => {
     return unlockedLevel >= module.unlockLevel;
   };
+
   const isModuleCompleted = (moduleId: string) => {
     return userProgress[moduleId]?.completed || false;
   };
+
   const getModuleProgress = (moduleId: string) => {
     const progress = userProgress[moduleId];
     if (!progress) return 0;
@@ -35,12 +42,15 @@ const ModuleSelectionScreen = ({
     if (!moduleData) return 0;
     return Math.round(progress.completedLessons / moduleData.lessons.length * 100);
   };
-  const getEarnedXp = (moduleId: string) => {
-    return userProgress[moduleId]?.earnedXp || 0;
+
+  const getEarnedPoints = (moduleId: string) => {
+    return userProgress[moduleId]?.earnedPoints || 0;
   };
+
   const canPreviewModule = (module: LessonModule) => {
     return module.previewAvailable && !isModuleUnlocked(module);
   };
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Beginner':
@@ -53,7 +63,9 @@ const ModuleSelectionScreen = ({
         return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
     }
   };
+
   const completedModules = Object.values(userProgress).filter((p: any) => p.completed).length;
+
   return (
     <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Header */}
@@ -68,9 +80,9 @@ const ModuleSelectionScreen = ({
         <div className="text-right">
           <div className="flex items-center space-x-1 text-yellow-400">
             <Star className="w-4 h-4 fill-current" />
-            <span className="font-bold">{totalXp}</span>
+            <span className="font-bold">{totalPoints}</span>
           </div>
-          <div className="text-xs text-slate-400">Total XP</div>
+          <div className="text-xs text-slate-400">Total Points</div>
         </div>
       </div>
 
@@ -123,7 +135,7 @@ const ModuleSelectionScreen = ({
           const isCompleted = isModuleCompleted(module.id);
           const canPreview = canPreviewModule(module);
           const progress = getModuleProgress(module.id);
-          const earnedXp = getEarnedXp(module.id);
+          const earnedPoints = getEarnedPoints(module.id);
 
           return (
             <div key={module.id} className="relative">
@@ -193,7 +205,7 @@ const ModuleSelectionScreen = ({
                     <div>
                       <div className="flex items-center justify-center space-x-1 text-yellow-400 mb-1">
                         <Star className="w-3 h-3 fill-current" />
-                        <span className="text-xs font-medium">{earnedXp}/{module.totalXp} XP</span>
+                        <span className="text-xs font-medium">{earnedPoints}/{module.totalPoints} Points</span>
                       </div>
                     </div>
                   </div>
