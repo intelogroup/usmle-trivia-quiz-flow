@@ -4,7 +4,17 @@ export interface Lesson {
   description: string;
   duration: number;
   xpReward: number;
-  content: string;
+  content: string[];
+  type?: 'reading' | 'interactive';
+  estimatedTime?: number;
+  image?: string;
+  imageDescription?: string;
+  quiz?: {
+    question: string;
+    options: string[];
+    correct: number;
+    explanation: string;
+  };
 }
 
 export interface LessonModule {
@@ -42,7 +52,19 @@ const moduleDatabase: LessonModule[] = [
         description: 'Explore the structures of the heart.',
         duration: 15,
         xpReward: 25,
-        content: 'Lesson content goes here...'
+        content: [
+          'The heart is a muscular organ that pumps blood throughout your body.',
+          'It has four chambers: two atria (upper chambers) and two ventricles (lower chambers).',
+          'The right side pumps blood to the lungs, while the left side pumps blood to the rest of the body.'
+        ],
+        type: 'interactive',
+        estimatedTime: 15,
+        quiz: {
+          question: 'How many chambers does the human heart have?',
+          options: ['2', '3', '4', '5'],
+          correct: 2,
+          explanation: 'The human heart has four chambers: two atria and two ventricles.'
+        }
       },
       {
         id: 'lesson-2',
@@ -50,7 +72,13 @@ const moduleDatabase: LessonModule[] = [
         description: 'Learn about the cardiac cycle.',
         duration: 20,
         xpReward: 35,
-        content: 'Lesson content goes here...'
+        content: [
+          'The cardiac cycle is the sequence of events that occurs in one heartbeat.',
+          'It consists of two main phases: systole (contraction) and diastole (relaxation).',
+          'During systole, the heart contracts and pumps blood out. During diastole, the heart relaxes and fills with blood.'
+        ],
+        type: 'reading',
+        estimatedTime: 20
       },
       {
         id: 'lesson-3',
@@ -58,7 +86,13 @@ const moduleDatabase: LessonModule[] = [
         description: 'Understand how blood pressure is regulated.',
         duration: 25,
         xpReward: 45,
-        content: 'Lesson content goes here...'
+        content: [
+          'Blood pressure is the force exerted by blood against the walls of arteries.',
+          'It is regulated by several mechanisms including the nervous system and hormones.',
+          'Normal blood pressure is essential for proper organ function.'
+        ],
+        type: 'reading',
+        estimatedTime: 25
       }
     ]
   },
@@ -80,7 +114,13 @@ const moduleDatabase: LessonModule[] = [
         description: 'Overview of lung structures.',
         duration: 15,
         xpReward: 20,
-        content: 'Lesson content goes here...'
+        content: [
+          'The lungs are paired organs located in the chest cavity.',
+          'They are responsible for gas exchange between the air we breathe and our blood.',
+          'Each lung is divided into lobes and contains millions of tiny air sacs called alveoli.'
+        ],
+        type: 'reading',
+        estimatedTime: 15
       },
       {
         id: 'lesson-5',
@@ -88,7 +128,13 @@ const moduleDatabase: LessonModule[] = [
         description: 'The process of gas exchange in the lungs.',
         duration: 15,
         xpReward: 30,
-        content: 'Lesson content goes here...'
+        content: [
+          'Gas exchange occurs in the alveoli, where oxygen enters the blood and carbon dioxide is removed.',
+          'This process is driven by differences in concentration gradients.',
+          'The thin walls of the alveoli allow for efficient gas exchange.'
+        ],
+        type: 'reading',
+        estimatedTime: 15
       },
       {
         id: 'lesson-6',
@@ -96,7 +142,13 @@ const moduleDatabase: LessonModule[] = [
         description: 'How we breathe.',
         duration: 15,
         xpReward: 30,
-        content: 'Lesson content goes here...'
+        content: [
+          'Breathing involves the contraction and relaxation of the diaphragm and other respiratory muscles.',
+          'Inspiration occurs when the diaphragm contracts, creating negative pressure in the lungs.',
+          'Expiration is usually passive, occurring when the diaphragm relaxes.'
+        ],
+        type: 'reading',
+        estimatedTime: 15
       }
     ]
   },
@@ -119,7 +171,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'Structures of the kidney.',
         duration: 20,
         xpReward: 30,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       },
       {
         id: 'lesson-8',
@@ -127,7 +179,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'How kidneys filter blood.',
         duration: 25,
         xpReward: 40,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       },
       {
         id: 'lesson-9',
@@ -135,7 +187,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'Regulation of body fluids.',
         duration: 25,
         xpReward: 40,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       }
     ]
   },
@@ -158,7 +210,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'Main parts of the brain.',
         duration: 25,
         xpReward: 40,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       },
       {
         id: 'lesson-11',
@@ -166,7 +218,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'How nerves transmit signals.',
         duration: 30,
         xpReward: 50,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       },
       {
         id: 'lesson-12',
@@ -174,7 +226,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'Function of the spinal cord.',
         duration: 25,
         xpReward: 40,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       }
     ]
   },
@@ -197,7 +249,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'Initial steps of digestion.',
         duration: 30,
         xpReward: 45,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       },
       {
         id: 'lesson-14',
@@ -205,7 +257,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'How nutrients are absorbed.',
         duration: 30,
         xpReward: 55,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       },
       {
         id: 'lesson-15',
@@ -213,7 +265,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'Process of waste removal.',
         duration: 30,
         xpReward: 50,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       }
     ]
   },
@@ -236,7 +288,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'Different types of hormones.',
         duration: 35,
         xpReward: 50,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       },
       {
         id: 'lesson-17',
@@ -244,7 +296,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'How hormones are regulated.',
         duration: 35,
         xpReward: 60,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       },
       {
         id: 'lesson-18',
@@ -252,7 +304,7 @@ const moduleDatabase: LessonModule[] = [
         description: 'How hormones interact.',
         duration: 30,
         xpReward: 50,
-        content: 'Lesson content goes here...'
+        content: ['Lesson content goes here...'],
       }
     ]
   }
@@ -340,4 +392,25 @@ export const getModuleById = (moduleId: string): LessonModule | null => {
 
 export const getAllModules = (): LessonModule[] => {
   return moduleDatabase;
+};
+
+// Function to save user progress
+export const saveUserProgress = (moduleId: string, lessonIndex: number, completedLessons: number, isModuleComplete: boolean, earnedXp: number) => {
+  if (!userProgress[moduleId]) {
+    userProgress[moduleId] = {
+      completed: false,
+      completedLessons: 0,
+      earnedXp: 0,
+      unlockedLessons: 1,
+      completedLessonIds: [],
+      currentLesson: 0
+    };
+  }
+
+  userProgress[moduleId].currentLesson = lessonIndex;
+  userProgress[moduleId].completedLessons = completedLessons;
+  userProgress[moduleId].completed = isModuleComplete;
+  userProgress[moduleId].earnedXp = earnedXp;
+
+  console.log(`Saved progress for module ${moduleId}:`, userProgress[moduleId]);
 };

@@ -1,16 +1,19 @@
 
 import { useState, useEffect } from 'react';
 import { ArrowLeft, BookOpen, Clock, ChevronRight, CheckCircle, Star, Award } from 'lucide-react';
-import { getModuleById, getUserProgress, saveUserProgress, LessonModule, ModuleLesson } from '@/data/moduleData';
+import { getModuleById, getUserProgress, saveUserProgress, LessonModule, Lesson } from '@/data/moduleData';
 import LessonProgress from './LessonProgress';
 
 interface ModuleLessonScreenProps {
   moduleId: string;
+  lessonId: string;
   onNavigate: (screen: string) => void;
+  onComplete: () => void;
 }
 
-const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) => {
+const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: ModuleLessonScreenProps) => {
   const [module, setModule] = useState<LessonModule | null>(null);
+  const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
   const [completedLessons, setCompletedLessons] = useState<Set<number>>(new Set());
   const [currentParagraph, setCurrentParagraph] = useState(0);
@@ -25,18 +28,22 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
     if (moduleData) {
       setModule(moduleData);
       
+      // Find the specific lesson
+      const lessonIndex = moduleData.lessons.findIndex(lesson => lesson.id === lessonId);
+      if (lessonIndex !== -1) {
+        setCurrentLesson(moduleData.lessons[lessonIndex]);
+        setCurrentLessonIndex(lessonIndex);
+      }
+      
       // Load user progress
       const progress = getUserProgress();
       const moduleProgress = progress[moduleId];
       if (moduleProgress) {
-        setCurrentLessonIndex(moduleProgress.currentLesson || 0);
         setCompletedLessons(new Set(Array.from({length: moduleProgress.completedLessons || 0}, (_, i) => i)));
         setEarnedXp(moduleProgress.earnedXp || 0);
       }
     }
-  }, [moduleId]);
-
-  const currentLesson = module?.lessons[currentLessonIndex];
+  }, [moduleId, lessonId]);
 
   const handleLessonComplete = () => {
     if (!module || !currentLesson) return;
@@ -58,21 +65,10 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
       saveUserProgress(moduleId, currentLessonIndex, newCompletedLessons.size, isModuleComplete, newXp);
     }
 
-    if (currentLessonIndex < module.lessons.length - 1) {
-      // Move to next lesson
-      setTimeout(() => {
-        setCurrentLessonIndex(currentLessonIndex + 1);
-        setCurrentParagraph(0);
-        setShowQuiz(false);
-        setSelectedAnswer(null);
-        setShowFeedback(false);
-      }, wasAlreadyCompleted ? 500 : 2000);
-    } else {
-      // Module complete - navigate back with delay
-      setTimeout(() => {
-        onNavigate('module-selection');
-      }, wasAlreadyCompleted ? 500 : 2000);
-    }
+    // Navigate back to lesson list after delay
+    setTimeout(() => {
+      onComplete();
+    }, wasAlreadyCompleted ? 500 : 2000);
   };
 
   const handleNextParagraph = () => {
@@ -97,24 +93,20 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
   };
 
   const handleStepClick = (step: number) => {
-    if (step <= currentLessonIndex || completedLessons.has(step)) {
-      setCurrentLessonIndex(step);
-      setCurrentParagraph(0);
-      setShowQuiz(false);
-      setSelectedAnswer(null);
-      setShowFeedback(false);
-    }
+    // For now, we'll just stay on the current lesson
+    // In a full implementation, this would navigate between lessons
+    console.log('Step clicked:', step);
   };
 
   if (!module || !currentLesson) {
     return (
       <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <div className="flex items-center space-x-3">
-          <button onClick={() => onNavigate('module-selection')} className="text-white hover:text-slate-300">
+          <button onClick={() => onNavigate('module-lesson-list')} className="text-white hover:text-slate-300">
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-white">Module Not Found</h1>
+            <h1 className="text-2xl font-bold text-white">Lesson Not Found</h1>
           </div>
         </div>
       </div>
@@ -137,7 +129,7 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
 
       {/* Header */}
       <div className="flex items-center space-x-3">
-        <button onClick={() => onNavigate('module-selection')} className="text-white hover:text-slate-300 transition-colors">
+        <button onClick={() => onNavigate('module-lesson-list')} className="text-white hover:text-slate-300 transition-colors">
           <ArrowLeft className="w-6 h-6" />
         </button>
         <div className="flex-1">
@@ -149,7 +141,7 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
             </div>
             <div className="flex items-center space-x-1">
               <Clock className="w-4 h-4" />
-              <span>{currentLesson.estimatedTime} min</span>
+              <span>{currentLesson.estimatedTime || currentLesson.duration} min</span>
             </div>
           </div>
         </div>

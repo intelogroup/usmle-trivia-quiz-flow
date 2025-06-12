@@ -1,10 +1,8 @@
+
 import { useState } from 'react';
 import HomeScreen from '@/components/HomeScreen';
 import QuizScreen from '@/components/QuizScreen';
 import ReviewScreen from '@/components/ReviewScreen';
-import CategorySelectionScreen from '@/components/selection/CategorySelectionScreen';
-import SubjectSystemSelectionScreen from '@/components/selection/SubjectSystemSelectionScreen';
-import LessonScreen from '@/components/lessons/LessonScreen';
 import LeaderboardScreen from '@/components/LeaderboardScreen';
 import AnalyticsScreen from '@/components/AnalyticsScreen';
 import Navigation from '@/components/Navigation';
@@ -36,8 +34,8 @@ const Index = () => {
   };
 
   const handleLessonComplete = () => {
-    console.log('Lesson completed, navigating back to learn screen');
-    setCurrentScreen('learn');
+    console.log('Lesson completed, navigating back to lesson list');
+    setCurrentScreen('module-lesson-list');
   };
 
   const handleModuleSelect = (moduleId: string) => {
@@ -71,17 +69,6 @@ const Index = () => {
         />;
       case 'review':
         return <ReviewScreen onNavigate={setCurrentScreen} />;
-      case 'category':
-        return <CategorySelectionScreen onCategorySelect={handleCategorySelect} onNavigate={setCurrentScreen} />;
-      case 'subject-system-selection':
-        return <SubjectSystemSelectionScreen onSubjectSystemSelect={handleSubjectSystemSelect} onNavigate={setCurrentScreen} />;
-      case 'lesson':
-        return <LessonScreen 
-          category={selectedCategory} 
-          subjects={selectedSubjects}
-          systems={selectedSystems}
-          onNavigate={setCurrentScreen}
-        />;
       case 'leaderboard':
         return <LeaderboardScreen onNavigate={setCurrentScreen} />;
       case 'analytics':
