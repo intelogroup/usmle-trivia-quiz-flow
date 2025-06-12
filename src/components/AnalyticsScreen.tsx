@@ -1,296 +1,370 @@
 
 import { useState } from 'react';
-import { Target, TrendingUp, Clock, BookOpen, Award, AlertTriangle, Brain, Calendar, CheckCircle, XCircle } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { getUSMLEAnalytics, calculateUSMLEInsights } from '@/utils/usmleAnalyticsManager';
+import { ArrowLeft, TrendingUp, Target, Clock, Award, ChevronRight, BarChart3, Calendar, BookOpen } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 
 interface AnalyticsScreenProps {
   onNavigate: (screen: string) => void;
 }
 
 const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
-  const [activeTab, setActiveTab] = useState('overview');
-  const analytics = getUSMLEAnalytics();
-  const insights = calculateUSMLEInsights(analytics);
-  const { readinessScore, sessionAnalytics } = analytics;
+  const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'progress'>('overview');
 
-  // Get recent performance data
-  const recentSessions = sessionAnalytics.slice(0, 7);
-  const avgRecentAccuracy = Math.round(recentSessions.reduce((sum, session) => sum + session.accuracy, 0) / recentSessions.length);
-
-  const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-emerald-400';
-    if (score >= 70) return 'text-amber-400';
-    return 'text-rose-400';
-  };
-
-  const getScoreBadge = (score: number) => {
-    if (score >= 85) return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-    if (score >= 70) return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-    return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
-  };
-
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: Target },
-    { id: 'subjects', label: 'Performance', icon: BookOpen },
-    { id: 'progress', label: 'Progress', icon: TrendingUp }
+  // Study progress data
+  const studyProgressData = [
+    { day: 'Mon', sessions: 3, minutes: 45 },
+    { day: 'Tue', sessions: 2, minutes: 30 },
+    { day: 'Wed', sessions: 4, minutes: 60 },
+    { day: 'Thu', sessions: 3, minutes: 40 },
+    { day: 'Fri', sessions: 5, minutes: 75 },
+    { day: 'Sat', sessions: 2, minutes: 25 },
+    { day: 'Sun', sessions: 1, minutes: 15 }
   ];
 
+  // Subject performance data
+  const subjectPerformanceData = [
+    { subject: 'Anatomy', score: 85, improvement: 12 },
+    { subject: 'Physiology', score: 78, improvement: 8 },
+    { subject: 'Pathology', score: 92, improvement: 15 },
+    { subject: 'Pharmacology', score: 74, improvement: -3 },
+    { subject: 'Microbiology', score: 88, improvement: 10 },
+    { subject: 'Biochemistry', score: 81, improvement: 5 }
+  ];
+
+  // Radar chart data for subject strengths
+  const radarData = [
+    { subject: 'Anatomy', score: 85, fullMark: 100 },
+    { subject: 'Physiology', score: 78, fullMark: 100 },
+    { subject: 'Pathology', score: 92, fullMark: 100 },
+    { subject: 'Pharmacology', score: 74, fullMark: 100 },
+    { subject: 'Microbiology', score: 88, fullMark: 100 },
+    { subject: 'Biochemistry', score: 81, fullMark: 100 }
+  ];
+
+  // Weekly XP data
+  const xpProgressData = [
+    { week: 'Week 1', xp: 320 },
+    { week: 'Week 2', xp: 485 },
+    { week: 'Week 3', xp: 650 },
+    { week: 'Week 4', xp: 890 }
+  ];
+
+  const tabs = [
+    { id: 'overview' as const, label: 'Overview', icon: BarChart3 },
+    { id: 'performance' as const, label: 'Performance', icon: Target },
+    { id: 'progress' as const, label: 'Progress', icon: TrendingUp }
+  ];
+
+  const renderOverviewTab = () => (
+    <div className="space-y-6">
+      {/* Key Stats Cards */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-gradient-to-br from-blue-600/20 to-blue-500/10 border border-blue-600/30 rounded-xl p-4">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
+              <Clock className="w-4 h-4 text-blue-400" />
+            </div>
+            <div>
+              <p className="text-xs text-slate-400">Study Time</p>
+              <p className="text-lg font-bold text-white">24.5h</p>
+            </div>
+          </div>
+          <p className="text-xs text-slate-400">This week</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-green-600/20 to-green-500/10 border border-green-600/30 rounded-xl p-4">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
+              <Award className="w-4 h-4 text-green-400" />
+            </div>
+            <div>
+              <p className="text-xs text-slate-400">Total XP</p>
+              <p className="text-lg font-bold text-white">4,289</p>
+            </div>
+          </div>
+          <p className="text-xs text-green-400">+890 this week</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-600/20 to-purple-500/10 border border-purple-600/30 rounded-xl p-4">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
+              <Target className="w-4 h-4 text-purple-400" />
+            </div>
+            <div>
+              <p className="text-xs text-slate-400">Avg Score</p>
+              <p className="text-lg font-bold text-white">84%</p>
+            </div>
+          </div>
+          <p className="text-xs text-purple-400">+7% improvement</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-orange-600/20 to-orange-500/10 border border-orange-600/30 rounded-xl p-4">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="w-8 h-8 bg-orange-600/20 rounded-lg flex items-center justify-center">
+              <BookOpen className="w-4 h-4 text-orange-400" />
+            </div>
+            <div>
+              <p className="text-xs text-slate-400">Streak</p>
+              <p className="text-lg font-bold text-white">12 days</p>
+            </div>
+          </div>
+          <p className="text-xs text-orange-400">Keep it up!</p>
+        </div>
+      </div>
+
+      {/* Daily Activity Chart */}
+      <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+        <h3 className="text-lg font-semibold text-white mb-4">Daily Study Activity</h3>
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={studyProgressData}>
+              <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
+              <Bar dataKey="minutes" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <p className="text-sm text-slate-400 mt-2">Study minutes per day this week</p>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-white">Quick Actions</h3>
+        <div className="grid grid-cols-1 gap-3">
+          <button 
+            onClick={() => onNavigate('quiz')}
+            className="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-3 text-left transition-colors border border-slate-700/50"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
+                  <Target className="w-5 h-5 text-blue-400" />
+                </div>
+                <div>
+                  <p className="font-medium text-white">Take Practice Quiz</p>
+                  <p className="text-sm text-slate-400">Test your knowledge</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-slate-400" />
+            </div>
+          </button>
+
+          <button 
+            onClick={() => onNavigate('learn')}
+            className="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-3 text-left transition-colors border border-slate-700/50"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-green-400" />
+                </div>
+                <div>
+                  <p className="font-medium text-white">Continue Learning</p>
+                  <p className="text-sm text-slate-400">Pick up where you left off</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-slate-400" />
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPerformanceTab = () => (
+    <div className="space-y-6">
+      {/* Subject Performance */}
+      <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+        <h3 className="text-lg font-semibold text-white mb-4">Subject Performance</h3>
+        <div className="space-y-3">
+          {subjectPerformanceData.map((subject) => (
+            <div key={subject.subject} className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-medium text-white">{subject.subject}</span>
+                  <span className="text-sm text-slate-300">{subject.score}%</span>
+                </div>
+                <div className="w-full bg-slate-600 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${subject.score}%` }}
+                  />
+                </div>
+              </div>
+              <div className={`ml-4 text-sm font-medium ${
+                subject.improvement > 0 ? 'text-green-400' : subject.improvement < 0 ? 'text-red-400' : 'text-slate-400'
+              }`}>
+                {subject.improvement > 0 ? '+' : ''}{subject.improvement}%
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Radar Chart */}
+      <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+        <h3 className="text-lg font-semibold text-white mb-4">Knowledge Radar</h3>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart data={radarData}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: '#94a3b8' }} />
+              <PolarRadiusAxis domain={[0, 100]} tick={false} />
+              <Radar 
+                name="Score" 
+                dataKey="score" 
+                stroke="#3b82f6" 
+                fill="#3b82f6" 
+                fillOpacity={0.2}
+                strokeWidth={2}
+              />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Recommendations */}
+      <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+        <h3 className="text-lg font-semibold text-white mb-4">Recommendations</h3>
+        <div className="space-y-3">
+          <div className="p-3 bg-yellow-600/10 border border-yellow-600/20 rounded-lg">
+            <p className="text-sm font-medium text-yellow-400 mb-1">Focus Area</p>
+            <p className="text-sm text-slate-300">Spend more time on Pharmacology - your weakest subject</p>
+          </div>
+          <div className="p-3 bg-green-600/10 border border-green-600/20 rounded-lg">
+            <p className="text-sm font-medium text-green-400 mb-1">Strength</p>
+            <p className="text-sm text-slate-300">Excellent progress in Pathology - keep it up!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderProgressTab = () => (
+    <div className="space-y-6">
+      {/* XP Progress Chart */}
+      <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+        <h3 className="text-lg font-semibold text-white mb-4">XP Progress</h3>
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={xpProgressData}>
+              <XAxis dataKey="week" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
+              <Line 
+                type="monotone" 
+                dataKey="xp" 
+                stroke="#3b82f6" 
+                strokeWidth={3}
+                dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        <p className="text-sm text-slate-400 mt-2">Weekly XP accumulation trend</p>
+      </div>
+
+      {/* Goals Section */}
+      <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+        <h3 className="text-lg font-semibold text-white mb-4">Study Goals</h3>
+        <div className="space-y-4">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-slate-300">Weekly Study Goal</span>
+              <span className="text-sm text-white font-medium">24.5h / 25h</span>
+            </div>
+            <div className="w-full bg-slate-600 rounded-full h-3">
+              <div className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full" style={{ width: '98%' }} />
+            </div>
+            <p className="text-xs text-green-400 mt-1">Almost there! 30 min to go</p>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-slate-300">Monthly XP Target</span>
+              <span className="text-sm text-white font-medium">2,890 / 4,000</span>
+            </div>
+            <div className="w-full bg-slate-600 rounded-full h-3">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full" style={{ width: '72%' }} />
+            </div>
+            <p className="text-xs text-slate-400 mt-1">1,110 XP remaining this month</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Achievements */}
+      <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+        <h3 className="text-lg font-semibold text-white mb-4">Recent Achievements</h3>
+        <div className="space-y-3">
+          <div className="flex items-center space-x-3 p-3 bg-yellow-600/10 border border-yellow-600/20 rounded-lg">
+            <div className="w-10 h-10 bg-yellow-600/20 rounded-full flex items-center justify-center">
+              <Award className="w-5 h-5 text-yellow-400" />
+            </div>
+            <div>
+              <p className="font-medium text-white">Study Streak Master</p>
+              <p className="text-xs text-slate-400">Studied for 10 consecutive days</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-3 p-3 bg-blue-600/10 border border-blue-600/20 rounded-lg">
+            <div className="w-10 h-10 bg-blue-600/20 rounded-full flex items-center justify-center">
+              <Target className="w-5 h-5 text-blue-400" />
+            </div>
+            <div>
+              <p className="font-medium text-white">Quiz Champion</p>
+              <p className="text-xs text-slate-400">Scored 90%+ on 5 quizzes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="p-3 pb-20 space-y-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
+    <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Header */}
-      <div className="text-center space-y-1 pt-8 pb-2">
-        <h1 className="text-2xl font-bold text-white">Study Analytics</h1>
-        <p className="text-sm text-slate-300">Track your USMLE preparation progress</p>
+      <div className="flex items-center space-x-3">
+        <button onClick={() => onNavigate('home')} className="text-white hover:text-slate-300 transition-colors">
+          <ArrowLeft className="w-6 h-6" />
+        </button>
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold text-white">Analytics</h1>
+          <p className="text-slate-300 text-sm">Track your learning progress</p>
+        </div>
+        <div className="text-right">
+          <div className="flex items-center space-x-1 text-blue-400">
+            <Calendar className="w-4 h-4" />
+            <span className="text-sm font-medium">This Week</span>
+          </div>
+        </div>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex space-x-1 bg-slate-800/50 p-1 rounded-xl backdrop-blur-sm">
-        {tabs.map(tab => {
+      <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1 border border-slate-700/50">
+        {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg transition-all duration-200 ${
+              className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-md text-sm font-medium transition-all ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
               }`}
             >
               <Icon className="w-4 h-4" />
-              <span className="text-xs font-medium">{tab.label}</span>
+              <span>{tab.label}</span>
             </button>
           );
         })}
       </div>
 
-      {/* Overview Tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-4">
-          {/* Key Metrics Cards */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-4 border border-slate-600/50">
-              <div className="flex items-center space-x-2 mb-2">
-                <div className="p-1.5 bg-blue-500/20 rounded-lg">
-                  <Target className="w-4 h-4 text-blue-400" />
-                </div>
-                <div>
-                  <span className="text-xs font-medium text-slate-300">Overall Readiness</span>
-                  <div className="text-xs text-slate-400">USMLE Preparation</div>
-                </div>
-              </div>
-              <div className={`text-2xl font-bold ${getScoreColor(readinessScore.overallScore)}`}>
-                {readinessScore.overallScore}%
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-4 border border-slate-600/50">
-              <div className="flex items-center space-x-2 mb-2">
-                <div className="p-1.5 bg-emerald-500/20 rounded-lg">
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
-                </div>
-                <div>
-                  <span className="text-xs font-medium text-slate-300">Recent Performance</span>
-                  <div className="text-xs text-slate-400">Last 7 sessions</div>
-                </div>
-              </div>
-              <div className={`text-2xl font-bold ${getScoreColor(avgRecentAccuracy)}`}>
-                {avgRecentAccuracy}%
-              </div>
-            </div>
-          </div>
-
-          {/* Study Summary */}
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-4 border border-slate-600/50">
-            <div className="flex items-center space-x-2 mb-3">
-              <Brain className="w-5 h-5 text-purple-400" />
-              <h3 className="text-lg font-semibold text-white">Study Summary</h3>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-2.5 bg-slate-700/50 rounded-lg">
-                  <span className="text-slate-300 flex items-center space-x-2 text-sm">
-                    <BookOpen className="w-3 h-3" />
-                    <span>Questions</span>
-                  </span>
-                  <span className="text-blue-400 font-bold">{insights.questionsCompleted}</span>
-                </div>
-                <div className="flex justify-between items-center p-2.5 bg-slate-700/50 rounded-lg">
-                  <span className="text-slate-300 flex items-center space-x-2 text-sm">
-                    <Clock className="w-3 h-3" />
-                    <span>Study Hours</span>
-                  </span>
-                  <span className="text-amber-400 font-bold">{Math.round(insights.totalStudyHours)}h</span>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-2.5 bg-slate-700/50 rounded-lg">
-                  <span className="text-slate-300 text-sm">Strongest</span>
-                  <span className="text-emerald-400 font-semibold text-sm">{insights.strongestSubjects[0]?.subject}</span>
-                </div>
-                <div className="flex justify-between items-center p-2.5 bg-slate-700/50 rounded-lg">
-                  <span className="text-slate-300 text-sm">Focus Area</span>
-                  <span className="text-orange-400 font-semibold text-sm">{insights.weakestSubjects[0]?.subject}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Performance Tab */}
-      {activeTab === 'subjects' && (
-        <div className="space-y-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-4 border border-slate-600/50">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
-              <BookOpen className="w-5 h-5 text-blue-400" />
-              <span>Subject Performance</span>
-            </h3>
-            
-            {/* Simplified Performance Cards */}
-            <div className="space-y-3">
-              {Object.entries(readinessScore.subjectReadiness).slice(0, 6).map(([subject, score], index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg border border-slate-600/30">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">{index + 1}</span>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-white">{subject}</div>
-                      <div className="text-xs text-slate-400">Medical Subject</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-lg font-bold ${getScoreColor(score as number)}`}>
-                      {score}%
-                    </div>
-                    <div className="text-xs text-slate-400">readiness</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Action Recommendations */}
-          <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 rounded-xl p-4 border border-orange-500/30">
-            <div className="flex items-center space-x-2 mb-3">
-              <AlertTriangle className="w-5 h-5 text-orange-400" />
-              <h3 className="text-lg font-semibold text-white">Study Recommendations</h3>
-            </div>
-            <div className="space-y-2">
-              {insights.weakestSubjects.slice(0, 3).map((subject, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-600/30">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 bg-orange-500/20 rounded-lg flex items-center justify-center">
-                      <span className="text-orange-400 font-bold text-xs">{index + 1}</span>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-white">Focus on {subject.subject}</div>
-                      <div className="text-xs text-slate-400">Current: {subject.score}%</div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => onNavigate('quiz')}
-                    className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200"
-                  >
-                    Practice
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Progress Tab */}
-      {activeTab === 'progress' && (
-        <div className="space-y-4">
-          {/* Weekly Progress */}
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-4 border border-slate-600/50">
-            <h3 className="text-lg font-semibold text-white mb-3 flex items-center space-x-2">
-              <Calendar className="w-5 h-5 text-blue-400" />
-              <span>Recent Sessions</span>
-            </h3>
-            <div className="space-y-2">
-              {recentSessions.slice(0, 5).map((session, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg border border-slate-600/30">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">
-                        {new Date(session.date).getDate()}
-                      </span>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-white">
-                        {new Date(session.date).toLocaleDateString('en-US', { weekday: 'long' })}
-                      </div>
-                      <div className="text-xs text-slate-400">
-                        {session.questionsAttempted} questions
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-sm font-bold ${getScoreColor(session.accuracy)}`}>
-                      {session.accuracy}%
-                    </div>
-                    <div className="text-xs text-slate-400">accuracy</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Goal Progress */}
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-4 border border-slate-600/50">
-            <div className="flex items-center space-x-2 mb-4">
-              <Award className="w-5 h-5 text-yellow-400" />
-              <h3 className="text-lg font-semibold text-white">USMLE Readiness Goals</h3>
-            </div>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 font-medium text-sm">Step 1 Readiness</span>
-                  <span className={`font-bold ${getScoreColor(readinessScore.step1Readiness)}`}>
-                    {readinessScore.step1Readiness}%
-                  </span>
-                </div>
-                <div className="w-full bg-slate-700 rounded-full h-2">
-                  <div
-                    className="bg-gradient-to-r from-blue-500 to-blue-400 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${readinessScore.step1Readiness}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 font-medium text-sm">Step 2 Readiness</span>
-                  <span className={`font-bold ${getScoreColor(readinessScore.step2Readiness)}`}>
-                    {readinessScore.step2Readiness}%
-                  </span>
-                </div>
-                <div className="w-full bg-slate-700 rounded-full h-2">
-                  <div
-                    className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${readinessScore.step2Readiness}%` }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 p-3 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-lg border border-blue-500/20">
-              <div className="text-sm text-slate-300 flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-orange-400" />
-                <span>Estimated <strong className="text-orange-400">{readinessScore.recommendedStudyHours}</strong> hours remaining</span>
-              </div>
-              <div className="text-xs text-slate-400 mt-1">
-                Target: <strong>{new Date(readinessScore.projectedExamDate).toLocaleDateString()}</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Tab Content */}
+      <div className="mt-6">
+        {activeTab === 'overview' && renderOverviewTab()}
+        {activeTab === 'performance' && renderPerformanceTab()}
+        {activeTab === 'progress' && renderProgressTab()}
+      </div>
     </div>
   );
 };

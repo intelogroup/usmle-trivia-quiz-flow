@@ -23,6 +23,7 @@ const LearnScreen = ({
 }: LearnScreenProps) => {
   const [showCategories, setShowCategories] = useState(false);
   const [showLessons, setShowLessons] = useState(false);
+  
   const categories: Category[] = [{
     id: 'anatomy',
     name: 'Anatomy',
@@ -84,6 +85,7 @@ const LearnScreen = ({
     emoji: '🚑',
     subcategories: ['Trauma', 'Cardiac Emergencies', 'Respiratory Emergencies', 'Toxicology', 'Shock', 'Critical Care', 'Procedures']
   }];
+  
   const learningResources = [{
     id: 'quick-lessons',
     icon: FileText,
@@ -106,13 +108,16 @@ const LearnScreen = ({
     color: 'bg-purple-600',
     action: () => console.log('Navigate to practice tests')
   }];
+  
   const handleSubcategoryClick = (category: string, subcategory: string) => {
     console.log(`Selected: ${category} - ${subcategory}`);
   };
+  
   const handleContinueStudying = () => {
     console.log('Continue studying clicked - navigating to continue-studying');
     onNavigate('continue-studying');
   };
+  
   const handleLessonFilterSelect = (system: string, subject: string) => {
     console.log(`Selected lesson: ${system} - ${subject}`);
     const availableLessons = getLessonsBySystemAndSubject(system, subject);
@@ -123,6 +128,7 @@ const LearnScreen = ({
       console.log('No lessons available for this combination');
     }
   };
+  
   if (showLessons) {
     return <div className="p-4 pb-20 space-y-6">
         <div className="flex items-center space-x-3">
@@ -137,6 +143,7 @@ const LearnScreen = ({
         <LessonFilters onFilterSelect={handleLessonFilterSelect} />
       </div>;
   }
+  
   if (showCategories) {
     return <div className="p-4 pb-20 space-y-6">
         <div className="flex items-center space-x-3">
@@ -166,6 +173,7 @@ const LearnScreen = ({
         </div>
       </div>;
   }
+  
   return <div className="p-4 pb-20 space-y-6">
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-white my-[30px]">Learn</h1>
@@ -175,6 +183,19 @@ const LearnScreen = ({
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-white">Learning Resources</h3>
         <div className="grid grid-cols-1 gap-3">
+          <button onClick={() => onSystemSelect('grand-lessons')} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-xl p-4 text-left transition-all transform hover:scale-[1.02] shadow-lg">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">🏆</span>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium text-white">Grand Lessons</h4>
+                <p className="text-sm text-purple-100">Comprehensive learning paths with multiple modules</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-white" />
+            </div>
+          </button>
+
           <button onClick={() => onSystemSelect('module-selection')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
