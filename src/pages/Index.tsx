@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import HomeScreen from '@/components/HomeScreen';
 import QuizScreen from '@/components/QuizScreen';
@@ -11,6 +10,8 @@ import ModuleSelectionScreen from '@/components/lessons/ModuleSelectionScreen';
 import ModuleLessonScreen from '@/components/lessons/ModuleLessonScreen';
 import ModuleLessonListScreen from '@/components/lessons/ModuleLessonListScreen';
 import PhoneFrame from '@/components/PhoneFrame';
+import SubjectSystemSelectionScreen from '@/components/SubjectSystemSelectionScreen';
+import QuizConfigurationScreen from '@/components/QuizConfigurationScreen';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<string>('home');
@@ -68,6 +69,26 @@ const Index = () => {
           onCategorySelect={handleCategorySelect}
           onPresetSelect={handleSubjectSystemSelect}
         />;
+      case 'subject-system-selection':
+        return (
+          <SubjectSystemSelectionScreen
+            onNavigate={setCurrentScreen}
+            onSelectionComplete={handleSubjectSystemSelect}
+          />
+        );
+      case 'quiz-configuration':
+        return (
+          <QuizConfigurationScreen
+            selectedSubjects={selectedSubjects}
+            selectedSystems={selectedSystems}
+            availableQuestions={25}
+            onNavigate={setCurrentScreen}
+            onStartQuiz={(config) => {
+              console.log('Starting quiz with config:', config);
+              setCurrentScreen('quiz-play');
+            }}
+          />
+        );
       case 'review':
         return <ReviewScreen onNavigate={setCurrentScreen} />;
       case 'leaderboard':
