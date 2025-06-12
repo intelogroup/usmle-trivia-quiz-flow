@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, BookOpen, Clock, ChevronRight, CheckCircle } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, ChevronRight, CheckCircle, Star, Award } from 'lucide-react';
 import { getModuleById, getUserProgress, saveUserProgress, LessonModule, ModuleLesson } from '@/data/moduleData';
+import LessonProgress from './LessonProgress';
 
 interface ModuleLessonScreenProps {
   moduleId: string;
@@ -16,6 +17,8 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
   const [showQuiz, setShowQuiz] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [earnedXp, setEarnedXp] = useState(0);
+  const [showXpReward, setShowXpReward] = useState(false);
 
   useEffect(() => {
     const moduleData = getModuleById(moduleId);
@@ -28,6 +31,7 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
       if (moduleProgress) {
         setCurrentLessonIndex(moduleProgress.currentLesson || 0);
         setCompletedLessons(new Set(Array.from({length: moduleProgress.completedLessons || 0}, (_, i) => i)));
+        setEarnedXp(moduleProgress.earnedXp || 0);
       }
     }
   }, [moduleId]);
@@ -35,25 +39,39 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
   const currentLesson = module?.lessons[currentLessonIndex];
 
   const handleLessonComplete = () => {
-    if (!module) return;
+    if (!module || !currentLesson) return;
 
     const newCompletedLessons = new Set(completedLessons);
+    const wasAlreadyCompleted = newCompletedLessons.has(currentLessonIndex);
     newCompletedLessons.add(currentLessonIndex);
     setCompletedLessons(newCompletedLessons);
 
-    // Save progress
-    const isModuleComplete = newCompletedLessons.size === module.lessons.length;
-    saveUserProgress(moduleId, currentLessonIndex, newCompletedLessons.size, isModuleComplete);
+    // Add XP reward if lesson wasn't already completed
+    if (!wasAlreadyCompleted) {
+      const newXp = earnedXp + currentLesson.xpReward;
+      setEarnedXp(newXp);
+      setShowXpReward(true);
+      setTimeout(() => setShowXpReward(false), 2000);
+      
+      // Save progress with XP
+      const isModuleComplete = newCompletedLessons.size === module.lessons.length;
+      saveUserProgress(moduleId, currentLessonIndex, newCompletedLessons.size, isModuleComplete, newXp);
+    }
 
     if (currentLessonIndex < module.lessons.length - 1) {
-      setCurrentLessonIndex(currentLessonIndex + 1);
-      setCurrentParagraph(0);
-      setShowQuiz(false);
-      setSelectedAnswer(null);
-      setShowFeedback(false);
+      // Move to next lesson
+      setTimeout(() => {
+        setCurrentLessonIndex(currentLessonIndex + 1);
+        setCurrentParagraph(0);
+        setShowQuiz(false);
+        setSelectedAnswer(null);
+        setShowFeedback(false);
+      }, wasAlreadyCompleted ? 500 : 2000);
     } else {
-      // Module complete
-      onNavigate('module-selection');
+      // Module complete - navigate back with delay
+      setTimeout(() => {
+        onNavigate('module-selection');
+      }, wasAlreadyCompleted ? 500 : 2000);
     }
   };
 
@@ -78,6 +96,16 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
     handleLessonComplete();
   };
 
+  const handleStepClick = (step: number) => {
+    if (step <= currentLessonIndex || completedLessons.has(step)) {
+      setCurrentLessonIndex(step);
+      setCurrentParagraph(0);
+      setShowQuiz(false);
+      setSelectedAnswer(null);
+      setShowFeedback(false);
+    }
+  };
+
   if (!module || !currentLesson) {
     return (
       <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -93,18 +121,28 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
     );
   }
 
-  const progressPercentage = ((currentLessonIndex + (currentParagraph + 1) / currentLesson.content.length) / module.lessons.length) * 100;
+  const isLessonCompleted = completedLessons.has(currentLessonIndex);
 
   return (
     <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* XP Reward Animation */}
+      {showXpReward && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-xl shadow-2xl animate-scale-in flex items-center space-x-2">
+            <Star className="w-5 h-5 fill-current" />
+            <span className="font-bold">+{currentLesson.xpReward} XP</span>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center space-x-3">
-        <button onClick={() => onNavigate('module-selection')} className="text-white hover:text-slate-300">
+        <button onClick={() => onNavigate('module-selection')} className="text-white hover:text-slate-300 transition-colors">
           <ArrowLeft className="w-6 h-6" />
         </button>
         <div className="flex-1">
           <h1 className="text-lg font-bold text-white">{module.title}</h1>
-          <div className="flex items-center space-x-3 text-sm text-slate-400">
+          <div className="flex items-center space-x-4 text-sm text-slate-400">
             <div className="flex items-center space-x-1">
               <BookOpen className="w-4 h-4" />
               <span>{module.system}</span>
@@ -115,105 +153,105 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
             </div>
           </div>
         </div>
+        <div className="text-right">
+          <div className="flex items-center space-x-1 text-yellow-400">
+            <Star className="w-4 h-4 fill-current" />
+            <span className="font-bold">{earnedXp}/{module.totalXp}</span>
+          </div>
+          <div className="text-xs text-slate-400">Module XP</div>
+        </div>
       </div>
 
       {/* Progress */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-slate-400">Module Progress</span>
-          <span className="text-white font-medium">
-            Lesson {currentLessonIndex + 1} of {module.lessons.length}
-          </span>
-        </div>
-        
-        <div className="w-full bg-slate-700 rounded-full h-2">
-          <div 
-            className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
-        
-        <div className="flex justify-center space-x-2">
-          {module.lessons.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                index < currentLessonIndex 
-                  ? 'bg-green-600' 
-                  : index === currentLessonIndex
-                  ? 'bg-blue-600'
-                  : 'bg-slate-600'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+      <LessonProgress 
+        currentStep={currentLessonIndex}
+        totalSteps={module.lessons.length}
+        onStepClick={handleStepClick}
+      />
 
       {/* Lesson Content */}
       <div className="space-y-6">
         {/* Lesson Header */}
-        <div className="text-center space-y-2">
-          <h2 className="text-xl font-semibold text-white">{currentLesson.title}</h2>
-          <p className="text-slate-300">{currentLesson.description}</p>
+        <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 rounded-xl p-4 border border-slate-700/50">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-2">
+                <h2 className="text-xl font-semibold text-white">{currentLesson.title}</h2>
+                {isLessonCompleted && <CheckCircle className="w-5 h-5 text-green-400" />}
+              </div>
+              <p className="text-slate-300 text-sm">{currentLesson.description}</p>
+            </div>
+            <div className="flex items-center space-x-1 text-yellow-400 ml-4">
+              <Star className="w-4 h-4 fill-current" />
+              <span className="text-sm font-medium">{currentLesson.xpReward} XP</span>
+            </div>
+          </div>
         </div>
 
         {/* Image if available */}
         {currentLesson.image && !showQuiz && (
           <div className="text-center">
-            <img 
-              src={currentLesson.image} 
-              alt={currentLesson.imageDescription || currentLesson.title}
-              className="w-full max-w-sm mx-auto rounded-lg bg-slate-700"
-            />
+            <div className="inline-block rounded-xl overflow-hidden border border-slate-700/50 shadow-lg">
+              <img 
+                src={currentLesson.image} 
+                alt={currentLesson.imageDescription || currentLesson.title}
+                className="w-full max-w-sm mx-auto bg-slate-700"
+              />
+            </div>
             {currentLesson.imageDescription && (
-              <p className="text-sm text-slate-400 mt-2">{currentLesson.imageDescription}</p>
+              <p className="text-sm text-slate-400 mt-3 max-w-sm mx-auto">{currentLesson.imageDescription}</p>
             )}
           </div>
         )}
 
         {/* Content or Quiz */}
         {!showQuiz ? (
-          <div className="bg-slate-800 rounded-xl p-6 space-y-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-800/50 rounded-xl p-6 space-y-6 border border-slate-700/50 shadow-lg">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-400">
-                Paragraph {currentParagraph + 1} of {currentLesson.content.length}
+              <span className="text-sm font-medium text-slate-300">
+                Section {currentParagraph + 1} of {currentLesson.content.length}
               </span>
               <div className="flex space-x-1">
                 {currentLesson.content.map((_, index) => (
                   <div
                     key={index}
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      index <= currentParagraph ? 'bg-blue-600' : 'bg-slate-600'
+                    className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                      index <= currentParagraph ? 'bg-blue-500' : 'bg-slate-600'
                     }`}
                   />
                 ))}
               </div>
             </div>
             
-            <p className="text-lg leading-relaxed text-white">
-              {currentLesson.content[currentParagraph]}
-            </p>
+            <div className="prose prose-invert max-w-none">
+              <p className="text-lg leading-relaxed text-white font-light">
+                {currentLesson.content[currentParagraph]}
+              </p>
+            </div>
 
             <button
               onClick={handleNextParagraph}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center space-x-2"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <span>
                 {currentParagraph < currentLesson.content.length - 1 
                   ? 'Continue Reading' 
                   : currentLesson.type === 'interactive' 
-                  ? 'Take Quiz' 
+                  ? 'Take Knowledge Check' 
                   : 'Complete Lesson'
                 }
               </span>
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         ) : (
-          <div className="bg-slate-800 rounded-xl p-6 space-y-4">
-            <div className="text-center">
-              <h3 className="text-lg font-semibold text-white mb-4">Quick Check</h3>
-              <p className="text-white mb-6">{currentLesson.quiz?.question}</p>
+          <div className="bg-gradient-to-br from-slate-800 to-slate-800/50 rounded-xl p-6 space-y-6 border border-slate-700/50 shadow-lg">
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 bg-blue-600/20 border border-blue-600/30 rounded-xl flex items-center justify-center mx-auto">
+                <Award className="w-6 h-6 text-blue-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-white">Knowledge Check</h3>
+              <p className="text-white text-lg leading-relaxed">{currentLesson.quiz?.question}</p>
             </div>
 
             <div className="space-y-3">
@@ -222,25 +260,35 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
                   key={index}
                   onClick={() => handleQuizAnswer(index)}
                   disabled={selectedAnswer !== null}
-                  className={`w-full p-4 rounded-lg text-left transition-colors ${
+                  className={`w-full p-4 rounded-lg text-left transition-all duration-300 border ${
                     selectedAnswer === null
-                      ? 'bg-slate-700 hover:bg-slate-600 text-white'
+                      ? 'bg-slate-700/50 hover:bg-slate-600/50 text-white border-slate-600/50 hover:border-slate-500'
                       : selectedAnswer === index
                       ? index === currentLesson.quiz?.correct
-                        ? 'bg-green-600 text-white'
-                        : 'bg-red-600 text-white'
+                        ? 'bg-green-600/20 border-green-600/50 text-green-300'
+                        : 'bg-red-600/20 border-red-600/50 text-red-300'
                       : index === currentLesson.quiz?.correct
-                      ? 'bg-green-600 text-white'
-                      : 'bg-slate-700 text-slate-400'
+                      ? 'bg-green-600/20 border-green-600/50 text-green-300'
+                      : 'bg-slate-700/30 border-slate-600/30 text-slate-400'
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    <span className="w-6 h-6 rounded-full bg-slate-600 flex items-center justify-center text-sm">
+                    <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      selectedAnswer === null
+                        ? 'bg-slate-600 text-white'
+                        : selectedAnswer === index
+                        ? index === currentLesson.quiz?.correct
+                          ? 'bg-green-600 text-white'
+                          : 'bg-red-600 text-white'
+                        : index === currentLesson.quiz?.correct
+                        ? 'bg-green-600 text-white'
+                        : 'bg-slate-600 text-slate-400'
+                    }`}>
                       {String.fromCharCode(65 + index)}
                     </span>
-                    <span>{option}</span>
+                    <span className="flex-1">{option}</span>
                     {showFeedback && index === currentLesson.quiz?.correct && (
-                      <CheckCircle className="w-5 h-5 text-white ml-auto" />
+                      <CheckCircle className="w-5 h-5 text-green-400" />
                     )}
                   </div>
                 </button>
@@ -248,23 +296,24 @@ const ModuleLessonScreen = ({ moduleId, onNavigate }: ModuleLessonScreenProps) =
             </div>
 
             {showFeedback && currentLesson.quiz && (
-              <div className={`p-4 rounded-lg ${
+              <div className={`p-4 rounded-lg border ${
                 selectedAnswer === currentLesson.quiz.correct
-                  ? 'bg-green-900/30 border border-green-600/50'
-                  : 'bg-red-900/30 border border-red-600/50'
+                  ? 'bg-green-900/20 border-green-600/30'
+                  : 'bg-blue-900/20 border-blue-600/30'
               }`}>
-                <p className={`font-medium ${
-                  selectedAnswer === currentLesson.quiz.correct ? 'text-green-300' : 'text-red-300'
+                <p className={`font-semibold mb-2 ${
+                  selectedAnswer === currentLesson.quiz.correct ? 'text-green-300' : 'text-blue-300'
                 }`}>
-                  {selectedAnswer === currentLesson.quiz.correct ? 'Correct!' : 'Not quite right'}
+                  {selectedAnswer === currentLesson.quiz.correct ? '🎉 Excellent!' : '💡 Good try!'}
                 </p>
-                <p className="text-sm text-slate-300 mt-2">{currentLesson.quiz.explanation}</p>
+                <p className="text-sm text-slate-300 mb-4">{currentLesson.quiz.explanation}</p>
 
                 <button
                   onClick={handleQuizComplete}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold transition-all duration-200 mt-4"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
                 >
-                  Continue
+                  <Star className="w-4 h-4 fill-current" />
+                  <span>Earn {currentLesson.xpReward} XP & Continue</span>
                 </button>
               </div>
             )}
