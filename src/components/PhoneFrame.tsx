@@ -1,13 +1,11 @@
-
 import React from 'react';
-
 interface PhoneFrameProps {
   children: React.ReactNode;
 }
-
-const PhoneFrame = ({ children }: PhoneFrameProps) => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-900 to-black flex items-center justify-center p-4">
+const PhoneFrame = ({
+  children
+}: PhoneFrameProps) => {
+  return <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-900 to-black flex items-center justify-center p-4 my-[50px]">
       {/* Phone Frame */}
       <div className="relative">
         {/* Phone Body */}
@@ -41,8 +39,6 @@ const PhoneFrame = ({ children }: PhoneFrameProps) => {
         {/* Power Button */}
         <div className="absolute right-0 top-40 w-1 h-12 bg-slate-600 rounded-l-lg"></div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default PhoneFrame;
