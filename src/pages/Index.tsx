@@ -10,6 +10,7 @@ import LearnScreen from '@/components/LearnScreen';
 import ModuleSelectionScreen from '@/components/lessons/ModuleSelectionScreen';
 import ModuleLessonScreen from '@/components/lessons/ModuleLessonScreen';
 import ModuleLessonListScreen from '@/components/lessons/ModuleLessonListScreen';
+import PhoneFrame from '@/components/PhoneFrame';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<string>('home');
@@ -106,10 +107,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {renderScreen()}
-      <Navigation currentScreen={currentScreen} onNavigate={setCurrentScreen} />
-    </div>
+    <PhoneFrame>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {renderScreen()}
+        <Navigation currentScreen={currentScreen} onNavigate={setCurrentScreen} />
+      </div>
+    </PhoneFrame>
   );
 };
 
