@@ -54,7 +54,8 @@ const ModuleSelectionScreen = ({
     }
   };
   const completedModules = Object.values(userProgress).filter((p: any) => p.completed).length;
-  return <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+  return (
+    <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Header */}
       <div className="flex items-center space-x-3">
         <button onClick={() => onNavigate('learn')} className="text-white hover:text-slate-300 transition-colors">
@@ -118,16 +119,26 @@ const ModuleSelectionScreen = ({
         </h2>
         
         {modules.map((module, index) => {
-        const isUnlocked = isModuleUnlocked(module);
-        const isCompleted = isModuleCompleted(module.id);
-        const canPreview = canPreviewModule(module);
-        const progress = getModuleProgress(module.id);
-        const earnedXp = getEarnedXp(module.id);
-        return <div key={module.id} className="relative">
+          const isUnlocked = isModuleUnlocked(module);
+          const isCompleted = isModuleCompleted(module.id);
+          const canPreview = canPreviewModule(module);
+          const progress = getModuleProgress(module.id);
+          const earnedXp = getEarnedXp(module.id);
+
+          return (
+            <div key={module.id} className="relative">
               {/* Connection Line */}
-              {index < modules.length - 1 && <div className="absolute left-6 top-20 w-0.5 h-8 bg-gradient-to-b from-slate-600 to-slate-700"></div>}
+              {index < modules.length - 1 && (
+                <div className="absolute left-6 top-20 w-0.5 h-8 bg-gradient-to-b from-slate-600 to-slate-700"></div>
+              )}
               
-              <div className={`relative overflow-hidden rounded-xl border transition-all duration-300 hover:scale-[1.02] ${isUnlocked ? 'bg-gradient-to-br from-slate-800 to-slate-800/50 border-slate-600 hover:border-slate-500 shadow-lg' : canPreview ? 'bg-slate-800/40 border-slate-600/50 hover:border-slate-500/70' : 'bg-slate-800/20 border-slate-700/30'}`}>
+              <div className={`relative overflow-hidden rounded-xl border transition-all duration-300 hover:scale-[1.02] ${
+                isUnlocked 
+                  ? 'bg-gradient-to-br from-slate-800 to-slate-800/50 border-slate-600 hover:border-slate-500 shadow-lg' 
+                  : canPreview 
+                  ? 'bg-slate-800/40 border-slate-600/50 hover:border-slate-500/70' 
+                  : 'bg-slate-800/20 border-slate-700/30'
+              }`}>
                 
                 {/* Status Badge */}
                 <div className="absolute top-4 right-4 flex items-center space-x-2">
@@ -210,14 +221,33 @@ const ModuleSelectionScreen = ({
                     </div>}
 
                   {/* Action Button */}
-                  <button onClick={() => {
-                if (isUnlocked || canPreview) {
-                  onModuleSelect(module.id);
-                }
-              }} disabled={!isUnlocked && !canPreview} className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${isUnlocked ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5' : canPreview ? 'bg-slate-700 hover:bg-slate-600 text-blue-400 border border-blue-500/30' : 'bg-slate-700/50 text-slate-500 cursor-not-allowed'}`}>
+                  <button
+                    onClick={() => {
+                      if (isUnlocked || canPreview) {
+                        onModuleSelect(module.id);
+                      }
+                    }}
+                    disabled={!isUnlocked && !canPreview}
+                    className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${
+                      isUnlocked 
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5' 
+                        : canPreview 
+                        ? 'bg-slate-700 hover:bg-slate-600 text-blue-400 border border-blue-500/30' 
+                        : 'bg-slate-700/50 text-slate-500 cursor-not-allowed'
+                    }`}
+                  >
                     {canPreview && <Eye className="w-4 h-4" />}
                     <span>
-                      {isCompleted ? 'Review Module' : isUnlocked ? progress > 0 ? 'Continue Learning' : 'Start Learning' : canPreview ? 'Preview Available' : `Unlock at Level ${module.unlockLevel}`}
+                      {isCompleted 
+                        ? 'Review Module' 
+                        : isUnlocked 
+                        ? progress > 0 
+                          ? 'Continue Learning' 
+                          : 'Start Learning' 
+                        : canPreview 
+                        ? 'Preview Available' 
+                        : `Unlock at Level ${module.unlockLevel}`
+                      }
                     </span>
                   </button>
 
@@ -227,9 +257,12 @@ const ModuleSelectionScreen = ({
                     </div>}
                 </div>
               </div>
-            </div>;
-      })}
+            </div>
+          );
+        })}
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default ModuleSelectionScreen;

@@ -1,416 +1,343 @@
-export interface ModuleLesson {
+export interface Lesson {
   id: string;
   title: string;
   description: string;
-  content: string[];
-  estimatedTime: number;
+  duration: number;
   xpReward: number;
-  image?: string;
-  imageDescription?: string;
-  type: 'text' | 'interactive';
-  quiz?: {
-    question: string;
-    options: string[];
-    correct: number;
-    explanation: string;
-  };
+  content: string;
 }
 
 export interface LessonModule {
   id: string;
+  system: string;
   title: string;
   description: string;
-  system: string;
-  subject: string;
-  level: number;
-  unlockLevel: number;
-  lessons: ModuleLesson[];
-  estimatedTime: number;
+  icon: React.ReactNode;
   totalXp: number;
+  unlockLevel: number;
+  estimatedTime: number;
   previewAvailable: boolean;
-  icon: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   prerequisites?: string[];
+  difficulty: string;
+  lessons: Lesson[];
 }
 
-export const moduleData: LessonModule[] = [
+// Mock module database
+const moduleDatabase: LessonModule[] = [
   {
     id: 'cardio-basics',
-    title: 'Heart Fundamentals',
-    description: 'Master the basic structure and function of the cardiovascular system',
     system: 'Cardiovascular System',
-    subject: 'Anatomy',
-    level: 1,
-    unlockLevel: 0,
-    previewAvailable: true,
+    title: 'Cardiovascular Basics',
+    description: 'Understand the fundamentals of the cardiovascular system.',
     icon: '🫀',
-    estimatedTime: 20,
     totalXp: 150,
-    difficulty: 'Beginner',
-    lessons: [
-      {
-        id: 'heart-anatomy-intro',
-        title: 'Introduction to Heart Anatomy',
-        description: 'Overview of the heart as the central pump of circulation',
-        content: [
-          'The heart is a muscular organ about the size of your fist, located in the mediastinum of the thoracic cavity.',
-          'It functions as a dual pump system, with the right side pumping blood to the lungs and the left side pumping blood to the body.',
-          'The heart beats approximately 100,000 times per day, pumping about 5 liters of blood per minute.',
-          'Understanding heart anatomy is fundamental to comprehending cardiovascular physiology and pathology.'
-        ],
-        estimatedTime: 5,
-        xpReward: 25,
-        type: 'text',
-        image: '/placeholder.svg',
-        imageDescription: 'External anatomy of the human heart'
-      },
-      {
-        id: 'heart-chambers',
-        title: 'The Four Heart Chambers',
-        description: 'Detailed study of atria and ventricles',
-        content: [
-          'The heart consists of four chambers that work in coordinated sequence to maintain circulation.',
-          'The right atrium receives deoxygenated blood from the systemic circulation via the superior and inferior vena cavae.',
-          'The left atrium receives oxygenated blood from the pulmonary circulation via four pulmonary veins.',
-          'The right ventricle has thinner walls and pumps blood through the pulmonary circulation at lower pressure.',
-          'The left ventricle has the thickest muscular walls and generates high pressure to pump blood through systemic circulation.'
-        ],
-        estimatedTime: 7,
-        xpReward: 40,
-        type: 'interactive',
-        image: '/placeholder.svg',
-        imageDescription: 'Cross-sectional view showing all four heart chambers',
-        quiz: {
-          question: 'Which chamber of the heart has the thickest muscular walls?',
-          options: ['Right atrium', 'Left atrium', 'Right ventricle', 'Left ventricle'],
-          correct: 3,
-          explanation: 'The left ventricle has the thickest walls because it must generate enough pressure to pump blood throughout the entire systemic circulation.'
-        }
-      },
-      {
-        id: 'heart-valves-function',
-        title: 'Heart Valves and Blood Flow',
-        description: 'Understanding valve structure and function',
-        content: [
-          'Heart valves ensure unidirectional blood flow and prevent backflow during the cardiac cycle.',
-          'The tricuspid valve (right atrioventricular valve) has three cusps and controls flow from right atrium to right ventricle.',
-          'The bicuspid or mitral valve (left atrioventricular valve) has two cusps and controls flow from left atrium to left ventricle.',
-          'The pulmonary semilunar valve controls blood flow from the right ventricle into the pulmonary trunk.',
-          'The aortic semilunar valve controls blood flow from the left ventricle into the ascending aorta.',
-          'Valve dysfunction can lead to stenosis (narrowing) or regurgitation (leakage).'
-        ],
-        estimatedTime: 8,
-        xpReward: 50,
-        type: 'interactive',
-        quiz: {
-          question: 'What happens when the aortic valve becomes stenotic?',
-          options: [
-            'Blood flows backward into the left ventricle',
-            'The left ventricle cannot fill properly',
-            'Blood flow from the left ventricle to the aorta is restricted',
-            'The right ventricle works harder'
-          ],
-          correct: 2,
-          explanation: 'Aortic stenosis restricts blood flow from the left ventricle to the aorta, making the heart work harder to pump blood to the body.'
-        }
-      },
-      {
-        id: 'cardiac-circulation',
-        title: 'Pulmonary and Systemic Circulation',
-        description: 'The two circuits of blood circulation',
-        content: [
-          'The cardiovascular system consists of two interconnected circulatory pathways that work together.',
-          'Pulmonary circulation carries deoxygenated blood from the right ventricle to the lungs for oxygenation and returns oxygenated blood to the left atrium.',
-          'Systemic circulation carries oxygenated blood from the left ventricle to body tissues and returns deoxygenated blood to the right atrium.',
-          'The coronary circulation is a specialized part of systemic circulation that supplies the heart muscle itself.',
-          'Portal circulations, such as hepatic portal circulation, connect two capillary beds without returning to the heart.'
-        ],
-        estimatedTime: 6,
-        xpReward: 35,
-        type: 'text'
-      }
-    ]
-  },
-  {
-    id: 'cardio-physiology',
-    title: 'Cardiac Cycle & Rhythm',
-    description: 'Advanced study of heart function and electrical conduction',
-    system: 'Cardiovascular System',
-    subject: 'Physiology',
-    level: 2,
     unlockLevel: 1,
-    previewAvailable: true,
-    icon: '⚡',
-    estimatedTime: 25,
-    totalXp: 200,
-    difficulty: 'Intermediate',
-    prerequisites: ['cardio-basics'],
-    lessons: [
-      {
-        id: 'cardiac-cycle-phases',
-        title: 'Phases of the Cardiac Cycle',
-        description: 'Systole, diastole, and pressure changes',
-        content: [
-          'The cardiac cycle represents all events occurring during one complete heartbeat, lasting approximately 0.8 seconds at rest.',
-          'Ventricular systole is the contraction phase, divided into isovolumetric contraction and ventricular ejection.',
-          'Ventricular diastole is the relaxation phase, including isovolumetric relaxation, rapid filling, and atrial systole.',
-          'Pressure changes drive valve opening and closing, ensuring unidirectional blood flow.',
-          'The cardiac cycle can be analyzed using pressure-volume loops to understand cardiac work and efficiency.'
-        ],
-        estimatedTime: 10,
-        xpReward: 75,
-        type: 'interactive',
-        image: '/placeholder.svg',
-        imageDescription: 'Cardiac cycle diagram showing pressure and volume changes',
-        quiz: {
-          question: 'During which phase are all heart valves closed?',
-          options: ['Ventricular filling', 'Isovolumetric contraction', 'Ventricular ejection', 'Atrial systole'],
-          correct: 1,
-          explanation: 'During isovolumetric contraction, both AV valves and semilunar valves are closed, causing pressure to build in the ventricles without volume change.'
-        }
-      },
-      {
-        id: 'electrical-conduction',
-        title: 'Cardiac Electrical System',
-        description: 'Understanding the heart\'s natural pacemaker',
-        content: [
-          'The heart has an intrinsic electrical conduction system that coordinates synchronized contraction.',
-          'The sinoatrial (SA) node acts as the natural pacemaker, generating action potentials at 60-100 beats per minute.',
-          'Electrical impulses spread through the atria, causing atrial contraction, then reach the atrioventricular (AV) node.',
-          'The AV node delays the impulse, allowing complete atrial emptying before ventricular contraction begins.',
-          'The bundle of His, bundle branches, and Purkinje fibers rapidly conduct impulses throughout the ventricles.'
-        ],
-        estimatedTime: 8,
-        xpReward: 60,
-        type: 'interactive',
-        quiz: {
-          question: 'What is the primary function of the AV node delay?',
-          options: [
-            'To slow down the heart rate',
-            'To allow complete atrial emptying',
-            'To prevent arrhythmias',
-            'To coordinate ventricular contraction'
-          ],
-          correct: 1,
-          explanation: 'The AV node delay ensures that the atria have completely emptied their blood into the ventricles before ventricular contraction begins.'
-        }
-      },
-      {
-        id: 'cardiac-output',
-        title: 'Cardiac Output and Regulation',
-        description: 'Factors affecting heart performance',
-        content: [
-          'Cardiac output is the volume of blood pumped by the heart per minute, calculated as heart rate × stroke volume.',
-          'Stroke volume depends on preload (ventricular filling), afterload (resistance to ejection), and contractility.',
-          'The Frank-Starling mechanism allows the heart to adapt to changes in venous return automatically.',
-          'Autonomic nervous system regulation adjusts heart rate and contractility based on physiological demands.',
-          'Exercise, stress, and disease states can significantly alter cardiac output requirements.'
-        ],
-        estimatedTime: 7,
-        xpReward: 65,
-        type: 'text'
-      }
-    ]
-  },
-  {
-    id: 'respir-anatomy',
-    title: 'Respiratory System Structure',
-    description: 'Complete anatomy of the breathing system',
-    system: 'Respiratory System',
-    subject: 'Anatomy',
-    level: 1,
-    unlockLevel: 0,
-    previewAvailable: true,
-    icon: '🫁',
-    estimatedTime: 22,
-    totalXp: 175,
+    estimatedTime: 60,
+    previewAvailable: false,
     difficulty: 'Beginner',
     lessons: [
       {
-        id: 'respiratory-overview',
-        title: 'Respiratory System Overview',
-        description: 'Introduction to breathing and gas exchange',
-        content: [
-          'The respiratory system facilitates gas exchange between the atmosphere and the bloodstream.',
-          'Primary functions include oxygen uptake, carbon dioxide elimination, pH regulation, and vocalization.',
-          'The system is divided into conducting airways (nose to terminal bronchioles) and respiratory zone (respiratory bronchioles to alveoli).',
-          'Breathing involves coordinated action of respiratory muscles, primarily the diaphragm and intercostal muscles.'
-        ],
-        estimatedTime: 6,
-        xpReward: 30,
-        type: 'text',
-        image: '/placeholder.svg',
-        imageDescription: 'Complete respiratory system anatomy'
+        id: 'lesson-1',
+        title: 'Anatomy of the Heart',
+        description: 'Explore the structures of the heart.',
+        duration: 15,
+        xpReward: 25,
+        content: 'Lesson content goes here...'
       },
       {
-        id: 'upper-airway',
-        title: 'Upper Respiratory Tract',
-        description: 'Nose, pharynx, and larynx anatomy',
-        content: [
-          'The nose filters, warms, and humidifies inspired air while providing the sense of smell.',
-          'Nasal conchae increase surface area for air conditioning and create turbulent flow for better filtering.',
-          'The pharynx serves as a shared pathway for respiratory and digestive systems.',
-          'The larynx contains vocal cords for sound production and acts as a protective mechanism during swallowing.',
-          'The epiglottis prevents aspiration by covering the laryngeal inlet during swallowing.'
-        ],
-        estimatedTime: 8,
+        id: 'lesson-2',
+        title: 'Cardiac Cycle',
+        description: 'Learn about the cardiac cycle.',
+        duration: 20,
+        xpReward: 35,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-3',
+        title: 'Blood Pressure Regulation',
+        description: 'Understand how blood pressure is regulated.',
+        duration: 25,
         xpReward: 45,
-        type: 'interactive',
-        quiz: {
-          question: 'What is the primary function of the epiglottis?',
-          options: [
-            'Sound production',
-            'Air filtration',
-            'Preventing aspiration during swallowing',
-            'Warming inspired air'
-          ],
-          correct: 2,
-          explanation: 'The epiglottis covers the laryngeal inlet during swallowing to prevent food and liquids from entering the airway.'
-        }
-      },
-      {
-        id: 'lower-airway',
-        title: 'Lower Respiratory Tract',
-        description: 'Trachea, bronchi, and lung structure',
-        content: [
-          'The trachea is a rigid tube supported by C-shaped cartilage rings that maintains airway patency.',
-          'Bronchi branch progressively, with cartilage support decreasing and smooth muscle increasing in smaller airways.',
-          'Bronchioles lack cartilage and rely on smooth muscle for diameter control, important in diseases like asthma.',
-          'Alveoli are the functional units where gas exchange occurs, surrounded by dense capillary networks.',
-          'Surfactant produced by type II pneumocytes reduces surface tension and prevents alveolar collapse.'
-        ],
-        estimatedTime: 8,
-        xpReward: 50,
-        type: 'interactive',
-        quiz: {
-          question: 'What cells produce surfactant in the alveoli?',
-          options: ['Type I pneumocytes', 'Type II pneumocytes', 'Alveolar macrophages', 'Capillary endothelium'],
-          correct: 1,
-          explanation: 'Type II pneumocytes produce surfactant, which reduces surface tension and prevents alveolar collapse during expiration.'
-        }
+        content: 'Lesson content goes here...'
       }
     ]
   },
   {
-    id: 'respir-physiology',
-    title: 'Gas Exchange Mechanics',
-    description: 'Advanced respiratory physiology and gas transport',
+    id: 'resp-fundamentals',
     system: 'Respiratory System',
-    subject: 'Physiology',
-    level: 3,
-    unlockLevel: 2,
-    previewAvailable: false,
-    icon: '💨',
-    estimatedTime: 30,
-    totalXp: 250,
-    difficulty: 'Advanced',
-    prerequisites: ['respir-anatomy', 'cardio-physiology'],
+    title: 'Respiratory Fundamentals',
+    description: 'Key concepts of the respiratory system.',
+    icon: '🫁',
+    totalXp: 120,
+    unlockLevel: 1,
+    estimatedTime: 45,
+    previewAvailable: true,
+    difficulty: 'Beginner',
     lessons: [
       {
-        id: 'ventilation-mechanics',
-        title: 'Mechanics of Breathing',
-        description: 'Pressure changes and respiratory muscles',
-        content: [
-          'Ventilation occurs due to pressure gradients created by respiratory muscle activity.',
-          'Inspiration is active, involving diaphragm descent and external intercostal muscle contraction.',
-          'Expiration is passive at rest but becomes active during exercise or forced breathing.',
-          'Lung compliance and airway resistance affect the work of breathing and ventilatory efficiency.',
-          'Respiratory diseases can alter these mechanics, leading to increased work of breathing.'
-        ],
-        estimatedTime: 10,
-        xpReward: 80,
-        type: 'interactive',
-        quiz: {
-          question: 'What makes inspiration an active process?',
-          options: [
-            'Elastic recoil of lungs',
-            'Atmospheric pressure',
-            'Respiratory muscle contraction',
-            'Surface tension in alveoli'
-          ],
-          correct: 2,
-          explanation: 'Inspiration requires active contraction of respiratory muscles to expand the thoracic cavity and create negative pressure.'
-        }
+        id: 'lesson-4',
+        title: 'Anatomy of the Lungs',
+        description: 'Overview of lung structures.',
+        duration: 15,
+        xpReward: 20,
+        content: 'Lesson content goes here...'
       },
       {
-        id: 'gas-exchange-diffusion',
-        title: 'Alveolar Gas Exchange',
-        description: 'Diffusion and oxygen transport',
-        content: [
-          'Gas exchange occurs across the respiratory membrane by simple diffusion down concentration gradients.',
-          'Oxygen diffuses from alveolar air into pulmonary capillary blood.',
-          'Carbon dioxide diffuses from capillary blood into alveolar air for elimination.',
-          'Factors affecting diffusion include membrane thickness, surface area, and concentration gradients.',
-          'Pulmonary diseases can impair gas exchange by affecting any of these factors.'
-        ],
-        estimatedTime: 10,
-        xpReward: 85,
-        type: 'interactive',
-        quiz: {
-          question: 'Which factor would decrease the efficiency of gas exchange?',
-          options: [
-            'Increased alveolar surface area',
-            'Thickened respiratory membrane',
-            'Higher oxygen concentration gradient',
-            'Increased capillary blood flow'
-          ],
-          correct: 1,
-          explanation: 'A thickened respiratory membrane (as in pulmonary edema or fibrosis) increases diffusion distance and reduces gas exchange efficiency.'
-        }
+        id: 'lesson-5',
+        title: 'Gas Exchange',
+        description: 'The process of gas exchange in the lungs.',
+        duration: 15,
+        xpReward: 30,
+        content: 'Lesson content goes here...'
       },
       {
-        id: 'oxygen-transport',
-        title: 'Oxygen and CO2 Transport',
-        description: 'Blood gas transport mechanisms',
-        content: [
-          'Oxygen is transported in blood both dissolved in plasma (3%) and bound to hemoglobin (97%).',
-          'The oxygen-hemoglobin dissociation curve shows the relationship between PO2 and hemoglobin saturation.',
-          'Carbon dioxide is transported as dissolved CO2, bicarbonate ions, and carbaminohemoglobin.',
-          'The Bohr effect describes how pH and CO2 affect oxygen-hemoglobin binding.',
-          'Respiratory and metabolic factors can shift the oxygen dissociation curve, affecting oxygen delivery to tissues.'
-        ],
-        estimatedTime: 10,
-        xpReward: 85,
-        type: 'text'
+        id: 'lesson-6',
+        title: 'Breathing Mechanics',
+        description: 'How we breathe.',
+        duration: 15,
+        xpReward: 30,
+        content: 'Lesson content goes here...'
+      }
+    ]
+  },
+  {
+    id: 'renal-physiology',
+    system: 'Urogenital System',
+    title: 'Renal Physiology',
+    description: 'Explore kidney functions and fluid balance.',
+    icon: '💧',
+    totalXp: 180,
+    unlockLevel: 2,
+    estimatedTime: 70,
+    previewAvailable: false,
+    prerequisites: ['cardio-basics'],
+    difficulty: 'Intermediate',
+    lessons: [
+      {
+        id: 'lesson-7',
+        title: 'Kidney Anatomy',
+        description: 'Structures of the kidney.',
+        duration: 20,
+        xpReward: 30,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-8',
+        title: 'Filtration Process',
+        description: 'How kidneys filter blood.',
+        duration: 25,
+        xpReward: 40,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-9',
+        title: 'Fluid Balance',
+        description: 'Regulation of body fluids.',
+        duration: 25,
+        xpReward: 40,
+        content: 'Lesson content goes here...'
+      }
+    ]
+  },
+  {
+    id: 'neuro-anatomy',
+    system: 'Nervous System',
+    title: 'Neuroanatomy Overview',
+    description: 'Basic brain and nerve structures.',
+    icon: '🧠',
+    totalXp: 200,
+    unlockLevel: 3,
+    estimatedTime: 80,
+    previewAvailable: false,
+    prerequisites: ['resp-fundamentals'],
+    difficulty: 'Intermediate',
+    lessons: [
+      {
+        id: 'lesson-10',
+        title: 'Brain Structures',
+        description: 'Main parts of the brain.',
+        duration: 25,
+        xpReward: 40,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-11',
+        title: 'Nerve Pathways',
+        description: 'How nerves transmit signals.',
+        duration: 30,
+        xpReward: 50,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-12',
+        title: 'Spinal Cord',
+        description: 'Function of the spinal cord.',
+        duration: 25,
+        xpReward: 40,
+        content: 'Lesson content goes here...'
+      }
+    ]
+  },
+  {
+    id: 'gastro-physiology',
+    system: 'Digestive System',
+    title: 'Gastrointestinal Physiology',
+    description: 'Digestive processes and nutrient absorption.',
+    icon: '🍔',
+    totalXp: 220,
+    unlockLevel: 4,
+    estimatedTime: 90,
+    previewAvailable: false,
+    prerequisites: ['renal-physiology'],
+    difficulty: 'Advanced',
+    lessons: [
+      {
+        id: 'lesson-13',
+        title: 'Digestion Basics',
+        description: 'Initial steps of digestion.',
+        duration: 30,
+        xpReward: 45,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-14',
+        title: 'Nutrient Absorption',
+        description: 'How nutrients are absorbed.',
+        duration: 30,
+        xpReward: 55,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-15',
+        title: 'Waste Elimination',
+        description: 'Process of waste removal.',
+        duration: 30,
+        xpReward: 50,
+        content: 'Lesson content goes here...'
+      }
+    ]
+  },
+  {
+    id: 'endo-hormones',
+    system: 'Endocrine System',
+    title: 'Endocrine Hormones',
+    description: 'Hormone functions and regulation.',
+    icon: '🧪',
+    totalXp: 250,
+    unlockLevel: 5,
+    estimatedTime: 100,
+    previewAvailable: false,
+    prerequisites: ['neuro-anatomy'],
+    difficulty: 'Advanced',
+    lessons: [
+      {
+        id: 'lesson-16',
+        title: 'Hormone Types',
+        description: 'Different types of hormones.',
+        duration: 35,
+        xpReward: 50,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-17',
+        title: 'Regulation Mechanisms',
+        description: 'How hormones are regulated.',
+        duration: 35,
+        xpReward: 60,
+        content: 'Lesson content goes here...'
+      },
+      {
+        id: 'lesson-18',
+        title: 'Hormone Interactions',
+        description: 'How hormones interact.',
+        duration: 30,
+        xpReward: 50,
+        content: 'Lesson content goes here...'
       }
     ]
   }
 ];
 
-export const getModulesBySystem = (system: string): LessonModule[] => {
-  return moduleData.filter(module => module.system === system);
+// Mock user progress data with detailed lesson tracking
+let userProgress = {
+  'cardio-basics': {
+    completed: false,
+    completedLessons: 1,
+    earnedXp: 25,
+    unlockedLessons: 2,
+    completedLessonIds: ['lesson-1']
+  },
+  'resp-fundamentals': {
+    completed: false,
+    completedLessons: 0,
+    earnedXp: 0,
+    unlockedLessons: 1,
+    completedLessonIds: []
+  }
 };
 
-export const getModuleById = (id: string): LessonModule | undefined => {
-  return moduleData.find(module => module.id === id);
+// Function to retrieve user progress from local storage (or initialize)
+export const getUserProgress = () => {
+  // For simplicity, using a mock. In real app, use local storage.
+  return userProgress;
 };
 
-export const getUserProgress = (): { [moduleId: string]: { completed: boolean; currentLesson: number; completedLessons: number; earnedXp: number } } => {
-  const progress = localStorage.getItem('moduleProgress');
-  return progress ? JSON.parse(progress) : {};
+// Function to update user progress (e.g., when a lesson is completed)
+export const updateUserProgress = (moduleId: string, lessonId: string, xp: number) => {
+  if (!userProgress[moduleId]) {
+    userProgress[moduleId] = {
+      completed: false,
+      completedLessons: 0,
+      earnedXp: 0,
+      unlockedLessons: 1,
+      completedLessonIds: []
+    };
+  }
+
+  // Unlock next lesson
+  const module = moduleDatabase.find(m => m.id === moduleId);
+  const currentLessonIndex = module?.lessons.findIndex(lesson => lesson.id === lessonId) ?? -1;
+  if (currentLessonIndex !== -1 && currentLessonIndex + 1 < (module?.lessons.length ?? 0)) {
+    userProgress[moduleId].unlockedLessons = Math.max(userProgress[moduleId].unlockedLessons, currentLessonIndex + 2);
+  }
+
+  userProgress[moduleId].completedLessons += 1;
+  userProgress[moduleId].earnedXp += xp;
+  userProgress[moduleId].completedLessonIds = [...(userProgress[moduleId].completedLessonIds || []), lessonId];
+
+  // Check if module is completed
+  if (userProgress[moduleId].completedLessons >= moduleDatabase.find(m => m.id === moduleId)!.lessons.length) {
+    userProgress[moduleId].completed = true;
+  }
+
+  console.log(`Updated progress for module ${moduleId}:`, userProgress[moduleId]);
 };
 
-export const saveUserProgress = (moduleId: string, currentLesson: number, completedLessons: number, completed: boolean = false, earnedXp: number = 0) => {
-  const progress = getUserProgress();
-  const existingXp = progress[moduleId]?.earnedXp || 0;
-  progress[moduleId] = { completed, currentLesson, completedLessons, earnedXp: Math.max(existingXp, earnedXp) };
-  localStorage.setItem('moduleProgress', JSON.stringify(progress));
-};
-
+// Function to determine the highest unlocked level
 export const getUnlockedLevel = (): number => {
-  const progress = getUserProgress();
-  let maxLevel = 0;
-  
-  Object.values(progress).forEach(moduleProgress => {
-    if (moduleProgress.completed) {
-      maxLevel = Math.max(maxLevel, 1);
-    }
-  });
-  
-  return maxLevel;
+  // Logic to determine unlocked level based on user progress
+  // This is a placeholder; implement actual logic
+  return 2;
 };
 
+// Function to calculate total user XP
 export const getTotalUserXp = (): number => {
-  const progress = getUserProgress();
-  return Object.values(progress).reduce((total, moduleProgress) => total + (moduleProgress.earnedXp || 0), 0);
+  // Logic to calculate total XP from all modules
+  let totalXp = 0;
+  for (const moduleId in userProgress) {
+    totalXp += userProgress[moduleId].earnedXp || 0;
+  }
+  return totalXp;
+};
+
+export const getModulesBySystem = (system: string): LessonModule[] => {
+  return moduleDatabase.filter(module => module.system === system);
+};
+
+export const getModuleById = (moduleId: string): LessonModule | null => {
+  return moduleDatabase.find(module => module.id === moduleId) || null;
+};
+
+export const getAllModules = (): LessonModule[] => {
+  return moduleDatabase;
 };

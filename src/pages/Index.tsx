@@ -1,170 +1,128 @@
-import { useState } from "react";
-import Navigation from "@/components/Navigation";
-import HomeScreen from "@/components/HomeScreen";
-import QuizScreen from "@/components/QuizScreen";
-import LeaderboardScreen from "@/components/LeaderboardScreen";
-import AnalyticsScreen from "@/components/AnalyticsScreen";
-import CategoryScreen from "@/components/CategoryScreen";
-import QuizPlayScreen from "@/components/QuizPlayScreen";
-import SubjectSystemSelectionScreen from "@/components/SubjectSystemSelectionScreen";
-import SettingsScreen from "@/components/SettingsScreen";
-import ProfileScreen from "@/components/ProfileScreen";
-import ReviewScreen from "@/components/ReviewScreen";
-import LearnScreen from "@/components/LearnScreen";
-import ContinueStudyingScreen from "@/components/ContinueStudyingScreen";
-import QuizConfigurationScreen, { QuizConfig } from "@/components/QuizConfigurationScreen";
-import QuickLessonScreen from "@/components/lessons/QuickLessonScreen";
-import ModuleSelectionScreen from "@/components/lessons/ModuleSelectionScreen";
-import ModuleLessonScreen from "@/components/lessons/ModuleLessonScreen";
-import PhoneFrame from "@/components/PhoneFrame";
-import { getQuestionCount } from "@/data/questionBank";
-
-type Screen = 'home' | 'quiz' | 'leaderboard' | 'analytics' | 'category' | 'quiz-play' | 'subject-system-selection' | 'quiz-configuration' | 'settings' | 'profile' | 'review' | 'learn' | 'continue-studying' | 'quick-lesson' | 'module-selection' | 'module-lesson';
+import { useState } from 'react';
+import HomeScreen from '@/components/HomeScreen';
+import QuizScreen from '@/components/QuizScreen';
+import ReviewScreen from '@/components/ReviewScreen';
+import CategorySelectionScreen from '@/components/selection/CategorySelectionScreen';
+import SubjectSystemSelectionScreen from '@/components/selection/SubjectSystemSelectionScreen';
+import LessonScreen from '@/components/lessons/LessonScreen';
+import LeaderboardScreen from '@/components/LeaderboardScreen';
+import AnalyticsScreen from '@/components/AnalyticsScreen';
+import Navigation from '@/components/Navigation';
+import LearnScreen from '@/components/LearnScreen';
+import ModuleSelectionScreen from '@/components/lessons/ModuleSelectionScreen';
+import ModuleLessonScreen from '@/components/lessons/ModuleLessonScreen';
+import ModuleLessonListScreen from '@/components/lessons/ModuleLessonListScreen';
 
 const Index = () => {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('home');
+  const [currentScreen, setCurrentScreen] = useState<string>('home');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
-  const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
   const [selectedLessonId, setSelectedLessonId] = useState<string>('');
-
-  const handleNavigation = (screen: string) => {
-    console.log(`Navigation requested: ${screen}`);
-    console.log(`Current screen: ${currentScreen}`);
-    
-    if (screen === 'module-selection') {
-      setCurrentScreen('module-selection' as Screen);
-    } else if (screen === 'module-lesson') {
-      setCurrentScreen('module-lesson' as Screen);
-    } else {
-      setCurrentScreen(screen as Screen);
-    }
-    console.log(`Screen changed to: ${screen}`);
-  };
+  const [selectedModuleId, setSelectedModuleId] = useState<string>('');
+  const [selectedSystem, setSelectedSystem] = useState<string>('');
 
   const handleCategorySelect = (category: string) => {
-    // For backward compatibility with old category system
+    console.log('Category selected:', category);
     setSelectedCategory(category);
-    setCurrentScreen('subject-system-selection');
+    setCurrentScreen('lesson');
   };
 
-  const handleSubjectSystemSelection = (subjects: string[], systems: string[]) => {
+  const handleSubjectSystemSelect = (subjects: string[], systems: string[]) => {
+    console.log('Subjects selected:', subjects, 'Systems selected:', systems);
     setSelectedSubjects(subjects);
     setSelectedSystems(systems);
-    setCurrentScreen('quiz-play');
+    setCurrentScreen('lesson');
   };
 
-  const handlePresetSelect = (subjects: string[], systems: string[]) => {
-    setSelectedSubjects(subjects);
-    setSelectedSystems(systems);
-    setCurrentScreen('quiz-play');
-  };
-
-  const handleQuizConfiguration = (subjects: string[], systems: string[]) => {
-    setSelectedSubjects(subjects);
-    setSelectedSystems(systems);
-    setCurrentScreen('quiz-configuration');
-  };
-
-  const handleStartQuizWithConfig = (config: QuizConfig) => {
-    setQuizConfig(config);
-    setSelectedSubjects(config.subjects);
-    setSelectedSystems(config.systems);
-    setCurrentScreen('quiz-play');
-  };
-
-  const handleQuizRestart = (subjects: string[], systems: string[]) => {
-    setSelectedSubjects(subjects);
-    setSelectedSystems(systems);
-    setCurrentScreen('quiz-configuration');
-  };
-
-  const handleLessonSelect = (lessonId: string) => {
-    setSelectedLessonId(lessonId);
-    setCurrentScreen('quick-lesson');
+  const handleLessonComplete = () => {
+    console.log('Lesson completed, navigating back to learn screen');
+    setCurrentScreen('learn');
   };
 
   const handleModuleSelect = (moduleId: string) => {
-    setSelectedLessonId(moduleId);
+    console.log('Module selected:', moduleId);
+    setSelectedModuleId(moduleId);
+    setCurrentScreen('module-lesson-list');
+  };
+
+  const handleLessonSelect = (moduleId: string, lessonId: string) => {
+    console.log('Lesson selected:', moduleId, lessonId);
+    setSelectedModuleId(moduleId);
+    setSelectedLessonId(lessonId);
     setCurrentScreen('module-lesson');
   };
 
+  const handleSystemSelect = (system: string) => {
+    console.log('System selected:', system);
+    setSelectedSystem(system);
+    setCurrentScreen('module-selection');
+  };
+
   const renderScreen = () => {
-    console.log(`Rendering screen: ${currentScreen}`);
     switch (currentScreen) {
       case 'home':
-        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
+        return <HomeScreen onNavigate={setCurrentScreen} />;
       case 'quiz':
-        return (
-          <QuizScreen 
-            onNavigate={handleNavigation} 
-            onCategorySelect={handleCategorySelect}
-            onPresetSelect={handlePresetSelect}
-          />
-        );
-      case 'leaderboard':
-        return <LeaderboardScreen />;
-      case 'analytics':
-        return <AnalyticsScreen />;
-      case 'category':
-        return <CategoryScreen onCategorySelect={handleCategorySelect} />;
-      case 'subject-system-selection':
-        return (
-          <SubjectSystemSelectionScreen 
-            onNavigate={handleNavigation} 
-            onSelectionComplete={handleQuizConfiguration}
-          />
-        );
-      case 'quiz-configuration':
-        return (
-          <QuizConfigurationScreen
-            selectedSubjects={selectedSubjects}
-            selectedSystems={selectedSystems}
-            availableQuestions={getQuestionCount(selectedSubjects, selectedSystems)}
-            onNavigate={handleNavigation}
-            onStartQuiz={handleStartQuizWithConfig}
-          />
-        );
-      case 'quiz-play':
-        return (
-          <QuizPlayScreen 
-            selectedSubjects={selectedSubjects}
-            selectedSystems={selectedSystems}
-            quizConfig={quizConfig}
-            onNavigate={handleNavigation} 
-          />
-        );
-      case 'settings':
-        return <SettingsScreen onNavigate={handleNavigation} />;
-      case 'profile':
-        return <ProfileScreen onNavigate={handleNavigation} />;
+        return <QuizScreen 
+          onNavigate={setCurrentScreen} 
+          onCategorySelect={handleCategorySelect}
+          onPresetSelect={handleSubjectSystemSelect}
+        />;
       case 'review':
-        return <ReviewScreen onNavigate={handleNavigation} />;
+        return <ReviewScreen onNavigate={setCurrentScreen} />;
+      case 'category':
+        return <CategorySelectionScreen onCategorySelect={handleCategorySelect} onNavigate={setCurrentScreen} />;
+      case 'subject-system-selection':
+        return <SubjectSystemSelectionScreen onSubjectSystemSelect={handleSubjectSystemSelect} onNavigate={setCurrentScreen} />;
+      case 'lesson':
+        return <LessonScreen 
+          category={selectedCategory} 
+          subjects={selectedSubjects}
+          systems={selectedSystems}
+          onNavigate={setCurrentScreen}
+        />;
+      case 'leaderboard':
+        return <LeaderboardScreen onNavigate={setCurrentScreen} />;
+      case 'analytics':
+        return <AnalyticsScreen onNavigate={setCurrentScreen} />;
       case 'learn':
-        return <LearnScreen onNavigate={handleNavigation} onLessonSelect={handleLessonSelect} />;
-      case 'quick-lesson':
-        return <QuickLessonScreen lessonId={selectedLessonId} onNavigate={handleNavigation} />;
-      case 'continue-studying':
-        console.log('Rendering ContinueStudyingScreen');
-        return <ContinueStudyingScreen onNavigate={handleNavigation} />;
+        return <LearnScreen onNavigate={setCurrentScreen} onSystemSelect={handleSystemSelect} />;
       case 'module-selection':
-        return <ModuleSelectionScreen system="Cardiovascular System" onNavigate={handleNavigation} onModuleSelect={handleModuleSelect} />;
+        return (
+          <ModuleSelectionScreen
+            system={selectedSystem}
+            onNavigate={setCurrentScreen}
+            onModuleSelect={handleModuleSelect}
+          />
+        );
+      case 'module-lesson-list':
+        return (
+          <ModuleLessonListScreen
+            moduleId={selectedModuleId}
+            onNavigate={setCurrentScreen}
+            onLessonSelect={handleLessonSelect}
+          />
+        );
       case 'module-lesson':
-        return <ModuleLessonScreen moduleId={selectedLessonId} onNavigate={handleNavigation} />;
+        return (
+          <ModuleLessonScreen
+            moduleId={selectedModuleId}
+            lessonId={selectedLessonId}
+            onNavigate={setCurrentScreen}
+            onComplete={handleLessonComplete}
+          />
+        );
       default:
-        console.log(`Unknown screen: ${currentScreen}, defaulting to home`);
-        return <HomeScreen onNavigate={handleNavigation} onQuizRestart={handleQuizRestart} />;
+        return <div>Screen not found</div>;
     }
   };
 
   return (
-    <PhoneFrame>
-      <div className="max-w-md mx-auto bg-slate-900 min-h-screen relative">
-        {renderScreen()}
-        <Navigation currentScreen={currentScreen} onNavigate={handleNavigation} />
-      </div>
-    </PhoneFrame>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {renderScreen()}
+      <Navigation currentScreen={currentScreen} onNavigate={setCurrentScreen} />
+    </div>
   );
 };
 
