@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import HomeScreen from '@/components/HomeScreen';
 import QuizScreen from '@/components/QuizScreen';
@@ -12,6 +13,8 @@ import ModuleLessonListScreen from '@/components/lessons/ModuleLessonListScreen'
 import PhoneFrame from '@/components/PhoneFrame';
 import SubjectSystemSelectionScreen from '@/components/SubjectSystemSelectionScreen';
 import QuizConfigurationScreen from '@/components/QuizConfigurationScreen';
+import QuizPlayScreen from '@/components/QuizPlayScreen';
+import { QuizConfig } from '@/components/QuizConfigurationScreen';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<string>('home');
@@ -21,6 +24,7 @@ const Index = () => {
   const [selectedLessonId, setSelectedLessonId] = useState<string>('');
   const [selectedModuleId, setSelectedModuleId] = useState<string>('');
   const [selectedSystem, setSelectedSystem] = useState<string>('');
+  const [quizConfig, setQuizConfig] = useState<QuizConfig | null>(null);
 
   const handleCategorySelect = (category: string) => {
     console.log('Category selected:', category);
@@ -32,7 +36,7 @@ const Index = () => {
     console.log('Subjects selected:', subjects, 'Systems selected:', systems);
     setSelectedSubjects(subjects);
     setSelectedSystems(systems);
-    setCurrentScreen('lesson');
+    setCurrentScreen('quiz-configuration');
   };
 
   const handleLessonComplete = () => {
@@ -85,8 +89,18 @@ const Index = () => {
             onNavigate={setCurrentScreen}
             onStartQuiz={(config) => {
               console.log('Starting quiz with config:', config);
+              setQuizConfig(config);
               setCurrentScreen('quiz-play');
             }}
+          />
+        );
+      case 'quiz-play':
+        return (
+          <QuizPlayScreen
+            selectedSubjects={selectedSubjects}
+            selectedSystems={selectedSystems}
+            quizConfig={quizConfig}
+            onNavigate={setCurrentScreen}
           />
         );
       case 'review':
