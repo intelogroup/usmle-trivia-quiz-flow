@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Lock, CheckCircle, Star, Play } from 'lucide-react';
+import { ArrowLeft, Lock, CheckCircle, Star, Play, Trophy } from 'lucide-react';
 import { getModuleById, getUserProgress, updateUserProgress, LessonModule, Lesson } from '@/data/moduleData';
 
 interface ModuleLessonListScreenProps {
@@ -34,7 +34,7 @@ const ModuleLessonListScreen = ({
   const moduleProgress = userProgress[moduleId] || {
     completed: false,
     completedLessons: 0,
-    earnedXp: 0,
+    earnedPoints: 0,
     unlockedLessons: 1
   };
 
@@ -84,10 +84,10 @@ const ModuleLessonListScreen = ({
         </div>
         <div className="text-right">
           <div className="flex items-center space-x-1 text-yellow-400">
-            <Star className="w-4 h-4 fill-current" />
-            <span className="font-bold">{moduleProgress.earnedXp}/{module.totalXp}</span>
+            <Trophy className="w-4 h-4 fill-current" />
+            <span className="font-bold">{moduleProgress.earnedPoints}/{module.totalPoints}</span>
           </div>
-          <div className="text-xs text-slate-400">XP Progress</div>
+          <div className="text-xs text-slate-400">Points Progress</div>
         </div>
       </div>
 
@@ -184,8 +184,8 @@ const ModuleLessonListScreen = ({
                           <div className={`flex items-center space-x-1 ${
                             isLocked ? 'text-slate-600' : 'text-yellow-400'
                           }`}>
-                            <Star className="w-3 h-3 fill-current" />
-                            <span className="text-xs font-medium">+{lesson.xpReward} XP</span>
+                            <Trophy className="w-3 h-3 fill-current" />
+                            <span className="text-xs font-medium">+{lesson.pointsReward} pts</span>
                           </div>
                         </div>
 

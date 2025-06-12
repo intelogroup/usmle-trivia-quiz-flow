@@ -30,7 +30,7 @@ export interface UserProfile {
   name: string;
   avatar: string;
   level: number;
-  totalXP: number;
+  totalXP: number; // Keep as totalXP for backwards compatibility, but represents points
   joinDate: string;
   studyStreak: number;
   lastStudyDate: string;

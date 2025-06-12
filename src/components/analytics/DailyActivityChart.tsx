@@ -1,3 +1,4 @@
+
 import { Activity, TrendingUp } from 'lucide-react';
 import { getUSMLEAnalytics } from '@/utils/usmleAnalyticsManager';
 const DailyActivityChart = () => {
@@ -71,12 +72,19 @@ const DailyActivityChart = () => {
               
               {/* Activity bar - cleaner design */}
               <div className="relative w-full flex flex-col justify-end h-20">
-                <div className="bg-gradient-to-t from-blue-600 to-blue-400 rounded-md w-full transition-all duration-300 hover:from-blue-500 hover:to-blue-300 cursor-pointer group" style={{
+                <div className="bg-gradient-to-t from-blue-600 to-blue-400 rounded-md w-full transition-all duration-300 hover:from-blue-500 hover:to-blue-300 cursor-pointer group relative" style={{
               height: `${getBarHeight(day.questions)}%`
             }}>
+                  {/* Minutes label inside the bar */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-xs font-bold text-white opacity-90">
+                      {Math.round(day.duration * 60)}m
+                    </span>
+                  </div>
+                  
                   {/* Simplified hover tooltip */}
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-slate-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg">
-                    {day.questions} questions
+                    {day.questions} questions, {Math.round(day.duration * 60)}min
                   </div>
                 </div>
               </div>

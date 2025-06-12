@@ -17,7 +17,7 @@ const ProfileScreen = ({ onNavigate }: ProfileScreenProps) => {
     { label: "Quizzes Taken", value: userProgress.totalQuizzes.toString(), icon: BookOpen, color: "text-blue-400" },
     { label: "Average Score", value: `${userProgress.averageScore}%`, icon: Target, color: "text-orange-400" },
     { label: "Study Streak", value: `${userProfile.studyStreak} day${userProfile.studyStreak !== 1 ? 's' : ''}`, icon: Calendar, color: "text-green-400" },
-    { label: "Total XP", value: userProfile.totalXP.toString(), icon: Star, color: "text-yellow-400" },
+    { label: "Total Points", value: userProfile.totalXP.toString(), icon: Star, color: "text-yellow-400" },
   ];
 
   return (

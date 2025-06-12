@@ -42,12 +42,12 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
     { subject: 'Biochemistry', score: 81, fullMark: 100 }
   ];
 
-  // Weekly XP data
-  const xpProgressData = [
-    { week: 'Week 1', xp: 320 },
-    { week: 'Week 2', xp: 485 },
-    { week: 'Week 3', xp: 650 },
-    { week: 'Week 4', xp: 890 }
+  // Weekly Points data
+  const pointsProgressData = [
+    { week: 'Week 1', points: 320 },
+    { week: 'Week 2', points: 485 },
+    { week: 'Week 3', points: 650 },
+    { week: 'Week 4', points: 890 }
   ];
 
   const tabs = [
@@ -79,7 +79,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
               <Award className="w-4 h-4 text-green-400" />
             </div>
             <div>
-              <p className="text-xs text-slate-400">Total XP</p>
+              <p className="text-xs text-slate-400">Total Points</p>
               <p className="text-lg font-bold text-white">4,289</p>
             </div>
           </div>
@@ -260,17 +260,17 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
         </div>
       </div>
 
-      {/* XP Progress Chart */}
+      {/* Points Progress Chart */}
       <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
-        <h3 className="text-lg font-semibold text-white mb-4">XP Progress</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Points Progress</h3>
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={xpProgressData}>
+            <LineChart data={pointsProgressData}>
               <XAxis dataKey="week" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
               <Line 
                 type="monotone" 
-                dataKey="xp" 
+                dataKey="points" 
                 stroke="#3b82f6" 
                 strokeWidth={3}
                 dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
@@ -278,7 +278,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <p className="text-sm text-slate-400 mt-2">Weekly XP accumulation trend</p>
+        <p className="text-sm text-slate-400 mt-2">Weekly points accumulation trend</p>
       </div>
 
       {/* Enhanced Goals Section */}
@@ -317,6 +317,17 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
             </div>
             <p className="text-xs text-slate-400 mt-1">4 more modules to explore</p>
           </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-slate-300">Weekly Points Target</span>
+              <span className="text-sm text-white font-medium">890 / 1000</span>
+            </div>
+            <div className="w-full bg-slate-600 rounded-full h-3">
+              <div className="bg-gradient-to-r from-yellow-500 to-orange-500 h-3 rounded-full" style={{ width: '89%' }} />
+            </div>
+            <p className="text-xs text-slate-400 mt-1">110 points to reach weekly target</p>
+          </div>
         </div>
       </div>
 
@@ -339,8 +350,8 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
               <Target className="w-5 h-5 text-blue-400" />
             </div>
             <div>
-              <p className="font-medium text-white">Quiz Champion</p>
-              <p className="text-xs text-slate-400">Scored 90%+ on 5 quizzes</p>
+              <p className="font-medium text-white">Points Collector</p>
+              <p className="text-xs text-slate-400">Earned 1000+ points this month</p>
             </div>
           </div>
         </div>
