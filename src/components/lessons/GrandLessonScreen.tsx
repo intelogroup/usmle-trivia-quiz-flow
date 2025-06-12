@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { ArrowLeft, Lock, CheckCircle, Star, Clock, BookOpen, ChevronRight, Trophy, Target } from 'lucide-react';
+import { ArrowLeft, Lock, CheckCircle, Clock, BookOpen, ChevronRight, Trophy, Target } from 'lucide-react';
 
 interface GrandLessonScreenProps {
   onNavigate: (screen: string) => void;
@@ -13,7 +13,6 @@ interface Module {
   description: string;
   lessonCount: number;
   duration: string;
-  xpReward: number;
   isLocked: boolean;
   progress: number;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
@@ -57,7 +56,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Essential anatomical structures and systems',
           lessonCount: 12,
           duration: '2.5 hours',
-          xpReward: 300,
           isLocked: false,
           progress: 100,
           difficulty: 'Beginner'
@@ -68,7 +66,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'How body systems work together',
           lessonCount: 10,
           duration: '2 hours',
-          xpReward: 250,
           isLocked: false,
           progress: 75,
           difficulty: 'Beginner'
@@ -79,7 +76,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Cellular processes and genetic principles',
           lessonCount: 8,
           duration: '1.5 hours',
-          xpReward: 200,
           isLocked: false,
           progress: 0,
           difficulty: 'Intermediate'
@@ -90,7 +86,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Chemical processes in living organisms',
           lessonCount: 15,
           duration: '3 hours',
-          xpReward: 400,
           isLocked: true,
           progress: 0,
           difficulty: 'Intermediate'
@@ -116,7 +111,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Comprehensive patient history techniques',
           lessonCount: 8,
           duration: '2 hours',
-          xpReward: 200,
           isLocked: false,
           progress: 100,
           difficulty: 'Beginner'
@@ -127,7 +121,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Systematic approach to patient examination',
           lessonCount: 12,
           duration: '3 hours',
-          xpReward: 300,
           isLocked: false,
           progress: 25,
           difficulty: 'Intermediate'
@@ -138,7 +131,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Clinical decision-making and differential diagnosis',
           lessonCount: 10,
           duration: '2.5 hours',
-          xpReward: 350,
           isLocked: true,
           progress: 0,
           difficulty: 'Advanced'
@@ -164,8 +156,7 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Basic principles of disease processes',
           lessonCount: 14,
           duration: '3.5 hours',
-          xpReward: 400,
-          isLocked: false,
+          isLocked: true,
           progress: 0,
           difficulty: 'Intermediate'
         },
@@ -175,7 +166,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Bacterial, viral, and parasitic infections',
           lessonCount: 16,
           duration: '4 hours',
-          xpReward: 450,
           isLocked: true,
           progress: 0,
           difficulty: 'Intermediate'
@@ -201,7 +191,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           description: 'Drug absorption, distribution, and elimination',
           lessonCount: 10,
           duration: '2.5 hours',
-          xpReward: 300,
           isLocked: true,
           progress: 0,
           difficulty: 'Advanced'
@@ -224,7 +213,11 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
     }
   };
 
-  const getDifficultyColor = (difficulty: string) => {
+  const getDifficultyColor = (difficulty: string, isLocked: boolean) => {
+    if (isLocked) {
+      return 'text-slate-600 bg-slate-700/30 border-slate-700/30';
+    }
+    
     switch (difficulty) {
       case 'Beginner':
         return 'text-green-400 bg-green-400/10 border-green-400/20';
@@ -321,14 +314,10 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
                   </div>
 
                   {/* Stats */}
-                  <div className="grid grid-cols-4 gap-4 mt-4">
+                  <div className="grid grid-cols-3 gap-4 mt-4">
                     <div className="text-center">
                       <div className="text-sm font-bold text-white">{grandLesson.completedModules}/{grandLesson.totalModules}</div>
                       <div className="text-xs text-slate-400">Modules</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-sm font-bold text-yellow-400">{grandLesson.earnedXP}/{grandLesson.totalXP}</div>
-                      <div className="text-xs text-slate-400">XP</div>
                     </div>
                     <div className="text-center">
                       <div className="text-sm font-bold text-blue-400">{grandLesson.estimatedTime}</div>
@@ -363,7 +352,7 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
                       disabled={module.isLocked}
                       className={`w-full p-4 rounded-lg border transition-all duration-300 text-left ${
                         module.isLocked 
-                          ? 'bg-slate-800/40 border-slate-700/30 cursor-not-allowed opacity-60'
+                          ? 'bg-slate-800/20 border-slate-700/20 cursor-not-allowed opacity-50'
                           : module.progress === 100
                           ? 'bg-gradient-to-r from-green-600/20 to-green-500/10 border-green-600/30 hover:border-green-500/50'
                           : module.progress > 0
@@ -375,7 +364,7 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
                         {/* Status Icon */}
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                           module.isLocked
-                            ? 'bg-slate-700/50 text-slate-500'
+                            ? 'bg-slate-700/30 text-slate-500'
                             : module.progress === 100
                             ? 'bg-green-600/20 text-green-400'
                             : module.progress > 0
@@ -397,7 +386,7 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
                             <h5 className={`font-medium ${module.isLocked ? 'text-slate-500' : 'text-white'}`}>
                               {module.title}
                             </h5>
-                            <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(module.difficulty)}`}>
+                            <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(module.difficulty, module.isLocked)}`}>
                               {module.difficulty}
                             </div>
                           </div>
@@ -414,10 +403,6 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
                               <div className={`flex items-center space-x-1 ${module.isLocked ? 'text-slate-600' : 'text-slate-400'}`}>
                                 <Clock className="w-3 h-3" />
                                 <span>{module.duration}</span>
-                              </div>
-                              <div className={`flex items-center space-x-1 ${module.isLocked ? 'text-slate-600' : 'text-yellow-400'}`}>
-                                <Star className="w-3 h-3 fill-current" />
-                                <span>{module.xpReward} XP</span>
                               </div>
                             </div>
                             
