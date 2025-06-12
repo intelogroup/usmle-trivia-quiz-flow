@@ -243,7 +243,7 @@ const AnalyticsScreen = ({
           <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 rounded-xl p-6 border border-orange-500/30">
             <div className="flex items-center space-x-2 mb-4">
               <AlertTriangle className="w-6 h-6 text-orange-400" />
-              <h3 className="text-xl font-semibold text-white">🎯 Study Recommendations</h3>
+              <h3 className="text-xl font-semibold text-white"> Study Recommendations</h3>
             </div>
             <div className="space-y-3">
               {insights.weakestSubjects.slice(0, 3).map((subject, index) => <div key={index} className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg border border-slate-600/30">
