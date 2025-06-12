@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { ArrowLeft, TrendingUp, Target, Clock, Award, ChevronRight, BarChart3, Calendar, BookOpen } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import DailyActivityChart from './analytics/DailyActivityChart';
 
 interface AnalyticsScreenProps {
   onNavigate: (screen: string) => void;
@@ -112,20 +113,8 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
         </div>
       </div>
 
-      {/* Daily Activity Chart */}
-      <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
-        <h3 className="text-lg font-semibold text-white mb-4">Daily Study Activity</h3>
-        <div className="h-48">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={studyProgressData}>
-              <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
-              <Bar dataKey="minutes" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <p className="text-sm text-slate-400 mt-2">Study minutes per day this week</p>
-      </div>
+      {/* Use the improved DailyActivityChart component */}
+      <DailyActivityChart />
 
       {/* Quick Actions */}
       <div className="space-y-3">
@@ -242,6 +231,35 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
 
   const renderProgressTab = () => (
     <div className="space-y-6">
+      {/* Enhanced Progress Stats */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-gradient-to-br from-blue-600/20 to-blue-500/10 border border-blue-600/30 rounded-xl p-4">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
+              <Target className="w-4 h-4 text-blue-400" />
+            </div>
+            <div>
+              <p className="text-xs text-slate-400">Questions</p>
+              <p className="text-lg font-bold text-white">342</p>
+            </div>
+          </div>
+          <p className="text-xs text-blue-400">This week</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-600/20 to-purple-500/10 border border-purple-600/30 rounded-xl p-4">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
+              <BookOpen className="w-4 h-4 text-purple-400" />
+            </div>
+            <div>
+              <p className="text-xs text-slate-400">Modules</p>
+              <p className="text-lg font-bold text-white">8</p>
+            </div>
+          </div>
+          <p className="text-xs text-purple-400">Used this week</p>
+        </div>
+      </div>
+
       {/* XP Progress Chart */}
       <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
         <h3 className="text-lg font-semibold text-white mb-4">XP Progress</h3>
@@ -263,7 +281,7 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
         <p className="text-sm text-slate-400 mt-2">Weekly XP accumulation trend</p>
       </div>
 
-      {/* Goals Section */}
+      {/* Enhanced Goals Section */}
       <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
         <h3 className="text-lg font-semibold text-white mb-4">Study Goals</h3>
         <div className="space-y-4">
@@ -280,13 +298,24 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-slate-300">Monthly XP Target</span>
-              <span className="text-sm text-white font-medium">2,890 / 4,000</span>
+              <span className="text-sm text-slate-300">Weekly Questions Target</span>
+              <span className="text-sm text-white font-medium">342 / 400</span>
             </div>
             <div className="w-full bg-slate-600 rounded-full h-3">
-              <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full" style={{ width: '72%' }} />
+              <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full" style={{ width: '86%' }} />
             </div>
-            <p className="text-xs text-slate-400 mt-1">1,110 XP remaining this month</p>
+            <p className="text-xs text-slate-400 mt-1">58 questions remaining this week</p>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-slate-300">Module Engagement</span>
+              <span className="text-sm text-white font-medium">8 / 12</span>
+            </div>
+            <div className="w-full bg-slate-600 rounded-full h-3">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full" style={{ width: '67%' }} />
+            </div>
+            <p className="text-xs text-slate-400 mt-1">4 more modules to explore</p>
           </div>
         </div>
       </div>
