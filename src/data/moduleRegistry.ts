@@ -30,11 +30,26 @@ export const getTotalUserPoints = (): number => {
 };
 
 export const getModulesBySystem = (system: string): LessonModule[] => {
-  return moduleDatabase.filter(module => module.system === system);
+  console.log(`Looking for modules in system: "${system}"`);
+  console.log('Available modules:', moduleDatabase.map(m => ({ id: m.id, system: m.system, title: m.title })));
+  
+  // Handle special case for module-selection screen
+  if (system === 'module-selection') {
+    return moduleDatabase;
+  }
+  
+  const filteredModules = moduleDatabase.filter(module => module.system === system);
+  console.log(`Found ${filteredModules.length} modules for system "${system}"`);
+  return filteredModules;
 };
 
 export const getModuleById = (moduleId: string): LessonModule | null => {
-  return moduleDatabase.find(module => module.id === moduleId) || null;
+  console.log(`Looking for module with ID: "${moduleId}"`);
+  const module = moduleDatabase.find(module => module.id === moduleId);
+  if (!module) {
+    console.log('Available module IDs:', moduleDatabase.map(m => m.id));
+  }
+  return module || null;
 };
 
 export const getAllModules = (): LessonModule[] => {
