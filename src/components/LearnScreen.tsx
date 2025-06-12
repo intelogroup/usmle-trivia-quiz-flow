@@ -5,16 +5,20 @@ import { getLessonsBySystemAndSubject } from "@/data/lessonData";
 
 interface LearnScreenProps {
   onNavigate: (screen: string) => void;
+  onSystemSelect: (system: string) => void;
   onLessonSelect?: (lessonId: string) => void;
 }
+
 interface Category {
   id: string;
   name: string;
   emoji: string;
   subcategories: string[];
 }
+
 const LearnScreen = ({
   onNavigate,
+  onSystemSelect,
   onLessonSelect
 }: LearnScreenProps) => {
   const [showCategories, setShowCategories] = useState(false);
@@ -104,7 +108,6 @@ const LearnScreen = ({
   }];
   const handleSubcategoryClick = (category: string, subcategory: string) => {
     console.log(`Selected: ${category} - ${subcategory}`);
-    // Here you would navigate to the specific lesson content
   };
   const handleContinueStudying = () => {
     console.log('Continue studying clicked - navigating to continue-studying');
@@ -115,7 +118,6 @@ const LearnScreen = ({
     const availableLessons = getLessonsBySystemAndSubject(system, subject);
     
     if (availableLessons.length > 0 && onLessonSelect) {
-      // For now, select the first available lesson
       onLessonSelect(availableLessons[0].id);
     } else {
       console.log('No lessons available for this combination');
@@ -123,7 +125,6 @@ const LearnScreen = ({
   };
   if (showLessons) {
     return <div className="p-4 pb-20 space-y-6">
-        {/* Header */}
         <div className="flex items-center space-x-3">
           <button onClick={() => setShowLessons(false)} className="text-white hover:text-slate-300">
             <ArrowLeft className="w-6 h-6" />
@@ -133,14 +134,11 @@ const LearnScreen = ({
             <p className="text-slate-300">Choose by system and subject</p>
           </div>
         </div>
-
-        {/* Lesson Filters */}
         <LessonFilters onFilterSelect={handleLessonFilterSelect} />
       </div>;
   }
   if (showCategories) {
     return <div className="p-4 pb-20 space-y-6">
-        {/* Header */}
         <div className="flex items-center space-x-3">
           <button onClick={() => setShowCategories(false)} className="text-white hover:text-slate-300">
             <ArrowLeft className="w-6 h-6" />
@@ -150,8 +148,6 @@ const LearnScreen = ({
             <p className="text-slate-300">Choose a subject to study</p>
           </div>
         </div>
-
-        {/* Categories */}
         <div className="space-y-3">
           {categories.map(category => <div key={category.id} className="bg-slate-800 rounded-xl overflow-hidden">
               <div className="p-4 border-b border-slate-700">
@@ -171,18 +167,15 @@ const LearnScreen = ({
       </div>;
   }
   return <div className="p-4 pb-20 space-y-6">
-      {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-white my-[30px]">Learn</h1>
         <p className="text-slate-300">Expand your medical knowledge</p>
       </div>
 
-      {/* Learning Resources */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-white">Learning Resources</h3>
         <div className="grid grid-cols-1 gap-3">
-          {/* Module Lessons Button */}
-          <button onClick={() => onNavigate('module-selection')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
+          <button onClick={() => onSystemSelect('module-selection')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-6 h-6 text-white" />
@@ -195,7 +188,6 @@ const LearnScreen = ({
             </div>
           </button>
 
-          {/* Interactive Lessons Button */}
           <button onClick={() => setShowLessons(true)} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -209,7 +201,6 @@ const LearnScreen = ({
             </div>
           </button>
 
-          {/* Updated Quick Lessons to Categories */}
           <button onClick={() => setShowCategories(true)} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -223,7 +214,6 @@ const LearnScreen = ({
             </div>
           </button>
 
-          {/* Flashcards */}
           <button onClick={() => console.log('Open flashcards')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
@@ -236,7 +226,6 @@ const LearnScreen = ({
             </div>
           </button>
 
-          {/* Practice Tests */}
           <button onClick={() => console.log('Navigate to practice tests')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -251,7 +240,6 @@ const LearnScreen = ({
         </div>
       </div>
 
-      {/* Recent Topics */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-white">Continue Learning</h3>
         <div className="bg-slate-800 rounded-xl p-4 space-y-3">
@@ -271,4 +259,5 @@ const LearnScreen = ({
       </div>
     </div>;
 };
+
 export default LearnScreen;
