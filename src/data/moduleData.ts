@@ -1,4 +1,3 @@
-
 export interface Lesson {
   id: string;
   title: string;
@@ -35,6 +34,301 @@ export interface LessonModule {
 
 // Mock module database with comprehensive data
 const moduleDatabase: LessonModule[] = [
+  {
+    id: 'intro-physiology',
+    system: 'Physiology',
+    title: 'Introduction to Physiology',
+    description: 'Fundamental principles of human physiology and homeostasis.',
+    icon: '⚡',
+    totalPoints: 350,
+    unlockLevel: 1,
+    estimatedTime: 140,
+    previewAvailable: true,
+    difficulty: 'Beginner',
+    lessons: [
+      {
+        id: 'lesson-phys-1',
+        title: 'Homeostasis Fundamentals',
+        description: 'Understanding how the body maintains balance.',
+        duration: 25,
+        pointsReward: 50,
+        content: [
+          'Homeostasis is the body\'s ability to maintain stable internal conditions.',
+          'It involves feedback mechanisms that detect and respond to changes.',
+          'Negative feedback loops work to counteract deviations from normal.',
+          'Positive feedback loops amplify responses, like during childbirth.'
+        ],
+        type: 'interactive',
+        estimatedTime: 25,
+        quiz: {
+          question: 'What type of feedback mechanism is most common in the human body?',
+          options: ['Positive feedback', 'Negative feedback', 'Neutral feedback', 'Mixed feedback'],
+          correct: 1,
+          explanation: 'Negative feedback is the most common mechanism, working to maintain homeostasis by counteracting changes.'
+        }
+      },
+      {
+        id: 'lesson-phys-2',
+        title: 'Cell Membrane Transport',
+        description: 'How substances move across cellular membranes.',
+        duration: 30,
+        pointsReward: 60,
+        content: [
+          'Cell membranes are selectively permeable barriers.',
+          'Passive transport requires no energy and includes diffusion and osmosis.',
+          'Active transport requires ATP to move substances against gradients.',
+          'Endocytosis and exocytosis transport large molecules.'
+        ],
+        type: 'reading',
+        estimatedTime: 30
+      },
+      {
+        id: 'lesson-phys-3',
+        title: 'Body Fluid Compartments',
+        description: 'Distribution and regulation of body fluids.',
+        duration: 28,
+        pointsReward: 55,
+        content: [
+          'Body water is distributed in intracellular and extracellular compartments.',
+          'Extracellular fluid includes plasma and interstitial fluid.',
+          'Osmotic pressure determines water movement between compartments.',
+          'The kidneys play a crucial role in fluid balance.'
+        ],
+        type: 'interactive',
+        estimatedTime: 28
+      },
+      {
+        id: 'lesson-phys-4',
+        title: 'Physiological Control Systems',
+        description: 'Integration of organ systems for coordinated function.',
+        duration: 32,
+        pointsReward: 65,
+        content: [
+          'Control systems consist of sensors, integrators, and effectors.',
+          'The nervous system provides rapid, precise control.',
+          'The endocrine system provides slower, longer-lasting control.',
+          'Many physiological processes involve both systems working together.'
+        ],
+        type: 'reading',
+        estimatedTime: 32
+      },
+      {
+        id: 'lesson-phys-5',
+        title: 'Metabolism and Energy',
+        description: 'Cellular energy production and utilization.',
+        duration: 35,
+        pointsReward: 70,
+        content: [
+          'Metabolism includes all chemical reactions in the body.',
+          'Catabolism breaks down molecules to release energy.',
+          'Anabolism builds complex molecules using energy.',
+          'ATP is the universal energy currency of cells.'
+        ],
+        type: 'interactive',
+        estimatedTime: 35
+      }
+    ]
+  },
+  {
+    id: 'cell-biology-genetics',
+    system: 'Cell Biology',
+    title: 'Cell Biology & Genetics',
+    description: 'Explore cellular structure, function, and genetic principles.',
+    icon: '🧬',
+    totalPoints: 400,
+    unlockLevel: 1,
+    estimatedTime: 160,
+    previewAvailable: true,
+    difficulty: 'Beginner',
+    lessons: [
+      {
+        id: 'lesson-cell-1',
+        title: 'Cell Structure and Organelles',
+        description: 'Understanding the components of eukaryotic cells.',
+        duration: 30,
+        pointsReward: 60,
+        content: [
+          'Cells are the basic units of life, containing specialized organelles.',
+          'The nucleus controls cellular activities and contains DNA.',
+          'Mitochondria are the powerhouses, producing ATP through respiration.',
+          'The endoplasmic reticulum and Golgi apparatus process and transport proteins.'
+        ],
+        type: 'interactive',
+        estimatedTime: 30,
+        quiz: {
+          question: 'Which organelle is known as the "powerhouse of the cell"?',
+          options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Golgi apparatus'],
+          correct: 1,
+          explanation: 'Mitochondria produce most of the cell\'s ATP through cellular respiration.'
+        }
+      },
+      {
+        id: 'lesson-cell-2',
+        title: 'DNA Structure and Replication',
+        description: 'The molecular basis of heredity.',
+        duration: 35,
+        pointsReward: 70,
+        content: [
+          'DNA is a double helix composed of nucleotides with four bases: A, T, G, C.',
+          'Base pairing rules: A pairs with T, G pairs with C.',
+          'DNA replication is semiconservative, each strand serves as a template.',
+          'DNA polymerase synthesizes new strands in the 5\' to 3\' direction.'
+        ],
+        type: 'reading',
+        estimatedTime: 35
+      },
+      {
+        id: 'lesson-cell-3',
+        title: 'Protein Synthesis',
+        description: 'From genes to proteins: transcription and translation.',
+        duration: 40,
+        pointsReward: 80,
+        content: [
+          'Transcription creates mRNA from DNA in the nucleus.',
+          'mRNA is processed and transported to ribosomes.',
+          'Translation converts the genetic code into amino acid sequences.',
+          'The genetic code is universal, with codons specifying amino acids.'
+        ],
+        type: 'interactive',
+        estimatedTime: 40
+      },
+      {
+        id: 'lesson-cell-4',
+        title: 'Cell Division and Mitosis',
+        description: 'How cells reproduce and maintain chromosome number.',
+        duration: 35,
+        pointsReward: 75,
+        content: [
+          'The cell cycle consists of interphase and mitotic phase.',
+          'DNA replication occurs during S phase of interphase.',
+          'Mitosis ensures equal distribution of chromosomes.',
+          'Checkpoints prevent errors in cell division.'
+        ],
+        type: 'reading',
+        estimatedTime: 35
+      },
+      {
+        id: 'lesson-cell-5',
+        title: 'Mendelian Genetics',
+        description: 'Basic principles of inheritance.',
+        duration: 32,
+        pointsReward: 65,
+        content: [
+          'Mendel\'s laws describe how traits are inherited.',
+          'Alleles are different versions of the same gene.',
+          'Dominant alleles mask recessive alleles in heterozygotes.',
+          'Punnett squares predict offspring genotypes and phenotypes.'
+        ],
+        type: 'interactive',
+        estimatedTime: 32
+      },
+      {
+        id: 'lesson-cell-6',
+        title: 'Gene Expression Regulation',
+        description: 'How cells control when and where genes are active.',
+        duration: 28,
+        pointsReward: 50,
+        content: [
+          'Gene expression can be regulated at transcriptional and post-transcriptional levels.',
+          'Promoters and enhancers control transcription initiation.',
+          'Epigenetic modifications affect gene expression without changing DNA sequence.',
+          'Cell differentiation results from differential gene expression.'
+        ],
+        type: 'reading',
+        estimatedTime: 28
+      }
+    ]
+  },
+  {
+    id: 'medical-biochemistry',
+    system: 'Biochemistry',
+    title: 'Medical Biochemistry',
+    description: 'Essential biochemical processes in health and disease.',
+    icon: '⚗️',
+    totalPoints: 380,
+    unlockLevel: 2,
+    estimatedTime: 150,
+    previewAvailable: false,
+    prerequisites: ['intro-physiology'],
+    difficulty: 'Intermediate',
+    lessons: [
+      {
+        id: 'lesson-biochem-1',
+        title: 'Enzyme Kinetics',
+        description: 'Understanding how enzymes catalyze biochemical reactions.',
+        duration: 35,
+        pointsReward: 70,
+        content: [
+          'Enzymes lower activation energy to speed up reactions.',
+          'The Michaelis-Menten equation describes enzyme kinetics.',
+          'Competitive inhibitors compete with substrate for active site.',
+          'Non-competitive inhibitors bind to allosteric sites.'
+        ],
+        type: 'interactive',
+        estimatedTime: 35
+      },
+      {
+        id: 'lesson-biochem-2',
+        title: 'Glycolysis and Gluconeogenesis',
+        description: 'Glucose metabolism pathways.',
+        duration: 40,
+        pointsReward: 80,
+        content: [
+          'Glycolysis breaks down glucose to pyruvate, producing ATP.',
+          'The pathway occurs in the cytoplasm and has regulatory steps.',
+          'Gluconeogenesis synthesizes glucose from non-carbohydrate sources.',
+          'These pathways are reciprocally regulated.'
+        ],
+        type: 'reading',
+        estimatedTime: 40
+      },
+      {
+        id: 'lesson-biochem-3',
+        title: 'Citric Acid Cycle',
+        description: 'The central metabolic pathway.',
+        duration: 38,
+        pointsReward: 75,
+        content: [
+          'The citric acid cycle oxidizes acetyl-CoA to CO2.',
+          'It produces NADH, FADH2, and GTP for energy.',
+          'The cycle occurs in the mitochondrial matrix.',
+          'It serves as a hub connecting carbohydrate, fat, and protein metabolism.'
+        ],
+        type: 'interactive',
+        estimatedTime: 38
+      },
+      {
+        id: 'lesson-biochem-4',
+        title: 'Electron Transport Chain',
+        description: 'Oxidative phosphorylation and ATP synthesis.',
+        duration: 42,
+        pointsReward: 85,
+        content: [
+          'The electron transport chain transfers electrons through protein complexes.',
+          'Energy released pumps protons across the inner mitochondrial membrane.',
+          'ATP synthase uses the proton gradient to synthesize ATP.',
+          'This process is called chemiosmotic coupling.'
+        ],
+        type: 'reading',
+        estimatedTime: 42
+      },
+      {
+        id: 'lesson-biochem-5',
+        title: 'Lipid Metabolism',
+        description: 'Fat synthesis and breakdown.',
+        duration: 35,
+        pointsReward: 70,
+        content: [
+          'Beta-oxidation breaks down fatty acids to acetyl-CoA.',
+          'Fatty acid synthesis occurs in the cytoplasm.',
+          'Ketone bodies are produced when glucose is scarce.',
+          'Cholesterol synthesis is tightly regulated.'
+        ],
+        type: 'interactive',
+        estimatedTime: 35
+      }
+    ]
+  },
   {
     id: 'cardio-basics',
     system: 'Cardiovascular System',
@@ -587,6 +881,27 @@ let userProgress = {
     completedLessonIds: []
   },
   'digestive-system': {
+    completed: false,
+    completedLessons: 0,
+    earnedPoints: 0,
+    unlockedLessons: 1,
+    completedLessonIds: []
+  },
+  'intro-physiology': {
+    completed: false,
+    completedLessons: 0,
+    earnedPoints: 0,
+    unlockedLessons: 1,
+    completedLessonIds: []
+  },
+  'cell-biology-genetics': {
+    completed: false,
+    completedLessons: 0,
+    earnedPoints: 0,
+    unlockedLessons: 1,
+    completedLessonIds: []
+  },
+  'medical-biochemistry': {
     completed: false,
     completedLessons: 0,
     earnedPoints: 0,
