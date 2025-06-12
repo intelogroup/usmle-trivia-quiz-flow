@@ -1,4 +1,12 @@
 
+import USMLEReadinessCard from './analytics/USMLEReadinessCard';
+import CategoryOverview from './analytics/CategoryOverview';
+import SubjectSystemPerformance from './analytics/SubjectSystemPerformance';
+import SimplifiedWeaknessAnalysis from './analytics/SimplifiedWeaknessAnalysis';
+import SubjectPerformanceRadar from './analytics/SubjectPerformanceRadar';
+import ClinicalCorrelationCard from './analytics/ClinicalCorrelationCard';
+import DailyActivityChart from './analytics/DailyActivityChart';
+
 interface AnalyticsScreenProps {
   onNavigate: (screen: string) => void;
 }
@@ -11,9 +19,26 @@ const AnalyticsScreen = ({ onNavigate }: AnalyticsScreenProps) => {
         <p className="text-slate-300">Track your learning progress</p>
       </div>
       
-      <div className="bg-slate-800 rounded-xl p-4">
-        <p className="text-slate-300">Analytics functionality coming soon...</p>
-      </div>
+      {/* USMLE Readiness Overview */}
+      <USMLEReadinessCard />
+      
+      {/* Category Performance Overview */}
+      <CategoryOverview />
+      
+      {/* Daily Activity Chart */}
+      <DailyActivityChart />
+      
+      {/* Subject & System Performance */}
+      <SubjectSystemPerformance />
+      
+      {/* Subject Performance Radar */}
+      <SubjectPerformanceRadar />
+      
+      {/* Clinical Correlation */}
+      <ClinicalCorrelationCard />
+      
+      {/* Weakness Analysis */}
+      <SimplifiedWeaknessAnalysis />
     </div>
   );
 };
