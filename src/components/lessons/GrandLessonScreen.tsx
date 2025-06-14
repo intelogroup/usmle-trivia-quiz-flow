@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { ArrowLeft, Lock, CheckCircle, Clock, BookOpen, ChevronRight, Trophy, Target } from 'lucide-react';
+import GrandLessonDetail from "./GrandLessonDetail";
+import GrandLessonCard from "./GrandLessonCard";
+import LearningProgressHeader from "./LearningProgressHeader";
 
 interface GrandLessonScreenProps {
   onNavigate: (screen: string) => void;
@@ -225,18 +228,31 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
     }
   };
 
-  const selectedLessonData = selectedGrandLesson ? grandLessons.find(gl => gl.id === selectedGrandLesson) : null;
+  const selectedLessonData = selectedGrandLesson
+    ? grandLessons.find((gl) => gl.id === selectedGrandLesson)
+    : null;
 
   return (
     <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Header */}
       <div className="flex items-center space-x-3">
-        <button onClick={() => selectedGrandLesson ? setSelectedGrandLesson(null) : onNavigate('learn')} className="text-white hover:text-slate-300 transition-colors">
+        <button
+          onClick={() =>
+            selectedGrandLesson ? setSelectedGrandLesson(null) : onNavigate("learn")
+          }
+          className="text-white hover:text-slate-300 transition-colors"
+        >
           <ArrowLeft className="w-6 h-6" />
         </button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-white">{selectedLessonData ? selectedLessonData.title : 'Grand Lessons'}</h1>
-          <p className="text-slate-300 text-sm">{selectedLessonData ? selectedLessonData.description : 'Comprehensive learning paths for medical mastery'}</p>
+          <h1 className="text-2xl font-bold text-white">
+            {selectedLessonData ? selectedLessonData.title : "Grand Lessons"}
+          </h1>
+          <p className="text-slate-300 text-sm">
+            {selectedLessonData
+              ? selectedLessonData.description
+              : "Comprehensive learning paths for medical mastery"}
+          </p>
         </div>
         <div className="text-right">
           <div className="flex items-center space-x-1 text-yellow-400">
@@ -246,203 +262,23 @@ const GrandLessonScreen = ({ onNavigate, onGrandLessonSelect }: GrandLessonScree
           <div className="text-xs text-slate-400">Total XP</div>
         </div>
       </div>
-
       {selectedLessonData ? (
-        <div className="space-y-4">
-          <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-4">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-sm font-bold text-white">{selectedLessonData.completedModules}/{selectedLessonData.totalModules}</div>
-                <div className="text-xs text-slate-400">Modules</div>
-              </div>
-              <div className="text-center">
-                <div className="text-sm font-bold text-blue-400">{selectedLessonData.estimatedTime}</div>
-                <div className="text-xs text-slate-400">Duration</div>
-              </div>
-              <div className="text-center">
-                <div className="text-sm font-bold text-green-400">{Math.round((selectedLessonData.completedModules / selectedLessonData.totalModules) * 100)}%</div>
-                <div className="text-xs text-slate-400">Complete</div>
-              </div>
-            </div>
-            <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
-              <div 
-                className={`bg-gradient-to-r ${selectedLessonData.color} h-2 rounded-full transition-all duration-500`}
-                style={{ width: `${(selectedLessonData.completedModules / selectedLessonData.totalModules) * 100}%` }}
-              />
-            </div>
-          </div>
-          <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden">
-            <div className="p-4 space-y-3">
-              <h4 className="text-sm font-medium text-slate-300 mb-3">Available Modules</h4>
-              {selectedLessonData.modules.map((module) => (
-                <button
-                  key={module.id}
-                  onClick={() => handleModuleClick(module.id, module.isLocked)}
-                  disabled={module.isLocked}
-                  className={`w-full p-4 rounded-lg border transition-all duration-300 text-left ${
-                    module.isLocked 
-                      ? 'bg-slate-800/20 border-slate-700/20 cursor-not-allowed opacity-50'
-                      : module.progress === 100
-                      ? 'bg-gradient-to-r from-green-600/20 to-green-500/10 border-green-600/30 hover:border-green-500/50'
-                      : module.progress > 0
-                      ? 'bg-gradient-to-r from-blue-600/20 to-blue-500/10 border-blue-600/30 hover:border-blue-500/50 hover:scale-[1.02]'
-                      : 'bg-gradient-to-r from-slate-700/30 to-slate-600/20 border-slate-600/30 hover:border-slate-500/50 hover:scale-[1.02]'
-                  }`}
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      module.isLocked
-                        ? 'bg-slate-700/30 text-slate-500'
-                        : module.progress === 100
-                        ? 'bg-green-600/20 text-green-400'
-                        : module.progress > 0
-                        ? 'bg-blue-600/20 text-blue-400'
-                        : 'bg-slate-600/20 text-slate-400'
-                    }`}>
-                      {module.isLocked ? (
-                        <Lock className="w-5 h-5" />
-                      ) : module.progress === 100 ? (
-                        <CheckCircle className="w-5 h-5" />
-                      ) : (
-                        <BookOpen className="w-5 h-5" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-1">
-                        <h5 className={`font-medium ${module.isLocked ? 'text-slate-500' : 'text-white'}`}>
-                          {module.title}
-                        </h5>
-                        <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(module.difficulty, module.isLocked)}`}>
-                          {module.difficulty}
-                        </div>
-                      </div>
-                      <p className={`text-sm mb-2 ${module.isLocked ? 'text-slate-600' : 'text-slate-300'}`}>
-                        {module.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 text-xs">
-                          <div className={`flex items-center space-x-1 ${module.isLocked ? 'text-slate-600' : 'text-slate-400'}`}>
-                            <BookOpen className="w-3 h-3" />
-                            <span>{module.lessonCount} lessons</span>
-                          </div>
-                          <div className={`flex items-center space-x-1 ${module.isLocked ? 'text-slate-600' : 'text-slate-400'}`}>
-                            <Clock className="w-3 h-3" />
-                            <span>{module.duration}</span>
-                          </div>
-                        </div>
-                        {module.progress > 0 && !module.isLocked && (
-                          <div className="text-xs text-slate-400">
-                            {module.progress}% complete
-                          </div>
-                        )}
-                      </div>
-                      {!module.isLocked && module.progress > 0 && (
-                        <div className="w-full bg-slate-700 rounded-full h-1.5 mt-2">
-                          <div 
-                            className={`h-1.5 rounded-full transition-all duration-500 ${
-                              module.progress === 100 ? 'bg-green-500' : 'bg-blue-500'
-                            }`}
-                            style={{ width: `${module.progress}%` }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+        <GrandLessonDetail
+          grandLesson={selectedLessonData}
+          onBack={() => setSelectedGrandLesson(null)}
+          onModuleClick={handleModuleClick}
+          getDifficultyColor={getDifficultyColor}
+        />
       ) : (
         <>
-          {/* Progress Overview */}
-          <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 rounded-xl p-4 border border-slate-700/50">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-white">Learning Progress</h2>
-              <div className="flex items-center space-x-1 text-blue-400">
-                <Target className="w-4 h-4" />
-                <span className="text-sm font-medium">Level 3</span>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-green-600/20 border border-green-600/30 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <CheckCircle className="w-6 h-6 text-green-400" />
-                </div>
-                <div className="text-xl font-bold text-green-400">4</div>
-                <div className="text-xs text-slate-400">Completed</div>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-12 h-12 bg-blue-600/20 border border-blue-600/30 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <BookOpen className="w-6 h-6 text-blue-400" />
-                </div>
-                <div className="text-xl font-bold text-blue-400">8</div>
-                <div className="text-xs text-slate-400">In Progress</div>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-12 h-12 bg-slate-600/20 border border-slate-600/30 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <Lock className="w-6 h-6 text-slate-400" />
-                </div>
-                <div className="text-xl font-bold text-slate-400">19</div>
-                <div className="text-xs text-slate-400">Locked</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Grand Lessons */}
+          <LearningProgressHeader />
           <div className="space-y-4">
             {grandLessons.map((grandLesson) => (
-              <div key={grandLesson.id} className="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden">
-                {/* Grand Lesson Header */}
-                <button
-                  onClick={() => handleGrandLessonClick(grandLesson.id)}
-                  className="w-full p-6 text-left hover:bg-slate-700/30 transition-colors"
-                >
-                  <div className="flex items-start space-x-4">
-                    <div className={`w-16 h-16 bg-gradient-to-r ${grandLesson.color} rounded-xl flex items-center justify-center text-2xl shadow-lg`}>
-                      {grandLesson.icon}
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white mb-1">{grandLesson.title}</h3>
-                          <p className="text-sm text-blue-400 font-medium mb-2">{grandLesson.subtitle}</p>
-                          <p className="text-sm text-slate-300">{grandLesson.description}</p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-slate-400" />
-                      </div>
-
-                      {/* Stats */}
-                      <div className="grid grid-cols-3 gap-4 mt-4">
-                        <div className="text-center">
-                          <div className="text-sm font-bold text-white">{grandLesson.completedModules}/{grandLesson.totalModules}</div>
-                          <div className="text-xs text-slate-400">Modules</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm font-bold text-blue-400">{grandLesson.estimatedTime}</div>
-                          <div className="text-xs text-slate-400">Duration</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm font-bold text-green-400">{Math.round((grandLesson.completedModules / grandLesson.totalModules) * 100)}%</div>
-                          <div className="text-xs text-slate-400">Complete</div>
-                        </div>
-                      </div>
-
-                      {/* Progress Bar */}
-                      <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
-                        <div 
-                          className={`bg-gradient-to-r ${grandLesson.color} h-2 rounded-full transition-all duration-500`}
-                          style={{ width: `${(grandLesson.completedModules / grandLesson.totalModules) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
+              <GrandLessonCard
+                key={grandLesson.id}
+                grandLesson={grandLesson}
+                onClick={handleGrandLessonClick}
+              />
             ))}
           </div>
         </>
