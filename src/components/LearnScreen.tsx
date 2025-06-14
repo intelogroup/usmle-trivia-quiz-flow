@@ -2,20 +2,17 @@ import { BookOpen, FileText, Award, ChevronRight, ArrowLeft } from "lucide-react
 import { useState } from "react";
 import LessonFilters from "./LessonFilters";
 import { getLessonsBySystemAndSubject } from "@/data/lessonData";
-
 interface LearnScreenProps {
   onNavigate: (screen: string) => void;
   onSystemSelect: (system: string) => void;
   onLessonSelect?: (lessonId: string) => void;
 }
-
 interface Category {
   id: string;
   name: string;
   emoji: string;
   subcategories: string[];
 }
-
 const LearnScreen = ({
   onNavigate,
   onSystemSelect,
@@ -23,7 +20,6 @@ const LearnScreen = ({
 }: LearnScreenProps) => {
   const [showCategories, setShowCategories] = useState(false);
   const [showLessons, setShowLessons] = useState(false);
-  
   const categories: Category[] = [{
     id: 'anatomy',
     name: 'Anatomy',
@@ -85,7 +81,6 @@ const LearnScreen = ({
     emoji: '🚑',
     subcategories: ['Trauma', 'Cardiac Emergencies', 'Respiratory Emergencies', 'Toxicology', 'Shock', 'Critical Care', 'Procedures']
   }];
-  
   const learningResources = [{
     id: 'quick-lessons',
     icon: FileText,
@@ -108,27 +103,22 @@ const LearnScreen = ({
     color: 'bg-purple-600',
     action: () => console.log('Navigate to practice tests')
   }];
-  
   const handleSubcategoryClick = (category: string, subcategory: string) => {
     console.log(`Selected: ${category} - ${subcategory}`);
   };
-  
   const handleContinueStudying = () => {
     console.log('Continue studying clicked - navigating to continue-studying');
     onNavigate('continue-studying');
   };
-  
   const handleLessonFilterSelect = (system: string, subject: string) => {
     console.log(`Selected lesson: ${system} - ${subject}`);
     const availableLessons = getLessonsBySystemAndSubject(system, subject);
-    
     if (availableLessons.length > 0 && onLessonSelect) {
       onLessonSelect(availableLessons[0].id);
     } else {
       console.log('No lessons available for this combination');
     }
   };
-  
   if (showLessons) {
     return <div className="p-4 pb-20 space-y-6">
         <div className="flex items-center space-x-3">
@@ -143,7 +133,6 @@ const LearnScreen = ({
         <LessonFilters onFilterSelect={handleLessonFilterSelect} />
       </div>;
   }
-  
   if (showCategories) {
     return <div className="p-4 pb-20 space-y-6">
         <div className="flex items-center space-x-3">
@@ -173,7 +162,6 @@ const LearnScreen = ({
         </div>
       </div>;
   }
-  
   return <div className="p-4 pb-20 space-y-6">
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-white my-[30px]">Learn</h1>
@@ -196,31 +184,9 @@ const LearnScreen = ({
             </div>
           </button>
 
-          <button onClick={() => onSystemSelect('module-selection')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <h4 className="font-medium text-white">Module Lessons</h4>
-                <p className="text-sm text-slate-400">Progressive learning with unlockable modules</p>
-              </div>
-              <ChevronRight className="w-5 h-5 text-slate-400" />
-            </div>
-          </button>
+          
 
-          <button onClick={() => setShowLessons(true)} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <h4 className="font-medium text-white">Interactive Lessons</h4>
-                <p className="text-sm text-slate-400">Fill-in-the-blank style lessons</p>
-              </div>
-              <ChevronRight className="w-5 h-5 text-slate-400" />
-            </div>
-          </button>
+          
 
           <button onClick={() => setShowCategories(true)} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
@@ -228,24 +194,14 @@ const LearnScreen = ({
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h4 className="font-medium text-white">Categories</h4>
+                <h4 className="font-medium text-white">Lessons By Categories</h4>
                 <p className="text-sm text-slate-400">Browse by medical categories</p>
               </div>
               <ChevronRight className="w-5 h-5 text-slate-400" />
             </div>
           </button>
 
-          <button onClick={() => console.log('Open flashcards')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <h4 className="font-medium text-white">Flashcards</h4>
-                <p className="text-sm text-slate-400">Review key concepts quickly</p>
-              </div>
-            </div>
-          </button>
+          
 
           <button onClick={() => console.log('Navigate to practice tests')} className="bg-slate-800 hover:bg-slate-700 rounded-xl p-4 text-left transition-colors">
             <div className="flex items-center space-x-3">
@@ -280,5 +236,4 @@ const LearnScreen = ({
       </div>
     </div>;
 };
-
 export default LearnScreen;
