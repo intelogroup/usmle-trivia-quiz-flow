@@ -1,7 +1,7 @@
 
 import { Lesson, LessonStep } from './types';
 
-export { LessonStep } from './types';
+export type { LessonStep };
 
 export const lessonData: Lesson[] = [
   {
