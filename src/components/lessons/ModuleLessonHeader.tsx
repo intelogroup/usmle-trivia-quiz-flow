@@ -1,7 +1,5 @@
-
 import { ArrowLeft, Clock, Trophy, Star, Heart, Activity, Brain, Target, BookOpen } from 'lucide-react';
 import { LessonModule, Lesson } from '@/data/types';
-
 interface ModuleLessonHeaderProps {
   module: LessonModule;
   currentLesson: Lesson;
@@ -10,7 +8,6 @@ interface ModuleLessonHeaderProps {
   isLessonCompleted: boolean;
   onNavigate: (screen: string) => void;
 }
-
 const ModuleLessonHeader = ({
   module,
   currentLesson,
@@ -31,63 +28,15 @@ const ModuleLessonHeader = ({
         return <Activity className="w-5 h-5 text-green-400" />;
     }
   };
-
   const getLessonTypeIcon = () => {
     if (currentLesson?.type === 'interactive') {
       return <Target className="w-4 h-4 text-orange-400" />;
     }
     return <BookOpen className="w-4 h-4 text-blue-400" />;
   };
-
-  return (
-    <div className="relative mb-6">
+  return <div className="relative mb-6">
       <div className="absolute inset-0 bg-gradient-to-r from-blue-700/25 to-purple-700/35 rounded-xl blur-xl"></div>
-      <div className="relative bg-gradient-to-r from-slate-800/95 to-slate-700/90 backdrop-blur-lg rounded-xl p-6 border border-slate-500/40 shadow-xl">
-        <div className="flex items-start space-x-4">
-          <button 
-            onClick={() => onNavigate('module-lesson-list')} 
-            className="mt-1 p-2 text-white hover:text-blue-300 transition-colors hover:bg-slate-600/50 rounded-lg"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          
-          <div className="flex-1">
-            <div className="flex items-center space-x-3 mb-3">
-              {getSystemIcon(module.system)}
-              <span className="text-2xl">{module.icon}</span>
-              <h1 className="text-xl font-bold text-white leading-tight">{module.title}</h1>
-              {isLessonCompleted && (
-                <div className="w-5 h-5 text-green-400 bg-green-400/10 rounded-full flex items-center justify-center text-xs">
-                  ✓
-                </div>
-              )}
-            </div>
-            <div className="flex items-center space-x-6 text-sm text-slate-300">
-              <div className="flex items-center space-x-2">
-                {getLessonTypeIcon()}
-                <span className="font-medium">{currentLesson.type === 'interactive' ? 'Interactive' : 'Reading'}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-blue-400" />
-                <span className="font-medium">{currentLesson.estimatedTime || currentLesson.duration} min</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Trophy className="w-4 h-4 text-yellow-400 fill-current" />
-                <span className="font-medium text-yellow-300">{currentLesson.pointsReward} pts</span>
-              </div>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-600/30 to-orange-600/30 rounded-full px-4 py-2 border border-yellow-500/40 shadow-lg">
-              <Star className="w-4 h-4 fill-current text-yellow-400" />
-              <span className="font-bold text-yellow-200 text-sm">{earnedPoints}/{module.totalPoints}</span>
-            </div>
-            <div className="text-xs text-slate-400 mt-1 font-medium">Module Progress</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+      
+    </div>;
 };
-
 export default ModuleLessonHeader;
