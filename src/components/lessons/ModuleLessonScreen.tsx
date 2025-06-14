@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, BookOpen, Clock, ChevronRight, CheckCircle, Star, Award, Trophy, Zap, Brain, Heart, Target, Eye, Activity } from 'lucide-react';
 import { getModuleById, getUserProgress, saveUserProgress, LessonModule, Lesson } from '@/data/moduleData';
+import { getLessonById as getInteractiveLessonById, Lesson as InteractiveLesson } from '@/data/lessonData';
 import LessonProgress from './LessonProgress';
+import LessonContent from './LessonContent';
 
 interface ModuleLessonScreenProps {
   moduleId: string;
@@ -22,6 +24,9 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
   const [earnedPoints, setEarnedPoints] = useState(0);
   const [showPointsReward, setShowPointsReward] = useState(false);
 
+  const [interactiveLesson, setInteractiveLesson] = useState<InteractiveLesson | null>(null);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
   useEffect(() => {
     const moduleData = getModuleById(moduleId);
     if (moduleData) {
@@ -29,8 +34,21 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
       
       const lessonIndex = moduleData.lessons.findIndex(lesson => lesson.id === lessonId);
       if (lessonIndex !== -1) {
-        setCurrentLesson(moduleData.lessons[lessonIndex]);
+        const lesson = moduleData.lessons[lessonIndex];
+        setCurrentLesson(lesson);
         setCurrentLessonIndex(lessonIndex);
+
+        if (lesson.type === 'interactive') {
+          const iLesson = getInteractiveLessonById(lesson.id);
+          if (iLesson) {
+            setInteractiveLesson(iLesson);
+            setShowQuiz(false); // Interactive lessons have their own flow
+          } else {
+            console.error(`Interactive lesson data not found for id: ${lesson.id}`);
+          }
+        } else {
+          setInteractiveLesson(null);
+        }
       }
       
       const progress = getUserProgress();
@@ -66,11 +84,11 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
   };
 
   const handleNextParagraph = () => {
-    if (!currentLesson) return;
+    if (!currentLesson || !currentLesson.content) return;
 
     if (currentParagraph < currentLesson.content.length - 1) {
       setCurrentParagraph(currentParagraph + 1);
-    } else if (currentLesson.type === 'interactive' && currentLesson.quiz) {
+    } else if (currentLesson.quiz) {
       setShowQuiz(true);
     } else {
       handleLessonComplete();
@@ -88,6 +106,14 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
 
   const handleStepClick = (step: number) => {
     console.log('Step clicked:', step);
+  };
+
+  const handleNextStep = () => {
+    if (interactiveLesson && currentStepIndex < interactiveLesson.steps.length - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
+    } else {
+      handleLessonComplete();
+    }
   };
 
   const getSystemIcon = (system: string) => {
@@ -126,7 +152,8 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
   }
 
   const isLessonCompleted = completedLessons.has(currentLessonIndex);
-  const progressPercentage = Math.round((currentParagraph / currentLesson.content.length) * 100);
+  const progressPercentage = currentLesson.content && currentLesson.content.length > 0 ? Math.round(((currentParagraph + 1) / currentLesson.content.length) * 100) : 0;
+  const interactiveProgressPercentage = interactiveLesson ? Math.round(((currentStepIndex + 1) / interactiveLesson.steps.length) * 100) : 0;
 
   return (
     <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -225,7 +252,22 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
                   </p>
                 </div>
                 
-                {!showQuiz && (
+                {currentLesson.type === 'interactive' && interactiveLesson ? (
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <span className="text-sm font-medium text-slate-300">
+                        Step: {currentStepIndex + 1} of {interactiveLesson.steps.length}
+                      </span>
+                      <div className="w-32 bg-slate-600 rounded-full h-2">
+                        <div 
+                          className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${interactiveProgressPercentage}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-slate-400">{interactiveProgressPercentage}%</span>
+                    </div>
+                  </div>
+                ) : !showQuiz && currentLesson.content && currentLesson.content.length > 0 && (
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <span className="text-sm font-medium text-slate-300">
@@ -275,7 +317,17 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
         )}
 
         {/* Enhanced Content Display */}
-        {!showQuiz ? (
+        {currentLesson.type === 'interactive' && interactiveLesson ? (
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-800/40 to-slate-700/40 rounded-2xl blur-lg"></div>
+            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-sm rounded-2xl p-8 border border-slate-600/30 shadow-xl">
+              <LessonContent
+                step={interactiveLesson.steps[currentStepIndex]}
+                onStepComplete={handleNextStep}
+              />
+            </div>
+          </div>
+        ) : !showQuiz ? (
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-slate-800/40 to-slate-700/40 rounded-2xl blur-lg"></div>
             <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-sm rounded-2xl p-8 border border-slate-600/30 shadow-xl">
@@ -323,9 +375,9 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
                 <span className="text-lg">
-                  {currentParagraph < currentLesson.content.length - 1 
+                  {currentLesson.content && currentParagraph < currentLesson.content.length - 1 
                     ? 'Continue Reading' 
-                    : currentLesson.type === 'interactive' 
+                    : currentLesson.quiz
                     ? 'Take Knowledge Check' 
                     : 'Complete Lesson'
                   }

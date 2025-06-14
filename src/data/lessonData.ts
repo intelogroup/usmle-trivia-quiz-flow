@@ -1,4 +1,3 @@
-
 export interface LessonStep {
   id: string;
   system: string;
@@ -16,12 +15,21 @@ export interface LessonStep {
 
 export interface Lesson {
   id: string;
-  system: string;
-  subject: string;
   title: string;
   description: string;
-  steps: LessonStep[];
-  estimatedTime: number; // in minutes
+  duration: number;
+  pointsReward: number;
+  content: string[];
+  type?: 'reading' | 'interactive';
+  estimatedTime?: number;
+  image?: string;
+  imageDescription?: string;
+  quiz?: {
+    question: string;
+    options: string[];
+    correct: number;
+    explanation: string;
+  };
 }
 
 export const lessonData: Lesson[] = [
