@@ -4,111 +4,89 @@ import { LessonModule } from '../types';
 export const cellBiologyModules: LessonModule[] = [
   {
     id: 'cell-biology-genetics',
-    system: 'Cell Biology',
-    title: 'Cell Biology & Genetics',
-    description: 'Explore cellular structure, function, and genetic principles.',
+    system: 'Cell Biology & Genetics',
+    title: 'Cell Structure & Function',
+    description: 'Explore cellular components and genetic principles',
     icon: '🧬',
-    totalPoints: 400,
-    unlockLevel: 1,
-    estimatedTime: 160,
-    previewAvailable: true,
-    difficulty: 'Beginner',
+    totalPoints: 160,
+    unlockLevel: 2,
+    estimatedTime: 28,
+    previewAvailable: false,
+    difficulty: 'Intermediate',
     lessons: [
       {
-        id: 'lesson-cell-1',
-        title: 'Cell Structure and Organelles',
-        description: 'Understanding the components of eukaryotic cells.',
-        duration: 30,
+        id: 'cell-organelles',
+        title: 'Cell Organelles',
+        description: 'Learn about cellular structures and their functions',
+        duration: 12,
         pointsReward: 60,
+        type: 'reading',
         content: [
-          'Cells are the basic units of life, containing specialized organelles.',
-          'The nucleus controls cellular activities and contains DNA.',
-          'Mitochondria are the powerhouses, producing ATP through respiration.',
-          'The endoplasmic reticulum and Golgi apparatus process and transport proteins.'
+          'Cells contain specialized structures called organelles that perform specific functions necessary for life.',
+          'The nucleus controls cell activities and contains DNA, while mitochondria produce energy (ATP) for the cell.',
+          'The endoplasmic reticulum (ER) manufactures proteins and lipids, and the Golgi apparatus modifies and packages them.',
+          'Ribosomes synthesize proteins, and lysosomes digest waste materials and break down worn-out organelles.'
         ],
-        type: 'interactive',
-        estimatedTime: 30,
+        image: 'photo-1576091160399-112ba8d25d1f',
+        imageDescription: 'Detailed diagram of a cell showing major organelles and their locations',
         quiz: {
           question: 'Which organelle is known as the "powerhouse of the cell"?',
           options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Golgi apparatus'],
           correct: 1,
-          explanation: 'Mitochondria produce most of the cell\'s ATP through cellular respiration.'
+          explanation: 'Mitochondria are called the "powerhouse of the cell" because they produce ATP, the energy currency used by cells for various functions.'
         }
       },
       {
-        id: 'lesson-cell-2',
-        title: 'DNA Structure and Replication',
-        description: 'The molecular basis of heredity.',
-        duration: 35,
-        pointsReward: 70,
-        content: [
-          'DNA is a double helix composed of nucleotides with four bases: A, T, G, C.',
-          'Base pairing rules: A pairs with T, G pairs with C.',
-          'DNA replication is semiconservative, each strand serves as a template.',
-          'DNA polymerase synthesizes new strands in the 5\' to 3\' direction.'
-        ],
-        type: 'reading',
-        estimatedTime: 35
-      },
-      {
-        id: 'lesson-cell-3',
-        title: 'Protein Synthesis',
-        description: 'From genes to proteins: transcription and translation.',
-        duration: 40,
-        pointsReward: 80,
-        content: [
-          'Transcription creates mRNA from DNA in the nucleus.',
-          'mRNA is processed and transported to ribosomes.',
-          'Translation converts the genetic code into amino acid sequences.',
-          'The genetic code is universal, with codons specifying amino acids.'
-        ],
-        type: 'interactive',
-        estimatedTime: 40
-      },
-      {
-        id: 'lesson-cell-4',
-        title: 'Cell Division and Mitosis',
-        description: 'How cells reproduce and maintain chromosome number.',
-        duration: 35,
-        pointsReward: 75,
-        content: [
-          'The cell cycle consists of interphase and mitotic phase.',
-          'DNA replication occurs during S phase of interphase.',
-          'Mitosis ensures equal distribution of chromosomes.',
-          'Checkpoints prevent errors in cell division.'
-        ],
-        type: 'reading',
-        estimatedTime: 35
-      },
-      {
-        id: 'lesson-cell-5',
-        title: 'Mendelian Genetics',
-        description: 'Basic principles of inheritance.',
-        duration: 32,
-        pointsReward: 65,
-        content: [
-          'Mendel\'s laws describe how traits are inherited.',
-          'Alleles are different versions of the same gene.',
-          'Dominant alleles mask recessive alleles in heterozygotes.',
-          'Punnett squares predict offspring genotypes and phenotypes.'
-        ],
-        type: 'interactive',
-        estimatedTime: 32
-      },
-      {
-        id: 'lesson-cell-6',
-        title: 'Gene Expression Regulation',
-        description: 'How cells control when and where genes are active.',
-        duration: 28,
+        id: 'dna-structure',
+        title: 'DNA Structure & Function',
+        description: 'Understand genetic material organization',
+        duration: 10,
         pointsReward: 50,
-        content: [
-          'Gene expression can be regulated at transcriptional and post-transcriptional levels.',
-          'Promoters and enhancers control transcription initiation.',
-          'Epigenetic modifications affect gene expression without changing DNA sequence.',
-          'Cell differentiation results from differential gene expression.'
-        ],
+        type: 'interactive',
+        system: 'Cell Biology & Genetics',
+        subject: 'Genetics',
+        steps: [
+          {
+            id: 'step-1',
+            system: 'Cell Biology & Genetics',
+            subject: 'Genetics',
+            sentence: 'DNA has a _____ helix structure made of two strands connected by _____ pairs: A-T and G-C.',
+            blanks: [
+              {
+                id: 1,
+                choices: ['single', 'double', 'triple'],
+                correct: 1,
+                explanation: 'DNA has a double helix structure with two intertwined strands'
+              },
+              {
+                id: 2,
+                choices: ['amino acid', 'base', 'sugar'],
+                correct: 1,
+                explanation: 'Base pairs (A-T and G-C) connect the two DNA strands'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'protein-synthesis',
+        title: 'Protein Synthesis',
+        description: 'Learn transcription and translation processes',
+        duration: 6,
+        pointsReward: 50,
         type: 'reading',
-        estimatedTime: 28
+        content: [
+          'Protein synthesis occurs in two main steps: transcription and translation.',
+          'During transcription, DNA is used as a template to create messenger RNA (mRNA) in the nucleus.',
+          'Translation occurs at ribosomes, where mRNA is read and amino acids are assembled into proteins.',
+          'Transfer RNA (tRNA) molecules bring specific amino acids to the ribosome based on the mRNA code.'
+        ],
+        quiz: {
+          question: 'Where does translation occur in the cell?',
+          options: ['Nucleus', 'Mitochondria', 'Ribosomes', 'Golgi apparatus'],
+          correct: 2,
+          explanation: 'Translation occurs at ribosomes, where mRNA is decoded and amino acids are assembled into proteins.'
+        }
       }
     ]
   }

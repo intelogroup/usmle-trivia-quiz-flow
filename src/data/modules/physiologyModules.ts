@@ -4,96 +4,81 @@ import { LessonModule } from '../types';
 export const physiologyModules: LessonModule[] = [
   {
     id: 'intro-physiology',
-    system: 'Physiology',
+    system: 'Human Physiology',
     title: 'Introduction to Physiology',
-    description: 'Fundamental principles of human physiology and homeostasis.',
+    description: 'Foundation concepts of human body function',
     icon: '⚡',
-    totalPoints: 350,
+    totalPoints: 120,
     unlockLevel: 1,
-    estimatedTime: 140,
+    estimatedTime: 20,
     previewAvailable: true,
     difficulty: 'Beginner',
     lessons: [
       {
-        id: 'lesson-phys-1',
+        id: 'homeostasis',
         title: 'Homeostasis Fundamentals',
-        description: 'Understanding how the body maintains balance.',
-        duration: 25,
-        pointsReward: 50,
+        description: 'Learn how the body maintains balance',
+        duration: 8,
+        pointsReward: 40,
+        type: 'reading',
         content: [
-          'Homeostasis is the body\'s ability to maintain stable internal conditions.',
-          'It involves feedback mechanisms that detect and respond to changes.',
-          'Negative feedback loops work to counteract deviations from normal.',
-          'Positive feedback loops amplify responses, like during childbirth.'
+          'Homeostasis is the body\'s ability to maintain stable internal conditions despite changes in the external environment.',
+          'Key examples include maintaining body temperature around 98.6°F (37°C) and blood glucose levels within normal ranges.',
+          'Homeostasis involves feedback loops - negative feedback maintains stability, while positive feedback amplifies changes.',
+          'Most physiological systems use negative feedback to return conditions to normal when they deviate from set points.'
         ],
-        type: 'interactive',
-        estimatedTime: 25,
         quiz: {
-          question: 'What type of feedback mechanism is most common in the human body?',
-          options: ['Positive feedback', 'Negative feedback', 'Neutral feedback', 'Mixed feedback'],
+          question: 'What type of feedback loop is most common in maintaining homeostasis?',
+          options: ['Positive feedback', 'Negative feedback', 'Neutral feedback', 'Random feedback'],
           correct: 1,
-          explanation: 'Negative feedback is the most common mechanism, working to maintain homeostasis by counteracting changes.'
+          explanation: 'Negative feedback loops are most common in homeostasis because they work to counteract changes and return the body to its normal state.'
         }
       },
       {
-        id: 'lesson-phys-2',
-        title: 'Cell Membrane Transport',
-        description: 'How substances move across cellular membranes.',
-        duration: 30,
-        pointsReward: 60,
-        content: [
-          'Cell membranes are selectively permeable barriers.',
-          'Passive transport requires no energy and includes diffusion and osmosis.',
-          'Active transport requires ATP to move substances against gradients.',
-          'Endocytosis and exocytosis transport large molecules.'
-        ],
-        type: 'reading',
-        estimatedTime: 30
-      },
-      {
-        id: 'lesson-phys-3',
-        title: 'Body Fluid Compartments',
-        description: 'Distribution and regulation of body fluids.',
-        duration: 28,
-        pointsReward: 55,
-        content: [
-          'Body water is distributed in intracellular and extracellular compartments.',
-          'Extracellular fluid includes plasma and interstitial fluid.',
-          'Osmotic pressure determines water movement between compartments.',
-          'The kidneys play a crucial role in fluid balance.'
-        ],
+        id: 'feedback-loops',
+        title: 'Feedback Mechanisms',
+        description: 'Understand positive and negative feedback',
+        duration: 7,
+        pointsReward: 35,
         type: 'interactive',
-        estimatedTime: 28
+        system: 'Human Physiology',
+        subject: 'General Physiology',
+        steps: [
+          {
+            id: 'step-1',
+            system: 'Human Physiology',
+            subject: 'General Physiology',
+            sentence: 'In _____ feedback, the response opposes the original stimulus, while in _____ feedback, the response amplifies the stimulus.',
+            blanks: [
+              {
+                id: 1,
+                choices: ['negative', 'positive', 'neutral'],
+                correct: 0,
+                explanation: 'Negative feedback opposes changes to maintain homeostasis'
+              },
+              {
+                id: 2,
+                choices: ['negative', 'positive', 'neutral'],
+                correct: 1,
+                explanation: 'Positive feedback amplifies changes, like during childbirth'
+              }
+            ]
+          }
+        ]
       },
       {
-        id: 'lesson-phys-4',
-        title: 'Physiological Control Systems',
-        description: 'Integration of organ systems for coordinated function.',
-        duration: 32,
-        pointsReward: 65,
-        content: [
-          'Control systems consist of sensors, integrators, and effectors.',
-          'The nervous system provides rapid, precise control.',
-          'The endocrine system provides slower, longer-lasting control.',
-          'Many physiological processes involve both systems working together.'
-        ],
+        id: 'body-systems',
+        title: 'Body System Integration',
+        description: 'How organ systems work together',
+        duration: 5,
+        pointsReward: 45,
         type: 'reading',
-        estimatedTime: 32
-      },
-      {
-        id: 'lesson-phys-5',
-        title: 'Metabolism and Energy',
-        description: 'Cellular energy production and utilization.',
-        duration: 35,
-        pointsReward: 70,
         content: [
-          'Metabolism includes all chemical reactions in the body.',
-          'Catabolism breaks down molecules to release energy.',
-          'Anabolism builds complex molecules using energy.',
-          'ATP is the universal energy currency of cells.'
-        ],
-        type: 'interactive',
-        estimatedTime: 35
+          'The human body contains multiple organ systems that work together to maintain life and health.',
+          'Major systems include cardiovascular, respiratory, nervous, digestive, endocrine, and musculoskeletal systems.',
+          'These systems are interconnected - for example, the respiratory and cardiovascular systems work together to deliver oxygen.',
+          'Understanding system integration is crucial for comprehending how the body functions as a unified whole.'
+        ]
       }
     ]
   }

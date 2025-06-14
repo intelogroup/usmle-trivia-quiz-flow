@@ -4,91 +4,87 @@ import { LessonModule } from '../types';
 export const biochemistryModules: LessonModule[] = [
   {
     id: 'medical-biochemistry',
-    system: 'Biochemistry',
-    title: 'Medical Biochemistry',
-    description: 'Essential biochemical processes in health and disease.',
-    icon: '⚗️',
-    totalPoints: 380,
-    unlockLevel: 2,
-    estimatedTime: 150,
+    system: 'Medical Biochemistry',
+    title: 'Metabolic Pathways',
+    description: 'Master cellular metabolism and energy production',
+    icon: '⚛️',
+    totalPoints: 240,
+    unlockLevel: 3,
+    estimatedTime: 45,
     previewAvailable: false,
-    prerequisites: ['intro-physiology'],
-    difficulty: 'Intermediate',
+    difficulty: 'Advanced',
     lessons: [
       {
-        id: 'lesson-biochem-1',
-        title: 'Enzyme Kinetics',
-        description: 'Understanding how enzymes catalyze biochemical reactions.',
-        duration: 35,
-        pointsReward: 70,
-        content: [
-          'Enzymes lower activation energy to speed up reactions.',
-          'The Michaelis-Menten equation describes enzyme kinetics.',
-          'Competitive inhibitors compete with substrate for active site.',
-          'Non-competitive inhibitors bind to allosteric sites.'
-        ],
-        type: 'interactive',
-        estimatedTime: 35
-      },
-      {
-        id: 'lesson-biochem-2',
-        title: 'Glycolysis and Gluconeogenesis',
-        description: 'Glucose metabolism pathways.',
-        duration: 40,
+        id: 'cellular-respiration',
+        title: 'Cellular Respiration',
+        description: 'Learn how cells produce ATP',
+        duration: 15,
         pointsReward: 80,
-        content: [
-          'Glycolysis breaks down glucose to pyruvate, producing ATP.',
-          'The pathway occurs in the cytoplasm and has regulatory steps.',
-          'Gluconeogenesis synthesizes glucose from non-carbohydrate sources.',
-          'These pathways are reciprocally regulated.'
-        ],
         type: 'reading',
-        estimatedTime: 40
-      },
-      {
-        id: 'lesson-biochem-3',
-        title: 'Citric Acid Cycle',
-        description: 'The central metabolic pathway.',
-        duration: 38,
-        pointsReward: 75,
         content: [
-          'The citric acid cycle oxidizes acetyl-CoA to CO2.',
-          'It produces NADH, FADH2, and GTP for energy.',
-          'The cycle occurs in the mitochondrial matrix.',
-          'It serves as a hub connecting carbohydrate, fat, and protein metabolism.'
+          'Cellular respiration is the process by which cells break down glucose to produce ATP (adenosine triphosphate).',
+          'It occurs in three main stages: glycolysis in the cytoplasm, the citric acid cycle in mitochondria, and electron transport.',
+          'Glycolysis breaks down glucose into pyruvate, producing a small amount of ATP and NADH.',
+          'The citric acid cycle and electron transport chain produce the majority of ATP through oxidative phosphorylation.'
         ],
-        type: 'interactive',
-        estimatedTime: 38
+        quiz: {
+          question: 'Where does glycolysis occur in the cell?',
+          options: ['Nucleus', 'Mitochondria', 'Cytoplasm', 'Ribosome'],
+          correct: 2,
+          explanation: 'Glycolysis occurs in the cytoplasm, where glucose is broken down into pyruvate molecules.'
+        }
       },
       {
-        id: 'lesson-biochem-4',
-        title: 'Electron Transport Chain',
-        description: 'Oxidative phosphorylation and ATP synthesis.',
-        duration: 42,
-        pointsReward: 85,
-        content: [
-          'The electron transport chain transfers electrons through protein complexes.',
-          'Energy released pumps protons across the inner mitochondrial membrane.',
-          'ATP synthase uses the proton gradient to synthesize ATP.',
-          'This process is called chemiosmotic coupling.'
-        ],
-        type: 'reading',
-        estimatedTime: 42
-      },
-      {
-        id: 'lesson-biochem-5',
-        title: 'Lipid Metabolism',
-        description: 'Fat synthesis and breakdown.',
-        duration: 35,
+        id: 'enzyme-function',
+        title: 'Enzyme Catalysis',
+        description: 'Understand how enzymes speed up reactions',
+        duration: 12,
         pointsReward: 70,
-        content: [
-          'Beta-oxidation breaks down fatty acids to acetyl-CoA.',
-          'Fatty acid synthesis occurs in the cytoplasm.',
-          'Ketone bodies are produced when glucose is scarce.',
-          'Cholesterol synthesis is tightly regulated.'
-        ],
         type: 'interactive',
-        estimatedTime: 35
+        system: 'Medical Biochemistry',
+        subject: 'Biochemistry',
+        steps: [
+          {
+            id: 'step-1',
+            system: 'Medical Biochemistry',
+            subject: 'Biochemistry',
+            sentence: 'Enzymes are _____ catalysts that lower the _____ energy needed for chemical reactions to occur.',
+            blanks: [
+              {
+                id: 1,
+                choices: ['protein', 'lipid', 'carbohydrate'],
+                correct: 0,
+                explanation: 'Enzymes are protein molecules that catalyze biochemical reactions'
+              },
+              {
+                id: 2,
+                choices: ['kinetic', 'activation', 'potential'],
+                correct: 1,
+                explanation: 'Enzymes lower the activation energy barrier for reactions'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'metabolic-regulation',
+        title: 'Metabolic Control',
+        description: 'Learn how metabolism is regulated',
+        duration: 18,
+        pointsReward: 90,
+        type: 'reading',
+        content: [
+          'Metabolic pathways are carefully regulated to maintain cellular energy balance and homeostasis.',
+          'Key regulatory mechanisms include allosteric regulation, covalent modification, and enzyme induction/repression.',
+          'Hormones like insulin and glucagon coordinate metabolism between different tissues and organs.',
+          'Feedback inhibition prevents overproduction of metabolic products and maintains pathway efficiency.'
+        ],
+        quiz: {
+          question: 'What is the primary hormone that promotes glucose uptake by cells?',
+          options: ['Glucagon', 'Insulin', 'Cortisol', 'Adrenaline'],
+          correct: 1,
+          explanation: 'Insulin is the primary hormone that promotes glucose uptake by cells, lowering blood glucose levels.'
+        }
       }
     ]
   }
