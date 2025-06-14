@@ -1,7 +1,5 @@
-
 import { ArrowLeft, Clock, Trophy, Star, Heart, Activity, Brain, Target, BookOpen } from 'lucide-react';
 import { LessonModule, Lesson } from '@/data/types';
-
 interface ModuleLessonHeaderProps {
   module: LessonModule;
   currentLesson: Lesson;
@@ -10,7 +8,6 @@ interface ModuleLessonHeaderProps {
   isLessonCompleted: boolean;
   onNavigate: (screen: string) => void;
 }
-
 const ModuleLessonHeader = ({
   module,
   currentLesson,
@@ -31,18 +28,15 @@ const ModuleLessonHeader = ({
         return <Activity className="w-6 h-6 text-green-400" />;
     }
   };
-
   const getLessonTypeIcon = () => {
     if (currentLesson?.type === 'interactive') {
       return <Target className="w-4 h-4 text-orange-400" />;
     }
     return <BookOpen className="w-4 h-4 text-blue-400" />;
   };
-
-  return (
-    <div className="relative">
+  return <div className="relative">
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl blur-xl"></div>
-      <div className="relative bg-gradient-to-r from-slate-800/90 to-slate-700/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-600/30">
+      <div className="relative bg-gradient-to-r from-slate-800/90 to-slate-700/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-600/30 my-[50px]">
         <div className="flex items-start space-x-4">
           <button onClick={() => onNavigate('module-lesson-list')} className="mt-1 text-white hover:text-slate-300 transition-colors">
             <ArrowLeft className="w-6 h-6" />
@@ -80,8 +74,6 @@ const ModuleLessonHeader = ({
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ModuleLessonHeader;
