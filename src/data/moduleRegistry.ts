@@ -4,13 +4,15 @@ import { physiologyModules } from './modules/physiologyModules';
 import { cellBiologyModules } from './modules/cellBiologyModules';
 import { biochemistryModules } from './modules/biochemistryModules';
 import { systemModules } from './modules/systemModules';
+import { anatomyModules } from './modules/anatomyModules';
 
 // Combined module database
 const moduleDatabase: LessonModule[] = [
   ...physiologyModules,
   ...cellBiologyModules,
   ...biochemistryModules,
-  ...systemModules
+  ...systemModules,
+  ...anatomyModules
 ];
 
 // Function to determine the highest unlocked level

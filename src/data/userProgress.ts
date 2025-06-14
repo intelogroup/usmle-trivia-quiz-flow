@@ -58,6 +58,13 @@ let userProgress: UserProgressData = {
     earnedPoints: 0,
     unlockedLessons: 1,
     completedLessonIds: []
+  },
+  'anatomy-basics': {
+    completed: false,
+    completedLessons: 0,
+    earnedPoints: 0,
+    unlockedLessons: 1,
+    completedLessonIds: []
   }
 };
 
