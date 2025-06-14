@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { ArrowLeft, BookOpen, Clock } from 'lucide-react';
-import { getLessonById, Lesson } from '@/data/lessonData';
+import { getLessonById } from '@/data/lessonData';
+import { Lesson } from '@/data/types';
 import LessonProgress from './LessonProgress';
 import LessonContent from './LessonContent';
 
@@ -27,7 +28,7 @@ const QuickLessonScreen = ({ lessonId, onNavigate }: QuickLessonScreenProps) => 
     newCompletedSteps.add(currentStep);
     setCompletedSteps(newCompletedSteps);
 
-    if (currentStep < (lesson?.steps.length || 0) - 1) {
+    if (currentStep < (lesson?.steps?.length || 0) - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       // Lesson complete
@@ -47,7 +48,7 @@ const QuickLessonScreen = ({ lessonId, onNavigate }: QuickLessonScreenProps) => 
     progress[lessonId] = {
       completed: true,
       completedAt: new Date().toISOString(),
-      stepsCompleted: lesson?.steps.length || 0
+      stepsCompleted: lesson?.steps?.length || 0
     };
     localStorage.setItem('lessonProgress', JSON.stringify(progress));
 
@@ -64,6 +65,21 @@ const QuickLessonScreen = ({ lessonId, onNavigate }: QuickLessonScreenProps) => 
           </button>
           <div>
             <h1 className="text-2xl font-bold text-white">Lesson Not Found</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!lesson.steps) {
+    return (
+      <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div className="flex items-center space-x-3">
+          <button onClick={() => onNavigate('learn')} className="text-white hover:text-slate-300">
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <div>
+            <h1 className="text-2xl font-bold text-white">This lesson is not interactive</h1>
           </div>
         </div>
       </div>

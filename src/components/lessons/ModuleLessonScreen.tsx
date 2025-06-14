@@ -40,7 +40,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
 
         if (lesson.type === 'interactive') {
           const iLesson = getInteractiveLessonById(lesson.id);
-          if (iLesson) {
+          if (iLesson && iLesson.steps) {
             setInteractiveLesson(iLesson);
             setShowQuiz(false); // Interactive lessons have their own flow
           } else {
@@ -109,7 +109,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
   };
 
   const handleNextStep = () => {
-    if (interactiveLesson && currentStepIndex < interactiveLesson.steps.length - 1) {
+    if (interactiveLesson && interactiveLesson.steps && currentStepIndex < interactiveLesson.steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     } else {
       handleLessonComplete();
@@ -153,7 +153,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
 
   const isLessonCompleted = completedLessons.has(currentLessonIndex);
   const progressPercentage = currentLesson.content && currentLesson.content.length > 0 ? Math.round(((currentParagraph + 1) / currentLesson.content.length) * 100) : 0;
-  const interactiveProgressPercentage = interactiveLesson ? Math.round(((currentStepIndex + 1) / interactiveLesson.steps.length) * 100) : 0;
+  const interactiveProgressPercentage = interactiveLesson?.steps ? Math.round(((currentStepIndex + 1) / interactiveLesson.steps.length) * 100) : 0;
 
   return (
     <div className="p-4 pb-20 space-y-6 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -252,7 +252,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
                   </p>
                 </div>
                 
-                {currentLesson.type === 'interactive' && interactiveLesson ? (
+                {currentLesson.type === 'interactive' && interactiveLesson?.steps ? (
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <span className="text-sm font-medium text-slate-300">
@@ -317,7 +317,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
         )}
 
         {/* Enhanced Content Display */}
-        {currentLesson.type === 'interactive' && interactiveLesson ? (
+        {currentLesson.type === 'interactive' && interactiveLesson?.steps ? (
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-slate-800/40 to-slate-700/40 rounded-2xl blur-lg"></div>
             <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-sm rounded-2xl p-8 border border-slate-600/30 shadow-xl">
@@ -336,7 +336,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
                 <div className="text-xl leading-relaxed text-white font-light mb-8 min-h-[120px] flex items-center">
                   <div className="relative">
                     <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
-                    <p className="pl-4">{currentLesson.content[currentParagraph]}</p>
+                    <p className="pl-4">{currentLesson.content?.[currentParagraph]}</p>
                   </div>
                 </div>
               </div>
@@ -344,7 +344,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
               {/* Enhanced Progress Dots */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex space-x-2">
-                  {currentLesson.content.map((_, index) => (
+                  {currentLesson.content?.map((_, index) => (
                     <div
                       key={index}
                       className={`relative transition-all duration-300 ${
@@ -365,7 +365,7 @@ const ModuleLessonScreen = ({ moduleId, lessonId, onNavigate, onComplete }: Modu
                 </div>
                 <div className="flex items-center space-x-2 text-sm text-slate-400">
                   <BookOpen className="w-4 h-4" />
-                  <span>{currentParagraph + 1} / {currentLesson.content.length}</span>
+                  <span>{currentParagraph + 1} / {currentLesson.content?.length}</span>
                 </div>
               </div>
 

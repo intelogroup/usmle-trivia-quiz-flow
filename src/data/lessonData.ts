@@ -1,36 +1,7 @@
-export interface LessonStep {
-  id: string;
-  system: string;
-  subject: string;
-  sentence: string;
-  blanks: Array<{
-    id: number;
-    choices: string[];
-    correct: number;
-    explanation: string;
-  }>;
-  image?: string;
-  imageDescription?: string;
-}
 
-export interface Lesson {
-  id: string;
-  title: string;
-  description: string;
-  duration: number;
-  pointsReward: number;
-  content: string[];
-  type?: 'reading' | 'interactive';
-  estimatedTime?: number;
-  image?: string;
-  imageDescription?: string;
-  quiz?: {
-    question: string;
-    options: string[];
-    correct: number;
-    explanation: string;
-  };
-}
+import { Lesson, LessonStep } from './types';
+
+export { LessonStep } from './types';
 
 export const lessonData: Lesson[] = [
   {
@@ -40,6 +11,9 @@ export const lessonData: Lesson[] = [
     title: 'Heart Structure Basics',
     description: 'Learn the fundamental anatomy of the heart',
     estimatedTime: 8,
+    duration: 8,
+    pointsReward: 50,
+    type: 'interactive',
     steps: [
       {
         id: 'step-1',
@@ -118,6 +92,9 @@ export const lessonData: Lesson[] = [
     title: 'Gas Exchange Mechanics',
     description: 'Understand how oxygen and carbon dioxide are exchanged',
     estimatedTime: 10,
+    duration: 10,
+    pointsReward: 60,
+    type: 'interactive',
     steps: [
       {
         id: 'step-1',

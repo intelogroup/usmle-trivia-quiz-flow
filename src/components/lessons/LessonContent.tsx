@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { CheckCircle, XCircle } from 'lucide-react';
-import { LessonStep } from '@/data/lessonData';
+import { LessonStep } from '@/data/types';
 
 interface LessonContentProps {
   step: LessonStep;
