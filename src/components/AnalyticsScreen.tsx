@@ -95,19 +95,23 @@ const AnalyticsScreen = ({
     fullMark: 100
   }];
 
-  // Weekly Points data
+  // Weekly Points data with average user progress
   const pointsProgressData = [{
     week: 'Week 1',
-    points: 320
+    points: 320,
+    averagePoints: 280
   }, {
     week: 'Week 2',
-    points: 485
+    points: 485,
+    averagePoints: 420
   }, {
     week: 'Week 3',
-    points: 650
+    points: 650,
+    averagePoints: 580
   }, {
     week: 'Week 4',
-    points: 890
+    points: 890,
+    averagePoints: 750
   }];
   const tabs = [{
     id: 'overview' as const,
@@ -304,7 +308,7 @@ const AnalyticsScreen = ({
         </div>
       </div>
 
-      {/* Points Progress Chart */}
+      {/* Points Progress Chart with Average Line */}
       <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
         <h3 className="text-lg font-semibold text-white mb-4">Points Progress</h3>
         <div className="h-48">
@@ -318,15 +322,47 @@ const AnalyticsScreen = ({
               fontSize: 12,
               fill: '#94a3b8'
             }} />
-              <Line type="monotone" dataKey="points" stroke="#3b82f6" strokeWidth={3} dot={{
-              fill: '#3b82f6',
-              strokeWidth: 2,
-              r: 4
-            }} />
+              <Line 
+                type="monotone" 
+                dataKey="points" 
+                stroke="#3b82f6" 
+                strokeWidth={3} 
+                dot={{
+                  fill: '#3b82f6',
+                  strokeWidth: 2,
+                  r: 4
+                }} 
+              />
+              <Line 
+                type="monotone" 
+                dataKey="averagePoints" 
+                stroke="#a855f7" 
+                strokeWidth={2} 
+                strokeDasharray="5 5"
+                dot={{
+                  fill: '#a855f7',
+                  strokeWidth: 2,
+                  r: 3
+                }} 
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <p className="text-sm text-slate-400 mt-2">Weekly points accumulation trend</p>
+        
+        {/* Legend */}
+        <div className="flex items-center justify-between mt-3">
+          <p className="text-sm text-slate-400">Weekly points accumulation trend</p>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-0.5 bg-blue-500 rounded-full" />
+              <span className="text-xs text-slate-400">Your progress</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-0.5 bg-purple-500 rounded-full opacity-70" style={{ backgroundImage: 'repeating-linear-gradient(to right, #a855f7 0, #a855f7 3px, transparent 3px, transparent 6px)' }} />
+              <span className="text-xs text-slate-400">Average user</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Enhanced Goals Section */}
